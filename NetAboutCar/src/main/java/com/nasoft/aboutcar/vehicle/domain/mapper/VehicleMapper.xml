@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.nasoft.aboutcar.VehicleMapper">
+	
+	<select id="searchAll" parameterType="String" resultType="com.nasoft.aboutcar.vehicle.domain.Vehicle">
+    	select *  from vehicle 
+    </select>
+	
+	<select id="searchById" parameterType="com.nasoft.aboutcar.vehicle.domain.Vehicle" resultType="com.nasoft.aboutcar.vehicle.domain.Vehicle">
+    	select *  from vehicle t where t.applyId = #{applyId}
+    </select>
+    <select id="findVehicleByCarId" parameterType="String" resultType="com.nasoft.aboutcar.vehicle.domain.Vehicle">
+    	select *  from xzsp_car_carinfo where carid = #{carId}
+    </select>
+</mapper>
+

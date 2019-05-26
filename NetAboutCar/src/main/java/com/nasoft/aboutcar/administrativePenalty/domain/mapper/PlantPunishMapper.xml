@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nasoft.aboutcar.PlantPunishMapper">
+    
+    <!-- 查找表所有数据 -->   
+    <select id="findAllPlantPunishInfo" parameterType="java.util.HashMap"  resultType="java.util.HashMap" >  
+        select * from xzcf_plantcase_info
+        
+        <where>
+         
+         <if test="areaCode!=null and areaCode!=''">
+            areacode like concat(concat('%', #{areaCode}), '%')
+
+         </if>  
+         <if test="punishType!=null and punishType!=''">
+             and punishType = #{punishType}
+         </if> 
+       
+         
+         <if test="begin_time != null and begin_time != '' and end_time != null and end_time != '' ">      
+                      and casetime between #{begin_time} and #{end_time}          
+         </if>
+     </where>
+    </select>
+    
+    <!-- 根据案件ID查找案件详情 -->
+    <select id="manageDetail" resultType="com.nasoft.aboutcar.administrativePenalty.domain.PlantPunishInfo" >
+        select * from xzcf_plantcase_info where caseId=#{caseId}
+    </select>
+    
+    
+    
+    
+    </mapper>

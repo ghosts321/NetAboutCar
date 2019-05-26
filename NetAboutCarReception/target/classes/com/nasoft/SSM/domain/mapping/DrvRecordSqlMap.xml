@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.SSM.DrvRecord" >
+  
+  <insert id="addDrvRecord" parameterType="com.nasoft.SSM.domain.DrvRecord" >
+    insert into xzsp_drv_record (recordid, certno, pcertno, 
+      carid, creditcode, contractid, 
+      status, createdate)
+    values (#{recordid,jdbcType=INTEGER}, #{certno,jdbcType=VARCHAR}, #{pcertno,jdbcType=VARCHAR}, 
+      #{carid,jdbcType=VARCHAR}, #{creditcode,jdbcType=VARCHAR}, #{contractid,jdbcType=INTEGER}, 
+      #{status,jdbcType=CHAR}, #{createdate,jdbcType=TIMESTAMP})
+  </insert>
+  
+   <select id="findRecordByCertNo" parameterType="java.lang.String" resultType="com.nasoft.SSM.domain.DrvRecord" >  
+      select * from xzsp_drv_record where certno=#{certNo}
+   </select>
+   
+   <select id="findRecordInfoByCert" parameterType="java.lang.String" resultType="java.util.HashMap">
+    select rc.recordid,con.url,drv.certno,drv.username,drv.drivecardno,car.carnum,com.platformname from xzsp_drv_record rc 
+	left join xzsp_drv_contract con on con.contractid=rc.contractid
+	left join xzsp_drv_userinfo drv on drv.certno=rc.certno
+	left join xzsp_car_carinfo car on car.carid=rc.carid
+	left join xzsp_com_companyinfo com on com.creditcode=rc.creditcode
+	where drv.certno=#{certNo}
+  </select>
+    
+</mapper>

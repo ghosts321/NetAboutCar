@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- 存放手写的sql -->
+<mapper namespace="com.nasoft.aboutcar.CxkhDrvAnnualWorkMapper">
+	
+	
+    <resultMap type="java.util.HashMap" id="CxkhDrvAnnualWorkResultToMap2">
+    	
+    </resultMap>
+	
+	<select id="listDrvforPlatform" resultMap="CxkhDrvAnnualWorkResultMap">
+		
+		select w.*,u.username drvname from xzsp_drv_record r 
+		left join cxkh_drv_annual_work w on r.certno=w.drv_license
+		left join xzsp_drv_userinfo u on r.certno=u.certno
+		where r.creditcode=#{comLicense} and id is not null
+		<if test="year!=null and year!=''">
+			and w.year=#{year}
+		</if>
+		order by r.certno,w.year desc
+	</select>
+	
+	 <select id="listforPunish" resultMap="CxkhDrvAnnualWorkResultMap">
+	  SELECT 
+	 cd.year,
+	 cd.score,
+	 cd.assess_level, 
+	 xd.username drv_name, 
+	 xd.drivecardno  drv_license
+	FROM
+	  cxkh_drv_annual_work cd 
+	  LEFT JOIN xzsp_drv_userinfo xd 
+	  ON cd.drv_license = xd.drivecardno 
+		<where>
+			and cd.is_curr='1'
+			and cd.score>=#{minScore}
+			<![CDATA[and cd.score<=#{maxScore}]]>
+		</where>
+	  </select>
+	  
+	 <select id="findDrvExaminationList" parameterType="map" resultType="hashmap">
+	  SELECT 
+ cd.year,
+ cd.score,
+ cps.pun_text, 
+ xd.username, 
+ xd.drivecardno 
+FROM
+  cxkh_drv_annual_work cd 
+  , xzsp_drv_userinfo xd ,
+  cxkh_drv_pun_list cdpl,
+  cxkh_punished_set cps
+  WHERE cd.drv_license = xd.drivecardno 
+  AND xd.certno=cdpl.certno
+  AND cps.pun_code=cdpl.pun_code
+	
+	<if test="username != null and username != ''">
+	  and xd.username like CONCAT('%',#{username},'%' )
+	</if>
+	<if test="year != null and year != ''">
+	 and cd.year = #{year}
+	</if>
+	  </select>
+	  
+	  
+	 <select id="findDrvExaminationList2" parameterType="map" resultType="hashmap">
+	  SELECT 
+ cd.year,
+ cd.score,
+ xd.username,
+ cd.drv_license
+FROM
+  cxkh_drv_annual_work cd 
+  , xzsp_drv_userinfo xd 
+  WHERE cd.drv_license = xd.drivecardno 
+	
+	<if test="username != null and username != ''">
+	  and xd.username like CONCAT('%',#{username},'%' )
+	</if>
+	<if test="year != null and year != ''">
+	 and cd.year = #{year}
+	</if>
+	  </select>
+	  
+	  <select id="findAllYear" resultMap="CxkhDrvAnnualWorkResultMap">
+	  select distinct c.year from cxkh_drv_annual_work c
+	  order by c.year desc
+	  </select>
+	  
+	  <select id="findAllYear2" resultMap="CxkhDrvAnnualWorkResultMap">
+	  select c.*,x.username drvName from cxkh_drv_annual_work c
+	  left join xzsp_drv_userinfo x on c.drv_license=x.certno
+	  where 1=1
+	  		<if test="year!=null">
+	  			and c.year=#{year}
+	  		</if>
+	  		
+	  </select>
+	  
+	  <select id="findCreditDriverByDrivecardno" parameterType="String" resultType="hashmap">
+	  SELECT 
+	  ci.* 
+	FROM
+	  cxkh_drv_score_record cr 
+	  LEFT JOIN cxkh_indic ci 
+	    ON cr.indic_code = ci.indic_code 
+	WHERE cr.drv_license = #{drivecardno} 
+	  </select>
+	  
+	   <insert id="addDrvAnnualWork" parameterType="com.nasoft.aboutcar.credit.domain.CxkhDrvAnnualWork" >
+	    insert into cxkh_drv_annual_work (id, year, drv_license, 
+	      score, start_date, end_date, 
+	      assess_level, create_user, create_time, 
+	      update_user, update_time)
+	    values (#{id,jdbcType=INTEGER}, #{year,jdbcType=CHAR}, #{drvLicense,jdbcType=CHAR}, 
+	      #{score,jdbcType=INTEGER}, #{startDate,jdbcType=DATE}, #{endDate,jdbcType=DATE}, 
+	      #{assessLevel,jdbcType=CHAR}, #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+	      #{updateUser,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP})
+	  </insert>
+	  
+	  <select id="selectDrvByDate" resultType="com.nasoft.aboutcar.credit.domain.CxkhDrvAnnualWork">
+		SELECT
+			*
+		FROM
+			cxkh_drv_annual_work a
+		WHERE
+			a.drv_license = #{drvLicense}
+		AND	<![CDATA[#{nowDate} >= a.start_date
+		AND #{nowDate} <= a.end_date]]>
+	  </select>
+  
+   <update id="updateDrvScore" parameterType="com.nasoft.aboutcar.credit.domain.CxkhDrvAnnualWork" >
+    update cxkh_drv_annual_work
+    <set>
+      <if test="score != null">
+        score = #{score},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  
+  
+  <select id="findDrvUserinfo" resultType="com.nasoft.aboutcar.pilotapply.domain.DrvUserinfo">
+  	  select * from xzsp_drv_userinfo where certno=#{certno}
+  </select>
+  
+  <select id="findDrvPermitcert" resultType="com.nasoft.aboutcar.credit.controller.DrvPermitcertModel">
+  	  select p.*,c.comname,car.carnum from xzsp_drv_record r 
+  	  left join xzsp_drv_permitcert p on r.pcertno=p.pcertno
+  	  left join xzsp_com_companyinfo c on r.creditcode=c.creditcode
+  	  left join xzsp_car_carinfo car on r.carid=car.carid
+  	  where r.certno=#{certno}
+  </select>
+  
+  
+</mapper>

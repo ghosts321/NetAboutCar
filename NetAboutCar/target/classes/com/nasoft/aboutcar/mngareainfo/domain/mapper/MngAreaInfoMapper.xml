@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<!-- 使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.nasoft.aboutcar.MngAreaInfoMapper">
+
+    
+    <!-- 根据用户id查询用户信息 -->
+    <select id="findAreaListByCode" parameterType="java.util.HashMap" resultType="com.nasoft.aboutcar.mngareainfo.domain.MngAreaInfo">
+		select areacode,areaname,pareacode,arealevel from mng_areainfo mng where 1 = 1 
+		<choose>
+          <when test="pareaCode != null">
+                 and mng.pareacode = #{pareaCode}
+          </when>
+          <otherwise>
+                 and mng.pareacode = '0'
+          </otherwise>
+         </choose>
+         
+    </select>
+
+
+    <select id="findLikeCode" resultType="com.nasoft.aboutcar.mngareainfo.domain.MngAreaInfo">
+		select areacode,areaname,pareacode,arealevel from mng_areainfo mng where 1=1 
+		
+	       <if test="areaCode != null">
+		 	   <choose>
+		 	   	  <when test="@Ognl@contains(areaCode,'%')">
+		 	 		  and areaCode like #{areaCode}
+		 	   	  </when>
+		 	   	  <otherwise>
+		 	   	  	  and areaCode=#{areaCode}
+		 	   	  </otherwise>
+		 	   </choose>
+			</if>
+		<if test="areaLevel!=null">
+			and areaLevel=#{areaLevel} 
+		</if>
+		<if test="pareaCode!=null">
+			and pareaCode=#{pareaCode}
+		</if>
+    </select>
+</mapper>
+

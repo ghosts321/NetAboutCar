@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.drvComplaintMapper" >
+
+ <insert id="addDrvComplaint" parameterType="com.nasoft.aboutcar.complaint.domain.drvComplainInfo">
+      insert into tsfw_drv_complain_info
+  (drv_complain_info_id,complain_code,car_number,driver_licence,driver_name,car_company,compn_name,compn_sex,
+  compn_tel,compn_email,compn_number,compn_address,compn_file,compn_reason,data_source,compn_time,compn_state,create_user,
+   create_time) 
+     values (#{drv_complain_info_id,jdbcType=INTEGER},
+             #{complain_code,jdbcType=VARCHAR},
+             #{car_number,jdbcType=VARCHAR},
+             #{driver_licence,jdbcType=VARCHAR},
+             #{driver_name,jdbcType=VARCHAR},
+             #{car_company,jdbcType=VARCHAR},
+             #{compn_name,jdbcType=VARCHAR},
+             #{compn_sex,jdbcType=CHAR},
+             #{compn_tel,jdbcType=VARCHAR},
+             #{compn_email,jdbcType=VARCHAR},
+             #{compn_number,jdbcType=VARCHAR},
+             #{compn_address,jdbcType=VARCHAR},
+             #{compn_file,jdbcType=VARCHAR},
+             #{compn_reason,jdbcType=VARCHAR},
+             #{data_source,jdbcType=CHAR},
+             #{compn_time},
+             #{compn_state,jdbcType=CHAR},
+             #{create_user,jdbcType=VARCHAR},
+             #{create_time})     
+   </insert>
+   
+   <insert id="drvAcceptComit" parameterType="com.nasoft.aboutcar.complaint.domain.drvComplainDistribute">
+         insert into tsfw_drv_complain_distribute (id,drv_complain_info_id,allot_depme,distri_idea,distri_peo,distri_time)
+           values(#{id,jdbcType=INTEGER},#{drv_complain_info_id,jdbcType=INTEGER},#{allot_depme,jdbcType=VARCHAR},
+           #{distri_idea,jdbcType=VARCHAR},#{distri_peo,jdbcType=VARCHAR},#{distri_time})
+   </insert>
+   
+   
+   <update id="drvUpdate" parameterType="com.nasoft.aboutcar.complaint.domain.drvComplainInfo">
+      update tsfw_drv_complain_info set
+        car_company = #{car_company},
+        driver_licence=#{driver_licence},
+        car_number=#{car_number},
+        compn_name=#{compn_name},
+        compn_sex=#{compn_sex},
+        data_source=#{data_source},
+        compn_tel=#{compn_tel},
+        compn_number=#{compn_number},
+        compn_email=#{compn_email},
+        compn_address=#{compn_address},
+        compn_file=#{compn_file},
+        compn_reason=#{compn_reason},
+        update_user=#{update_user},
+        update_time=#{update_time}
+        where complain_code=#{complain_code}
+   </update>
+   
+   <select id="findDrvAppeal" parameterType="java.util.HashMap" resultType="java.util.HashMap" >
+         SELECT DISTINCT a.*,b.appl_time FROM tsfw_drv_complain_info a JOIN tsfw_drv_complain_appeal b ON a.drv_complain_info_id=b.drv_complain_info_id 
+            <where>
+         a.compn_state="5"
+         <if test="complain_code != null and complain_code != '' ">
+             and a.complain_code like CONCAT('%%',#{complain_code},'%%') 
+         </if> 
+         <if test="car_number != null and car_number != '' ">
+             and a.car_number like CONCAT('%%',#{car_number},'%%') 
+         </if>
+           <if test="begin_time != null and begin_time != ''  ">      
+                  and compn_time >= #{begin_time}          
+         </if>
+         <if test="end_time != null and end_time != ''">
+                and compn_time &lt;=#{end_time}
+         </if>   
+         
+        <!--  <if test="begin_time != null and begin_time != '' and end_time != null and end_time != '' ">      
+                      and a.compn_time between #{begin_time} and #{end_time}          
+         </if> -->
+     </where>
+        order by a.compn_time desc 
+      </select>
+      
+        <select id="selectdrv"  parameterType="java.util.HashMap" resultType="java.util.HashMap" >
+       select * from tsfw_drv_complain_info
+       <where>
+         <if test="complain_code != null and complain_code != '' ">
+              complain_code like CONCAT('%%',#{complain_code},'%%')
+         </if> 
+         <if test="car_number != null and car_number != '' ">
+             and car_number like CONCAT('%%',#{car_number},'%%') 
+         </if>
+           <if test="compn_state!= null and compn_state!= '' ">
+               and compn_state = #{compn_state}
+         </if>
+          <if test="begin_time != null and begin_time != ''  ">      
+                  and compn_time >= #{begin_time}          
+         </if>
+         <if test="end_time != null and end_time != ''">
+                and compn_time &lt;=#{end_time}
+         </if> 
+         <!-- <if test="begin_time != null and begin_time != '' and end_time != null and end_time != '' ">      
+                  and compn_time between #{begin_time} and #{end_time}          
+         </if> -->
+     </where>
+     order by compn_time desc  
+   </select>
+   
+
+    <select id="findDrvComplaint"  parameterType="java.util.HashMap" resultType="java.util.HashMap" >
+     select * from tsfw_drv_complain_info
+      <where>
+         compn_state="1"
+         <if test="complain_code != null and complain_code != '' ">
+             and complain_code like CONCAT('%%',#{complain_code},'%%')
+         </if> 
+         <if test="car_number != null and car_number != '' ">
+             and car_number like CONCAT('%%',#{car_number},'%%') 
+         </if>
+         <if test="begin_time != null and begin_time != ''  ">      
+                  and compn_time >= #{begin_time}          
+         </if>
+         <if test="end_time != null and end_time != ''">
+                and compn_time &lt;=#{end_time}
+         </if>   
+         
+        <!--  <if test="begin_time != null and begin_time != '' and end_time != null and end_time != '' ">      
+                      and compn_time between #{begin_time} and #{end_time}          
+         </if> -->
+     </where>
+     order by compn_time desc  
+   </select>
+   
+    <select id="findDrvHandle" parameterType="java.util.HashMap" resultType="java.util.HashMap" >
+         SELECT DISTINCT a.*,b.* FROM tsfw_drv_complain_info a JOIN tsfw_drv_complain_distribute b ON a.drv_complain_info_id=b.drv_complain_info_id 
+            <where>
+         a.compn_state between 3 and 7 and b.allot_depme &lt;&gt;"运营平台"
+         <if test="complain_code != null and complain_code != '' ">
+             and a.complain_code like CONCAT('%%',#{complain_code},'%%') 
+         </if> 
+         <if test="car_number != null and car_number != '' ">
+             and a.car_number like CONCAT('%%',#{car_number},'%%') 
+         </if>
+         <if test="begin_time != null and begin_time != ''  ">      
+                  and compn_time >= #{begin_time}          
+         </if>
+         <if test="end_time != null and end_time != ''">
+                and compn_time &lt;=#{end_time}
+         </if>    
+         
+         <!-- <if test="begin_time != null and begin_time != '' and end_time != null and end_time != '' ">      
+                      and a.compn_time between #{begin_time} and #{end_time}          
+         </if> -->
+     </where>
+        order by a.compn_time desc 
+      </select> 
+   
+      <select id="findDrvAccept"  parameterType="java.util.HashMap" resultType="java.util.HashMap" >
+     select * from tsfw_drv_complain_info
+      <where>
+         compn_state="2"
+         <if test="complain_code != null and complain_code != '' ">
+             and complain_code like CONCAT('%%',#{complain_code},'%%') 
+         </if> 
+         <if test="car_number != null and car_number != '' ">
+             and car_number like CONCAT('%%',#{car_number},'%%') 
+         </if>
+         <if test="begin_time != null and begin_time != ''  ">      
+                  and compn_time >= #{begin_time}          
+         </if>
+         <if test="end_time != null and end_time != ''">
+                and compn_time &lt;=#{end_time}
+         </if>     
+         
+         <!-- <if test="begin_time != null and begin_time != '' and end_time != null and end_time != '' ">      
+                      and compn_time between #{begin_time} and #{end_time}          
+         </if> -->
+     </where>
+     order by compn_time desc  
+   </select>
+   
+       <select id="drvComplaintStatistics" parameterType="java.util.HashMap" resultType="java.util.HashMap" >
+    SELECT SUM(compn_state=1) AS a,SUM(compn_state=2) AS b,SUM(compn_state=3) AS c,SUM(compn_state=4) AS d,
+    SUM(compn_state=8) AS e FROM tsfw_drv_complain_info 
+      <where>
+      <if test="driver_licence != null and driver_licence != '' ">
+             and driver_licence = #{driver_licence}
+         </if>
+      <if test="begin_time != null and begin_time != ''  ">      
+                  and compn_time >= #{begin_time}          
+         </if>
+         <if test="end_time != null and end_time != ''">
+                and compn_time &lt;=#{end_time}
+         </if> 
+      
+      </where>
+    </select>
+   
+    <select id="selectblack" resultType="java.util.HashMap" >
+   select * from cxkh_drv_blacklist where drv_license=#{drv_license}
+   </select>
+   
+   <select id="reg" parameterType="java.lang.String"  resultType="java.util.HashMap">
+    select certno from xzsp_drv_record where certno=#{driver_licence}
+   </select>
+   
+   <select id="selectComName" resultType="java.util.HashMap">
+    select comname from xzsp_com_companyinfo
+   </select>
+ <select id="findcompcodebyId" parameterType="java.lang.String"   resultType="com.nasoft.aboutcar.complaint.domain.drvComplainInfo">
+      select * from tsfw_drv_complain_info where complain_code=#{complain_code}
+   </select>
+   
+    <select id="findacceptbyId" parameterType="int"   resultType="com.nasoft.aboutcar.complaint.domain.drvComplainDistribute">
+      select DISTINCT * from tsfw_drv_complain_distribute where drv_complain_info_id=#{drv_complain_info_id}
+   </select>
+   
+   <select id="findDrvAppealbyId" parameterType="int"   resultType="com.nasoft.aboutcar.complaint.domain.drvComplainAppeal">
+      select * from tsfw_drv_complain_appeal where drv_complain_info_id =#{drv_complain_info_id}
+   </select>
+   
+   <select id="finddisposetbyId" parameterType="int"   resultType="com.nasoft.aboutcar.complaint.domain.drvComplainDispose">
+      select * from tsfw_drv_complain_dispose where drv_complain_info_id =#{drv_complain_info_id}
+   </select>
+   
+   <select id="findDisAppealbyID" parameterType="int" resultType="com.nasoft.aboutcar.complaint.domain.drvDisAppeal">
+    select disappeal_idea from tsfw_drv_disappeal where drv_complain_info_id=#{drv_complain_info_id}
+   </select>
+   
+
+ <update id="drvcomit" parameterType="com.nasoft.aboutcar.complaint.domain.drvComplainInfo">
+      update tsfw_drv_complain_info set 
+           compn_state=#{compn_state}
+        where complain_code=#{complain_code}
+   </update>
+   
+ <delete id="comDrvDel" parameterType="java.lang.String">
+   delete from tsfw_drv_complain_info where complain_code = #{complain_code}
+   </delete>
+
+    <insert id="toHandleComit" parameterType="com.nasoft.aboutcar.complaint.domain.drvComplainDispose">
+        insert into tsfw_drv_complain_dispose (id,drv_complain_info_id,dis_type,is_integrity,is_blacklist,survey_file,
+             survey_idea,dis_idea,idea_peo,idea_time)
+             values(#{id,jdbcType=INTEGER},#{drv_complain_info_id,jdbcType=INTEGER},#{dis_type,jdbcType=VARCHAR},
+              #{is_integrity,jdbcType=CHAR},#{is_blacklist,jdbcType=CHAR},#{survey_file,jdbcType=VARCHAR},#{survey_idea,jdbcType=VARCHAR},
+               #{dis_idea,jdbcType=VARCHAR}, #{idea_peo,jdbcType=VARCHAR},#{idea_time})
+     
+     </insert>
+     
+         <insert id="insertblack" parameterType="com.nasoft.aboutcar.complaint.domain.drvBlackList">
+        insert into cxkh_drv_blacklist (drv_license,drv_id,drv_name,storage_date,status,storager)
+        values(
+        #{drv_license},
+        #{drv_id},
+        #{drv_name},
+        #{storage_date},
+        #{status},
+        #{storager}
+        )
+        
+     </insert>
+     
+     <insert id="insertdrvplant" parameterType="com.nasoft.aboutcar.administrativePenalty.domain.DrvPlantCaseInfo">
+      insert into xzcf_dricase_info (plateName,punishid,caseid,carid,casereason,drivcarno,casetime,isappeal,
+                   createinstid,dealstatus,drivename,caseType,updatetime,casesource,caseuserid)
+            values(
+                    #{plateName},
+                    #{punishid},
+                    #{caseid},
+                    #{carid},
+                    #{casereason},
+                    #{drivcarno},
+                    #{casetime},
+                    #{isappeal},
+                    #{createinstid},
+                    #{dealstatus},
+                    #{drivename},
+                    #{caseType},
+                    #{updatetime},
+                    #{casesource},
+                    #{caseuserid}
+                 )
+     </insert>
+     
+     <insert id="saveDisAppeal" parameterType="com.nasoft.aboutcar.complaint.domain.drvDisAppeal">
+     insert into tsfw_drv_disappeal (id,drv_complain_info_id,disappeal_idea)
+     values(
+     #{id},
+     #{drv_complain_info_id},
+     #{disappeal_idea}
+     ) 
+     </insert>
+     
+     <update id="updateDrvPlant" parameterType="com.nasoft.aboutcar.administrativePenalty.domain.DrvPlantCaseInfo">
+     update xzcf_dricase_info set 
+     isappeal=#{isappeal},
+     updatetime=#{updatetime}
+     where caseid=#{caseid}
+     </update>
+     
+     <update id="updatetblack" parameterType="com.nasoft.aboutcar.complaint.domain.drvBlackList" >
+     update cxkh_drv_blacklist set
+      drv_license= #{drv_license},
+      drv_id= #{drv_id},
+      drv_name= #{drv_name},
+      storage_date= #{storage_date},
+      status= #{status},
+      storager =#{storager}
+     where drv_license=#{drv_license}
+     </update>
+     
+     <update id="deleteblack" parameterType="com.nasoft.aboutcar.complaint.domain.drvBlackList" >
+     
+     update cxkh_drv_blacklist set status=#{status} where drv_license=#{drv_license}
+     
+     </update>
+     
+     <update id="drvFeedBack" parameterType="java.lang.String">
+     update tsfw_drv_complain_info set 
+     compn_state="8"
+     where complain_code = #{complain_code}
+     </update>
+
+<insert id="drvappealcomit" parameterType="com.nasoft.aboutcar.complaint.domain.drvComplainAppeal">
+       update tsfw_drv_complain_appeal set 
+       appl_dis_idea=#{appl_dis_idea},
+       appl_dis_result=#{appl_dis_result},
+       appl_dis_peo=#{appl_dis_peo},
+       appl_dis_time=#{appl_dis_time}
+       where drv_complain_info_id=#{drv_complain_info_id}
+     </insert>
+     
+      <update id="drvDisposeUpdate" parameterType="com.nasoft.aboutcar.complaint.domain.drvComplainDispose">
+       update tsfw_drv_complain_dispose set
+       dis_type=#{dis_type}, 
+       appl_idea_peo=#{appl_idea_peo},
+       appl_idea_time=#{appl_idea_time},
+       survey_idea=#{survey_idea},
+       dis_idea=#{dis_idea},
+       is_integrity=#{is_integrity},
+       is_blacklist=#{is_blacklist},
+       survey_file=#{survey_file} 
+       where drv_complain_info_id=#{drv_complain_info_id}
+     </update>
+
+	<select id="drvHandleSelect" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+   SELECT allot_depme,
+   SUM(a.compn_state != 8)AS compn_handle,
+   SUM(a.compn_state =8)AS compn_end,
+   SUM(a.compn_state BETWEEN 0 AND 8)AS compn_sum,
+   ROUND(SUM(a.compn_state =8)/SUM(a.compn_state BETWEEN 0 AND 8)*100,2) AS compn_rate
+   FROM  tsfw_drv_complain_info a JOIN tsfw_drv_complain_distribute b ON  a.drv_complain_info_id=b.drv_complain_info_id 
+   <where>
+      <if test="allot_depme!=null and allot_depme!=''">
+       b.allot_depme=#{allot_depme}
+      </if>
+      <if test="begin_time != null and begin_time != ''  ">      
+                  and a.compn_time >= #{begin_time}          
+         </if>
+         <if test="end_time != null and end_time != ''">
+                and a.compn_time &lt;=#{end_time}
+         </if>
+   </where>
+   GROUP BY b.allot_depme
+   </select>
+
+<select id="drvDaichuliDetail" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+  SELECT  a.complain_code complain_code,a.car_number car_number,a.car_company car_company,a.driver_licence driver_licence,
+a.compn_name compn_name,a.compn_tel compn_tel,a.compn_time compn_time,b.distri_time distri_time,a.compn_state compn_state
+FROM tsfw_drv_complain_info a JOIN tsfw_drv_complain_distribute b ON a.drv_complain_info_id=b.drv_complain_info_id 
+
+   <where>
+   compn_state != 8 and b.allot_depme=#{allotdepme}
+      <if test="complain_code!=null and complain_code!=''">
+       and complain_code=#{complain_code}
+      </if>
+      <if test="begin_time != null and begin_time != ''  ">      
+                  and distri_time >= #{begin_time}          
+         </if>
+         <if test="end_time != null and end_time != ''">
+                and distri_time &lt;=#{end_time}
+         </if>
+   </where>
+   
+   </select>
+   
+   <select id="drvYiwanchengDetail" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+  SELECT  a.complain_code complain_code,a.car_number car_number,a.car_company car_company,a.driver_licence driver_licence,
+a.compn_name compn_name,a.compn_tel compn_tel,a.compn_time compn_time,b.distri_time distri_time
+FROM tsfw_drv_complain_info a JOIN tsfw_drv_complain_distribute b ON a.drv_complain_info_id=b.drv_complain_info_id 
+
+   <where>
+   compn_state = 8 and b.allot_depme=#{allotdepme}
+      <if test="complain_code!=null and complain_code!=''">
+       and complain_code=#{complain_code}
+      </if>
+      <if test="begin_time != null and begin_time != ''  ">      
+                  and distri_time >= #{begin_time}          
+         </if>
+         <if test="end_time != null and end_time != ''">
+                and distri_time &lt;=#{end_time}
+         </if>
+   </where>
+   
+   </select>
+</mapper>

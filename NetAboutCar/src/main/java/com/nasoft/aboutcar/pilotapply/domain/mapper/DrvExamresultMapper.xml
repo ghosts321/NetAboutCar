@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.DrvExamresultMapper" >
+	
+	<select id="findByCertno" parameterType="String" resultType="com.nasoft.aboutcar.pilotapply.domain.DrvExamresult">
+    	select *  from xzsp_drv_examresult e where e.certno = #{certno}  ORDER BY createdatetime DESC
+    </select>
+    <select id="findByExamdate" resultType="com.nasoft.aboutcar.pilotapply.domain.DrvExamresult">
+    	select *  from xzsp_drv_examresult e where e.certno = #{certno} and e.examdate=#{examdate}
+    </select>
+	
+  <insert id="addDrvExamresult" parameterType="com.nasoft.aboutcar.pilotapply.domain.DrvExamresult" >
+    insert into xzsp_drv_examresult (resultid, certno, examname, 
+      examdate, examplace, examcontent, 
+      score, totalscore, certificate, 
+      examresult, remark, createuserid, 
+      createinstid, createdatetime, upduserid, 
+      updinstid, upddatetime, examtype
+      )
+    values (#{resultid,jdbcType=INTEGER}, #{certno,jdbcType=VARCHAR}, #{examname,jdbcType=VARCHAR}, 
+      #{examdate,jdbcType=DATE}, #{examplace,jdbcType=VARCHAR}, #{examcontent,jdbcType=VARCHAR}, 
+      #{score,jdbcType=INTEGER}, #{totalscore,jdbcType=INTEGER}, #{certificate,jdbcType=VARCHAR}, 
+      #{examresult,jdbcType=CHAR}, #{remark,jdbcType=VARCHAR}, #{createuserid,jdbcType=INTEGER}, 
+      #{createinstid,jdbcType=INTEGER}, #{createdatetime,jdbcType=TIMESTAMP}, #{upduserid,jdbcType=INTEGER}, 
+      #{updinstid,jdbcType=INTEGER}, #{upddatetime,jdbcType=TIMESTAMP}, #{examtype,jdbcType=CHAR}
+      )
+  </insert>
+  <update id="updateDrvExamresult" parameterType="com.nasoft.aboutcar.pilotapply.domain.DrvExamresult">
+  UPDATE xzsp_drv_examresult d SET
+  d.score = #{score},
+  d.examresult = #{examresult},
+  d.createdatetime = #{createdatetime}
+  WHERE d.certno = #{certno} AND d.examdate = #{examdate} AND d.examtype = #{examtype}
+  </update>
+  
+  
+  <select id="examSystemByCertno" parameterType="java.lang.String" resultType="java.util.HashMap">
+  	SELECT e.score,e.examdate,e.examcontent,e.examresult,e.examtype,u.username 
+  	FROM xzsp_drv_examresult e,xzsp_drv_userinfo u 
+  	WHERE e.certno=u.certno 
+  	AND e.certno=#{certno}
+  
+  </select>
+</mapper>

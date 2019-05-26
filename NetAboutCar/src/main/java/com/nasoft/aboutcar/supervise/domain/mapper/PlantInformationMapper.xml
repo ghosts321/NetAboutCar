@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nasoft.aboutcar.PlantInformationMapper">		
+    		<!-- 查找表所有数据 -->
+    	 <select id="findAllPlantInformationInfo" parameterType="java.util.HashMap"  resultType="java.util.HashMap" >  
+        select a.* ,b.status FROM xzsp_com_companyinfo a JOIN xzsp_com_permitcert b ON a.creditcode = b.creditcode
+        
+        <where>
+         
+         <if test="platformname !=null and platformname !=''">
+            platformname = #{platformname}
+         </if>  
+         <if test="creditcode !=null and creditcode !=''">
+             and a.creditcode = #{creditcode}
+         </if> 
+       
+         
+     </where>
+    </select>
+    
+    	 
+    	 
+    	 </mapper>

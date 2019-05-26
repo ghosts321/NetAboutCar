@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.DrvEventReview" >
+  
+  <insert id="addDrvEventReview" parameterType="com.nasoft.aboutcar.credit.domain.DrvEventReview">
+    insert into cxkh_drv_event_review (review_no, event_no, review_status, 
+      drv_name, certno, drv_license, deal_date, dealer, 
+      review_date, reviewer, review_result, 
+      result_file, create_user, create_time, 
+      update_user, update_time)
+    values (#{review_no,jdbcType=CHAR}, #{event_no,jdbcType=CHAR}, #{review_status,jdbcType=VARCHAR}, 
+      #{drv_name,jdbcType=VARCHAR}, #{certno,jdbcType=VARCHAR}, #{drv_license,jdbcType=CHAR}, #{deal_date,jdbcType=TIMESTAMP}, #{dealer,jdbcType=INTEGER}, 
+      #{review_date,jdbcType=TIMESTAMP}, #{reviewer,jdbcType=INTEGER}, #{review_result,jdbcType=VARCHAR}, 
+      #{result_file,jdbcType=VARCHAR}, #{create_user,jdbcType=INTEGER}, #{create_time,jdbcType=TIMESTAMP}, 
+      #{update_user,jdbcType=INTEGER}, #{update_time,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <select id="findByEventNo" resultType="com.nasoft.aboutcar.credit.domain.DrvEventReview">
+    SELECT * FROM cxkh_drv_event_review where event_no = #{event_no}
+  </select>
+  
+  <select id="findByReviewNo" resultType="com.nasoft.aboutcar.credit.domain.DrvEventReview">
+    SELECT * FROM cxkh_drv_event_review where review_no = #{review_no}
+  </select>
+  
+</mapper>

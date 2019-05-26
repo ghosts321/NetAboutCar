@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.Events" >
+  
+  <select id="findDrvEvents" resultType="java.util.HashMap">
+    SELECT
+		e.event_no, e.occur_date,r.review_no,r.review_status,u.username,e.driver_certno,e.event_status,e.event_desc
+	FROM
+		cxkh_events e
+	LEFT JOIN cxkh_drv_event_review r ON e.event_no = r.event_no
+	LEFT JOIN xzsp_drv_userinfo u ON e.driver_certno = u.certno
+	WHERE e.driver_certno != "" 
+	<if test="userName != null and userName != '' ">
+		and u.username like CONCAT('%',#{userName},'%' ) 
+	</if>
+	<if test="certNo != null and certNo != ''">
+		and u.certno like CONCAT('%',#{certNo},'%' )
+	</if>
+	<if test="status!=null and status!=''">
+		and e.event_status=#{status}
+	</if>
+	order by e.create_time desc
+  </select>
+  
+  <select id="findDriverRecord" resultType="java.util.HashMap">
+  		select * from xzsp_drv_record where certno=#{certno,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="findComRecord" resultType="java.util.HashMap">
+  		select * from xzsp_com_companyinfo where creditcode=#{creditcode,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="findComEvents" resultType="java.util.HashMap">
+    SELECT
+		e.event_no, e.occur_date,r.review_no,r.review_status,e.com_creditcode,c.comname,e.event_status,e.event_desc
+	FROM
+		cxkh_events e
+	LEFT JOIN cxkh_com_event_review r ON e.event_no = r.event_no
+	LEFT JOIN xzsp_com_companyinfo c ON e.com_creditcode = c.creditcode
+	WHERE e.com_creditcode != "" 
+	<if test="creditcode != null and creditcode != '' ">
+		and c.creditcode like CONCAT('%',#{creditcode},'%' ) 
+	</if>
+	<if test="comname != null and comname != ''">
+		and c.comname like CONCAT('%',#{comname},'%' )
+	</if>
+	<if test="status!=null and status!=''">
+		and e.event_status=#{status}
+	</if>
+	order by e.create_time desc
+  </select>
+  
+  <select id="findEventsByNo" resultType="com.nasoft.aboutcar.credit.domain.Events">
+    SELECT * FROM cxkh_events where event_no = #{event_no}
+  </select>
+  
+  <insert id="addEvents" parameterType="com.nasoft.aboutcar.credit.domain.Events" >
+    insert into cxkh_events (event_no, event_desc, event_detail, 
+      attachment, ar_fact, occur_date, 
+      occur_address, com_creditcode, driver_certno, 
+      data_source, storage_date, event_status, 
+      create_user, create_time, update_user,ar_code, 
+      update_time)
+    values (#{event_no,jdbcType=CHAR}, #{event_desc,jdbcType=VARCHAR}, #{event_detail,jdbcType=VARCHAR}, 
+      #{attachment,jdbcType=VARCHAR}, #{ar_fact,jdbcType=VARCHAR}, #{occur_date,jdbcType=TIMESTAMP}, 
+      #{occur_address,jdbcType=VARCHAR}, #{com_creditcode,jdbcType=VARCHAR}, #{driver_certno,jdbcType=VARCHAR}, 
+      #{data_source,jdbcType=VARCHAR}, #{storage_date,jdbcType=TIMESTAMP}, #{event_status,jdbcType=VARCHAR}, 
+      #{create_user,jdbcType=INTEGER}, #{create_time,jdbcType=TIMESTAMP}, #{update_user,jdbcType=INTEGER}, #{arCode,jdbcType=VARCHAR},
+      #{update_time,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <update id="updateStatus" parameterType="com.nasoft.aboutcar.credit.domain.Events" >
+    update cxkh_events
+    <set>
+      <if test="event_status != null">
+        event_status = #{event_status},
+      </if>
+    </set>
+    where event_no = #{event_no}
+  </update>
+  
+</mapper>

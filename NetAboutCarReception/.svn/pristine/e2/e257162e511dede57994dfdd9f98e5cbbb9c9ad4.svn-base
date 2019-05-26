@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nasoft.SSM.instInfo">
+
+    <select id="findAllInstInfo" resultType="com.nasoft.SSM.domain.InstInfo" >  
+        select * from mng_instinfo
+    </select>
+    
+    <select id="findInstInfoByAreacode" parameterType="String" resultType="com.nasoft.SSM.domain.InstInfo" >  
+        select * from mng_instinfo
+        where areacode = #{areaCode,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="findInstInfoByInstid" parameterType="String" resultType="String" >  
+        select instname from mng_instinfo
+        where instid = #{instid}
+    </select>
+    
+</mapper>

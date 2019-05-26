@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.DrvBlacklist">
+	<select id="findAllDrvBlacklist" parameterType="map" resultType="com.nasoft.aboutcar.credit.domain.DrvBlacklist">
+	select * from cxkh_drv_blacklist
+	<where>
+	status = '0'
+	<if test="drv_name != null and drv_name !=''">
+	and drv_name like CONCAT('%',#{drv_name},'%' )
+	</if>
+	</where>
+	</select>
+	<select id="selectOneById" parameterType="String" resultType="com.nasoft.aboutcar.credit.domain.DrvBlacklist">
+	select * from cxkh_drv_blacklist where id = #{id}
+	</select>
+	<select id="getDrvNameList" resultType="com.nasoft.aboutcar.pilotapply.domain.DrvUserinfo">
+	SELECT *
+	FROM xzsp_drv_userinfo u
+	WHERE u.certno NOT IN(SELECT
+	                        b.drv_id
+	                      FROM cxkh_drv_blacklist b
+	                      WHERE b.status = '0')
+	</select>
+	<insert id="addDrvBlacklist" parameterType="com.nasoft.aboutcar.credit.domain.DrvBlacklist">
+	insert into cxkh_drv_blacklist values(
+	#{id},#{drv_license},#{drv_id},#{drv_name},#{storage_date},
+	#{storage_reason},#{storage_file},#{storager},#{remove_date},
+	#{remove_reason},#{remove_file},#{remover},#{pre_remove_date},#{status},
+	#{bl_type},#{create_user},#{create_time},#{update_user},#{update_time}
+	)
+	</insert>
+	
+	<update id="updateDrvBlacklist" parameterType="com.nasoft.aboutcar.credit.domain.DrvBlacklist">
+	update cxkh_drv_blacklist set 
+	status = '1',
+	remove_date = #{remove_date},
+	remove_reason = #{remove_reason},
+	remove_file = #{remove_file},
+	remover = #{remover},
+	update_user = #{update_user},
+	update_time = #{update_time}
+	<where>
+	id = #{id}
+	</where>
+	</update>
+</mapper>

@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.CtlIllegalCarMonitorMapper" >
+<select id="findAll" parameterType="java.util.HashMap" resultType="com.nasoft.aboutcar.supervise.domain.CtlIllegalCarMonitor">
+	select c.comname comname, b.area_name areaName, a.*, d.areaname cityName
+	from yyjg_illegal_car_monitor a 
+	LEFT JOIN xzsp_com_companyinfo c ON c.creditcode = a.company_id 
+	LEFT JOIN yyjg_outin_area_set	b ON b.id = a.inAreaId 
+	LEFT JOIN mng_areainfo d ON d.areacode = a.vehicle_region_code
+	<where>
+		<if test="vehicle_region_code != null and vehicle_region_code !=''">
+		and a.vehicle_region_code = #{vehicle_region_code}
+		</if>
+		<if test="company_id != null and company_id !=''">
+		and a.company_id = #{company_id}
+		</if>
+		<if test="vehicle_no != null and vehicle_no !=''">
+		and a.vehicle_no like concat(concat('%', #{vehicle_no}), '%')
+		</if>
+		<if test="illegal_type != null and illegal_type !=''">
+		and a.illegal_type = #{illegal_type}
+		</if>
+	</where>
+</select>
+
+<delete id="disposeDel" parameterType="java.lang.String">
+	delete from yyjg_illegal_car_monitor
+	<where>
+	id=#{id}
+	</where>
+</delete>
+	
+<select id="findCarNewPosition" resultType="com.nasoft.aboutcar.supervise.domain.CtlCarPositionInfo">
+SELECT DISTINCT * FROM yyjg_car_position_info GROUP BY vehicle_no ORDER BY DATE_FORMAT(position_time,'%y%m%d%H%i%s') DESC 
+</select>
+<select id="findById" parameterType="String" resultType="com.nasoft.aboutcar.supervise.domain.CtlIllegalCarMonitor">
+SELECT * FROM yyjg_illegal_car_monitor WHERE id = #{id}
+</select>
+
+<select id="DrvIllegalInfofindAll" parameterType="java.util.HashMap" resultType="com.nasoft.aboutcar.supervise.domain.DrvIllegalInfo">
+	select * from zfjc_drv_illegalinfo
+	 <where>
+	      status in ('1','2') 
+		<if test="name != null and name !=''">
+		and name like concat(concat('%', #{name}), '%')
+		</if>
+		<if test="company_name != null and company_name !=''">
+		 and company_name like concat(concat('%', #{company_name}), '%')
+		</if>
+		<if test="begin_time != null and begin_time != '' ">
+			and illegal_time >= #{begin_time}
+		</if>
+    	<if test="end_time !=null and end_time !='' "> 
+          	<![CDATA[and illegal_time <= #{end_time}]]>
+        </if>
+	</where>
+	ORDER by status ASC,illegal_time DESC
+</select>
+
+<select id="DrvIllegalInfofindById" parameterType="java.util.HashMap" resultType="com.nasoft.aboutcar.supervise.domain.DrvIllegalInfo">
+	SELECT * FROM zfjc_drv_illegalinfo WHERE drv_illegal_id = #{drv_illegal_id}
+	
+</select>
+
+<insert id="insertDetermine" parameterType="com.nasoft.aboutcar.supervise.domain.DrvIllegalInfo">
+    	insert into zfjc_drv_illegalinfo(decision_result,notice_status) values(
+	    	 #{decision_result,jdbcType=VARCHAR},
+	    	 #{notice_status,jdbcType=CHAR}
+    	 )
+    </insert>
+    
+    <update id="updateDetermine" parameterType="com.nasoft.aboutcar.supervise.domain.DrvIllegalInfo" >
+     update zfjc_drv_illegalinfo
+     set status = 2,decision_result = #{decision_result},notice_status = #{notice_status}
+     where drv_illegal_id = #{drv_illegal_id}
+    </update>
+    
+    <select id="driverexamineFindAll" parameterType="java.util.HashMap" resultType="com.nasoft.aboutcar.supervise.domain.DrvIllegalInfo">
+	select * from zfjc_drv_illegalinfo
+	 <where>
+	      status in ('2','3') 
+		<if test="name != null and name !=''">
+		and name like concat(concat('%', #{name}), '%')
+		</if>
+		<if test="company_name != null and company_name !=''">
+		 and company_name like concat(concat('%', #{company_name}), '%')
+		</if>
+		<if test="begin_time != null and begin_time != '' ">
+			and illegal_time >= #{begin_time}
+		</if>
+    	<if test="end_time !=null and end_time !='' "> 
+          	<![CDATA[and illegal_time <= #{end_time}]]>
+        </if>
+	</where>
+	ORDER by status ASC,illegal_time DESC
+	</select>
+	
+	<update id="updateExamine" parameterType="com.nasoft.aboutcar.supervise.domain.DrvIllegalInfo" >
+     update zfjc_drv_illegalinfo
+     set status = 3,check_result = #{check_result}
+     where drv_illegal_id = #{drv_illegal_id}
+    </update>
+    
+     <insert id="addDriverwzwf" parameterType="com.nasoft.aboutcar.supervise.domain.DrvIllegalInfo" >
+    insert into zfjc_drv_illegalinfo (drv_illegal_id, name, certno, 
+      company_id, company_name, car_num, 
+      areacode, phone_number, order_id, 
+      illegal_source, illegal_content, status, 
+      illegal_time)
+    values (#{drv_illegal_id}, #{name}, #{certno}, 
+      #{company_id}, #{company_name}, #{car_num}, 
+      #{areacode}, #{phone_number}, #{order_id}, 
+      #{illegal_source}, #{illegal_content}, #{status}, 
+      #{illegal_time}
+      )
+  </insert>
+  
+  <select id="driverlawaddFindAll" parameterType="java.util.HashMap" resultType="com.nasoft.aboutcar.supervise.domain.DrvActionInfo">
+	select * from zfjc_drv_actioninfo
+	 <where>
+		<if test="name != null and name !=''">
+		and name like concat(concat('%', #{name}), '%')
+		</if>
+		<if test="enforcer != null and enforcer !=''">
+		 and enforcer like concat(concat('%', #{enforcer}), '%')
+		</if>
+		<if test="begin_time != null and begin_time != '' ">
+			and action_time >= #{begin_time}
+		</if>
+    	<if test="end_time !=null and end_time !='' "> 
+          	<![CDATA[and action_time <= #{end_time}]]>
+        </if>
+	</where>
+	order by action_time desc
+</select>
+
+<insert id="DriverlawInsert" parameterType="com.nasoft.aboutcar.supervise.domain.DrvActionInfo" >
+    insert into zfjc_drv_actioninfo (name, certno, 
+      illegal_content, enforcer, action_time, 
+      action_result)
+    values (#{name,jdbcType=VARCHAR}, 
+    		#{certno,jdbcType=VARCHAR}, 
+          	#{illegal_content,jdbcType=VARCHAR}, 
+      		#{enforcer,jdbcType=VARCHAR},
+      		#{action_time,jdbcType=TIMESTAMP},
+      		#{action_result,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  <select id="CarIllegalInfofindAll" parameterType="java.util.HashMap" resultType="com.nasoft.aboutcar.supervise.domain.CarIllegalInfo">
+	select * from zfjc_car_illegalinfo
+	 <where>
+	      status in ('1','2') 
+	    <if test="driver_name != null and driver_name !=''">
+		and driver_name like concat(concat('%', #{driver_name}), '%')
+		</if>
+		<if test="car_num != null and car_num !=''">
+		and car_num like concat(concat('%', #{car_num}), '%')
+		</if>
+		<if test="company_name != null and company_name !=''">
+		 and company_name like concat(concat('%', #{company_name}), '%')
+		</if>
+		<if test="begin_time != null and begin_time != '' ">
+			and illegal_time >= #{begin_time}
+		</if>
+    	<if test="end_time !=null and end_time !='' "> 
+          	<![CDATA[and illegal_time <= #{end_time}]]>
+        </if>
+	</where>
+	ORDER by status ASC,illegal_time DESC
+</select>
+
+<select id="CarIllegalInfofindById" parameterType="java.util.HashMap" resultType="com.nasoft.aboutcar.supervise.domain.CarIllegalInfo">
+	SELECT * FROM zfjc_car_illegalinfo WHERE car_illegal_id = #{car_illegal_id}
+	
+</select>
+
+<update id="updatecarDetermine" parameterType="com.nasoft.aboutcar.supervise.domain.CarIllegalInfo" >
+     update zfjc_car_illegalinfo
+     set status = 2,decision_result = #{decision_result},notice_status = #{notice_status}
+     where car_illegal_id = #{car_illegal_id}
+    </update>
+    
+    <insert id="addCarwzwf" parameterType="com.nasoft.aboutcar.supervise.domain.CarIllegalInfo" >
+    insert into zfjc_car_illegalinfo (car_illegal_id,car_num, driver_name, 
+      driver_certno,company_id, company_name, 
+      areacode, phone_number, order_id, 
+      illegal_source, illegal_content, status, 
+      illegal_time)
+    values (#{car_illegal_id,jdbcType=CHAR}, #{car_num,jdbcType=VARCHAR}, #{driver_name,jdbcType=VARCHAR}, 
+      #{driver_certno,jdbcType=VARCHAR},#{company_id,jdbcType=VARCHAR}, #{company_name,jdbcType=VARCHAR},  
+      #{areacode,jdbcType=VARCHAR}, #{phone_number,jdbcType=VARCHAR}, #{order_id,jdbcType=VARCHAR}, 
+      #{illegal_source,jdbcType=VARCHAR}, #{illegal_content,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, 
+      #{illegal_time,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  
+   <select id="carexamineFindAll" parameterType="java.util.HashMap" resultType="com.nasoft.aboutcar.supervise.domain.CarIllegalInfo">
+	select * from zfjc_car_illegalinfo
+	 <where>
+	      status in ('2','3') 
+		<if test="car_num != null and car_num !=''">
+		and car_num like concat(concat('%', #{car_num}), '%')
+		</if>
+		<if test="company_name != null and company_name !=''">
+		 and company_name like concat(concat('%', #{company_name}), '%')
+		</if>
+		<if test="begin_time != null and begin_time != '' ">
+			and illegal_time >= #{begin_time}
+		</if>
+    	<if test="end_time !=null and end_time !='' "> 
+          	<![CDATA[and illegal_time <= #{end_time}]]>
+        </if>
+	</where>
+	ORDER by status ASC,illegal_time DESC
+	</select>
+	
+	<update id="updatecarExamine" parameterType="com.nasoft.aboutcar.supervise.domain.CarIllegalInfo" >
+     update zfjc_car_illegalinfo
+     set status = 3,check_result = #{check_result}
+     where car_illegal_id = #{car_illegal_id}
+    </update>
+    
+     <select id="carlawaddFindAll" parameterType="java.util.HashMap" resultType="com.nasoft.aboutcar.supervise.domain.CarActionInfo">
+	select * from zfjc_car_actioninfo
+	 <where>
+		<if test="car_num != null and car_num !=''">
+		and car_num like concat(concat('%', #{car_num}), '%')
+		</if>
+		<if test="enforcer != null and enforcer !=''">
+		 and enforcer like concat(concat('%', #{enforcer}), '%')
+		</if>
+		<if test="begin_time != null and begin_time != '' ">
+			and enforcement_time >= #{begin_time}
+		</if>
+    	<if test="end_time !=null and end_time !='' "> 
+          	<![CDATA[and enforcement_time <= #{end_time}]]>
+        </if>
+	</where>
+	order by enforcement_time desc
+</select>
+
+<insert id="CarlawInsert" parameterType="com.nasoft.aboutcar.supervise.domain.CarActionInfo" >
+    insert into zfjc_car_actioninfo (car_num, engine_number, 
+      illegal_content, enforcer, enforcement_time, 
+      enforcement_result)
+    values (#{car_num,jdbcType=VARCHAR}, 
+    		#{engine_number,jdbcType=VARCHAR}, 
+          	#{illegal_content,jdbcType=VARCHAR}, 
+      		#{enforcer,jdbcType=VARCHAR},
+      		#{enforcement_time,jdbcType=DATE},
+      		#{enforcement_result,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+   <select id="drvillegalSearch" parameterType="java.util.HashMap" resultType="com.nasoft.aboutcar.supervise.domain.DrvIllegalInfo">
+	select * from zfjc_drv_illegalinfo
+	 <where>
+		<if test="name != null and name !=''">
+		and name like concat(concat('%', #{name}), '%')
+		</if>
+		<if test="company_name != null and company_name !=''">
+		 and company_name like concat(concat('%', #{company_name}), '%')
+		</if>
+		<if test="begin_time != null and begin_time != '' ">
+			and illegal_time >= #{begin_time}
+		</if>
+    	<if test="end_time !=null and end_time !='' "> 
+          	<![CDATA[and illegal_time <= #{end_time}]]>
+        </if>
+	</where>
+	order by illegal_time desc
+	</select>
+	
+	<select id="carillegalSearch" parameterType="java.util.HashMap" resultType="com.nasoft.aboutcar.supervise.domain.CarIllegalInfo">
+	select * from zfjc_car_illegalinfo
+	 <where>
+	    <if test="driver_name != null and driver_name !=''">
+		and driver_name like concat(concat('%', #{driver_name}), '%')
+		</if>
+		<if test="car_num != null and car_num !=''">
+		and car_num like concat(concat('%', #{car_num}), '%')
+		</if>
+		<if test="company_name != null and company_name !=''">
+		 and company_name like concat(concat('%', #{company_name}), '%')
+		</if>
+		<if test="begin_time != null and begin_time != '' ">
+			and illegal_time >= #{begin_time}
+		</if>
+    	<if test="end_time !=null and end_time !='' "> 
+          	<![CDATA[and illegal_time <= #{end_time}]]>
+        </if>
+	</where>
+	order by illegal_time desc
+</select>
+
+<insert id="insertdrvcaseinfo" parameterType="com.nasoft.aboutcar.administrativePenalty.domain.DrvPlantCaseInfo" >
+    insert into xzcf_dricase_info 
+    (plateName,punishid,caseid,carid,casesource,drivcarno,areacode,casetime,casereason,dealstatus,updatetime,caseuserid,instid,createinstid,drivename,caseType)
+    values (#{plateName}, 
+    		#{punishid},
+    		#{caseid},
+    		#{carid}, 
+    		"01",
+          	#{drivcarno}, 
+      		#{areacode},
+      		#{casetime},
+      		#{casereason},
+      		"00",
+      		#{updatetime},
+      		#{caseuserid},
+      		#{instid},
+      		#{createinstid},
+      		#{drivename},
+      		"01"
+      )
+  </insert>
+  <insert id="insertcarcaseinfo" parameterType="com.nasoft.aboutcar.administrativePenalty.domain.DrvPlantCaseInfo" >
+    insert into xzcf_dricase_info 
+    (plateName,punishid,caseid,carid,casesource,drivcarno,areacode,casetime,casereason,dealstatus,updatetime,caseuserid,instid,createinstid,drivename,caseType)
+    values (#{plateName}, 
+    		#{punishid},
+    		#{caseid},
+    		#{carid}, 
+    		"01",
+          	#{drivcarno}, 
+      		#{areacode},
+      		#{casetime},
+      		#{casereason},
+      		"00",
+      		#{updatetime},
+      		#{caseuserid},
+      		#{instid},
+      		#{createinstid},
+      		#{drivename},
+      		"01"
+      )
+  </insert>
+  
+   <select id="findXzspCertno" resultType="java.util.HashMap" >
+    select certno from xzsp_drv_record where certno != ""
+    </select>
+    
+    <!-- 判断要保存的违规车辆是否存在 -->
+    <select id="findIllegaCar" parameterType="java.util.HashMap" resultType="com.nasoft.aboutcar.supervise.domain.CtlIllegalCarMonitor">
+		select * from yyjg_illegal_car_monitor 
+		
+		<where>
+		    <if test="vehicleNo != null and vehicleNo !=''">
+			and vehicle_no = #{vehicleNo}
+			</if>
+			<if test="illegalType != null and illegalType !=''">
+			and illegal_type = #{illegalType}
+			</if>
+			<if test="areaId != null and areaId !=''">
+			and inAreaId = #{areaId}
+			</if>
+		</where>
+	</select>
+    
+    <!-- 违规车辆检测表数据保存 -->
+  	<insert id="saveIllCar" parameterType="com.nasoft.aboutcar.supervise.domain.CtlIllegalCarMonitor">
+	   	insert into yyjg_illegal_car_monitor
+	   	(company_id,vehicle_no,vehicle_region_code,position_time,longitude,latitude,speed,direction,elevation,mileage,warnStatus,veh_status,biz_status,order_id,encrypt,illegal_type,inAreaId,create_time) 
+	   	values(
+	    	 #{company_id},
+	    	 #{vehicle_no},
+	    	 #{vehicle_region_code},
+	    	 #{position_time},
+	    	 #{longitude},
+	    	 #{latitude},
+	    	 #{speed},
+	    	 #{direction},
+	    	 #{elevation},
+	    	 #{mileage},
+	    	 #{warnStatus},
+	    	 #{veh_status},
+	    	 #{biz_status},
+	    	 #{order_id},
+	    	 #{encrypt},
+	    	 #{illegal_type},
+	    	 #{inAreaId},
+	    	 #{create_time}
+	   	 )
+    </insert>
+</mapper>

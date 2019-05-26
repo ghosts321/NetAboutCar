@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.SSM.DrvBespeak" >
+
+		 <insert id="addDrvBespeak" parameterType="com.nasoft.SSM.domain.DrvBespeak" >
+		    insert into xzsp_drv_window_bespeak (certno,bespeak_id,bespeak_time,applyid,create_user,create_time,update_user,update_time) 
+		    values (#{certno},#{bespeakId},#{bespeakTime},#{applyId},#{createUser},#{createTime},#{updateUser},#{updateTime})
+		  </insert>
+		  
+		  <select id="selectByDate" parameterType="String" resultMap="BespeakResultMap">
+			    select bespeak_id,bespeak_date,morning_count,afternoon_count,morning_count+afternoon_count as sum,address
+			    from xzsp_mng_window_bespeak    
+			    where bespeak_date like CONCAT( CONCAT('%',#{bespeakDate}),'%')  and order_type="0"
+			 </select>
+		
+		 <select id="selectByDistinctDate" parameterType="com.nasoft.SSM.domain.BespeakSum" resultMap="BespeakResultMap">
+			    select distinct year,month
+			    from xzsp_mng_window_bespeak 
+			    where  order_type="0"
+			 </select>
+			 
+			 
+			  <update id="updateOrderInfo" parameterType="com.nasoft.SSM.domain.BespeakSum" >
+				    update xzsp_mng_window_bespeak set 
+				      morning_count= #{morningCount},
+				      afternoon_count= #{afternoonCount}
+				      where bespeak_id= #{bespeakId,jdbcType=INTEGER}
+				</update>
+			 
+			 <select id="selectByCertno" parameterType="String" resultType="com.nasoft.SSM.domain.DrvPermitapply">
+				    select 
+				    *
+				    from xzsp_drv_permitapply
+				    where certno = #{certno,jdbcType=VARCHAR}
+			 </select>
+				  
+		 <resultMap type="com.nasoft.SSM.domain.BespeakSum" id="BespeakResultMap">  
+		    <id column="bespeak_id" property="bespeakId" />  
+		    <result column="address" property="address" />
+			<result column="bespeak_date" property="bespeakDate" />
+			<result column="morning_count" property="morningCount" />
+			<result column="afternoon_count" property="afternoonCount" />
+			<result column="order_type" property="orderType" />
+			
+		</resultMap>  
+</mapper>

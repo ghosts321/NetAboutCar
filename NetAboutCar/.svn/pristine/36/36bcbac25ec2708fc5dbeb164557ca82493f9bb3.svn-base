@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.DrvRecordMapper" >
+
+  <select id="selectAllRecord" resultType="java.util.HashMap">
+    select rc.recordid,rc.status,con.url,con.type,drv.certno,drv.username,drv.areacode,drv.drivecardno,
+    car.carnum,com.creditcode,com.comname,com.platformname from xzsp_drv_record rc 
+	left join xzsp_drv_contract con on con.contractid=rc.contractid
+	left join xzsp_drv_userinfo drv on drv.certno=rc.certno
+	left join xzsp_car_carinfo car on car.carid=rc.carid
+	left join xzsp_com_companyinfo com on com.creditcode=rc.creditcode
+	<where>
+		<if test="roleid != null and roleid != '' and roleid != '1000' ">
+			and drv.areacode = #{areacode}
+		</if>
+	    <if test="userName != null and userName != '' ">
+			and drv.username like CONCAT('%',#{userName},'%' ) 
+		</if>
+		<if test="comName != null and comName != ''">
+			and com.comname like CONCAT('%',#{comName},'%' )
+		</if>
+	</where>
+  </select>
+  
+  <select id="selectDetailById" resultType="java.util.HashMap">
+    select rc.*,con.*,drv.*,car.*,com.* from xzsp_drv_record rc 
+	left join xzsp_drv_contract con on con.contractid=rc.contractid
+	left join xzsp_drv_userinfo drv on drv.certno=rc.certno
+	left join xzsp_car_carinfo car on car.carid=rc.carid
+	left join xzsp_com_companyinfo com on com.creditcode=rc.creditcode
+	where rc.recordid = #{recordid}
+  </select>
+  
+  <select id="selectDetailByCertno" resultType="java.util.HashMap">
+    select rc.*,drv.*,car.*,com.* from xzsp_drv_record rc 
+	left join xzsp_drv_userinfo drv on drv.certno=rc.certno
+	left join xzsp_car_carinfo car on car.carid=rc.carid
+	left join xzsp_com_companyinfo com on com.creditcode=rc.creditcode
+	where rc.certno = #{certno}
+  </select>
+  
+  
+  <select id="selectDetailByCertno2" resultType="com.nasoft.aboutcar.credit.controller.DriverModel">
+    select rc.*,drv.*,car.*,com.* from xzsp_drv_record rc 
+	left join xzsp_drv_userinfo drv on drv.certno=rc.certno
+	left join xzsp_car_carinfo car on car.carid=rc.carid
+	left join xzsp_com_companyinfo com on com.creditcode=rc.creditcode
+	where rc.certno = #{certno}
+  </select>
+  
+  <select id="findRecord" resultType="com.nasoft.aboutcar.pilotapply.domain.DrvRecord">
+    select * from xzsp_drv_record where certno = #{certno} and creditcode = #{creditcode}
+  </select>
+  
+  <insert id="addDrvRecord" parameterType="com.nasoft.aboutcar.pilotapply.domain.DrvRecord" >
+    insert into xzsp_drv_record (recordid, certno, pcertno, 
+      carid, creditcode, contractid, 
+      status, createdate)
+    values (#{recordid,jdbcType=INTEGER}, #{certno,jdbcType=VARCHAR}, #{pcertno,jdbcType=VARCHAR}, 
+      #{carid,jdbcType=VARCHAR}, #{creditcode,jdbcType=VARCHAR}, #{contractid,jdbcType=INTEGER}, 
+      #{status,jdbcType=CHAR}, #{createdate,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <update id="updateDrvRecord" parameterType="com.nasoft.aboutcar.pilotapply.domain.DrvRecord" >
+    update xzsp_drv_record
+    <set>
+      <if test="status != null">
+        status = #{status,jdbcType=CHAR},
+      </if>
+    </set>
+    where recordid = #{recordid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nasoft.aboutcar.CxkhDrvPunList">
+   <select id="findCreditDriverPunishmentList" parameterType="map" resultType="hashmap">
+SELECT 
+  cdpl.list_no listNo,
+  cdsr.drv_name drvName,
+  cdsr.certno,
+  cps.pun_text punText,
+ SUM(cdsr.score) score,
+ xcc.belongs,
+ xcc.carnum
+FROM
+  cxkh_drv_pun_list cdpl,
+  cxkh_drv_pun_list_d cdpld,
+  xzsp_drv_userinfo xdu,
+  xzsp_car_carinfo xcc,
+  cxkh_drv_score_record cdsr,
+  cxkh_punished_set cps
+WHERE cdpl.list_no = cdpld.list_no 
+  AND xdu.certno = cdsr.certno
+  AND cdpl.pun_code=cps.pun_code
+  AND xcc.certno = xdu.certno
+  AND cdpld.drv_license=cdsr.drv_license 
+AND cps.pun_text = #{pun_text}
+AND cdpl.pub_status = #{pubStatus}
+GROUP BY cdsr.certno
+  <if test="username != null and username !=''">
+  and xdu.username like CONCAT('%',#{username},'%' )
+  </if>
+   </select>
+   <select id="findCxhDrvPunListByListNo"  parameterType="String" resultType="hashmap">
+   SELECT 
+  cp.list_no listNo,
+  cp.pun_code punCode,
+  cp.pun_text punText,
+  cp.pub_date pubDate,
+  cp.pub_end_date punEndDate,
+  cp.pub_status pubStatus,
+  cd.drv_license drvLicense
+FROM
+  cxkh_drv_pun_list cp,
+  cxkh_drv_pun_list_d cd 
+WHERE cp.list_no = cd.list_no 
+	AND cp.list_no=#{listNo}
+   </select>
+   <update id="updateCxhDrvPunList" parameterType="map">
+   update cxkh_drv_pun_list 
+   set pub_status=#{pubStatus}
+   where list_no=#{listNo}
+   </update>
+</mapper>

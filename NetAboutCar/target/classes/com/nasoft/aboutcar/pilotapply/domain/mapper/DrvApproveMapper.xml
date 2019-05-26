@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.DrvApproveMapper" >
+
+  <insert id="addDrvApprove" parameterType="com.nasoft.aboutcar.pilotapply.domain.DrvApprove" >
+    insert into xzsp_drv_approve (apprid, certno, apprtype, 
+      applyid, opinions, description, 
+      appruserid, apprinstid, apprdatetime
+      )
+    values (#{apprid,jdbcType=INTEGER}, #{certno,jdbcType=VARCHAR}, #{apprtype,jdbcType=CHAR}, 
+      #{applyid,jdbcType=INTEGER}, #{opinions,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{appruserid,jdbcType=INTEGER}, #{apprinstid,jdbcType=INTEGER}, #{apprdatetime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  
+  <select id="selectByCertno" parameterType="map" resultType="com.nasoft.aboutcar.pilotapply.domain.DrvApprove">
+    SELECT
+		a.*, u.username
+	FROM
+		xzsp_drv_approve a
+	LEFT JOIN mng_userinfo u ON a.appruserid = u.userid
+	WHERE
+		a.certno = #{certno} and a.apprtype = #{apprtype}
+	ORDER BY
+		a.apprid DESC
+  </select>
+  
+</mapper>

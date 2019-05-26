@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.MngOperatingTimeSet">
+	<select id="findAllOperatingTimeSet" resultType="com.nasoft.aboutcar.mngoperating.domain.MngOperatingTimeSet">
+		select * from mng_operating_time_set 
+		<where>
+			<if test="company_name != null and company_name !=''">
+			and company_name like concat(concat('%',#{company_name}),'%')  
+			</if>
+			<if test="begin_time != null and begin_time !='' and end_time != null and end_time !=''">
+			and (begin_time between #{begin_time} and #{end_time})  and
+			(end_time between #{begin_time} and #{end_time})
+			</if>
+		</where>
+	</select>
+	
+	<delete id="delOperatingSetById" parameterType="java.lang.String">
+		DELETE FROM mng_operating_time_set
+		<where>
+		operating_time_id=#{operating_time_id}
+		</where>
+	</delete>
+	<select id="selectOperatingSetIsExist" parameterType="java.util.HashMap" resultType="com.nasoft.aboutcar.mngoperating.domain.MngOperatingTimeSet">
+	select * from mng_operating_time_set where region_code = #{region_code} and company_id = #{company_id} 
+	</select>
+	
+	<insert id="AddOperatingTimeSet" parameterType="com.nasoft.aboutcar.mngoperating.domain.MngOperatingTimeSet">
+	insert into mng_operating_time_set values (
+	#{operating_time_id},#{region_code},#{region_name},#{company_id},#{company_name},#{begin_time},
+	#{end_time},#{create_user},#{create_time},#{update_user},#{update_time}
+	)
+	</insert>
+	
+	<select id="selectOperatingSetById" parameterType="java.lang.String" resultType="com.nasoft.aboutcar.mngoperating.domain.MngOperatingTimeSet">
+	select * from mng_operating_time_set where operating_time_id = #{operating_time_id}
+	</select>
+	
+	<update id="updateOperatingSet" parameterType="com.nasoft.aboutcar.mngoperating.domain.MngOperatingTimeSet">
+	update mng_operating_time_set
+		<set>
+		region_code=#{region_code},
+		region_name=#{region_name},
+		company_id=#{company_id},
+		company_name=#{company_name},
+		begin_time=#{begin_time},
+		end_time=#{end_time},
+		create_user=#{create_user},
+		create_time=#{create_time},
+		update_user=#{update_user},
+		update_time=#{update_time}
+		</set>
+		<where>
+		operating_time_id=#{operating_time_id}
+		</where>
+	</update>
+</mapper>

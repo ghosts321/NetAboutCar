@@ -1,0 +1,20 @@
+@CHARSET "UTF-8";
+*{margin:0;padding:0;list-style-type:none;}
+body{
+	margin: 0px;
+	padding: 0px;
+	font-family:'Microsoft YaHei';
+	font-size: 14px;
+}
+a,img{border:0;}
+a,a:hover{text-decoration: none;}
+
+/*收缩菜单*/
+.v{float:right;width:14px;height:14px;overflow:hidden;background:url(../images/vicon.png) no-repeat;display:inline-block;margin-top:-5px;margin-bottom:-5px;}
+.v01{background-position:0 0;}
+.v02{background-position:0 -16px;;}
+.vtitle{height:35px;background:#0D419D;line-height:35px;border:1px solid #ccb6a9;margin-top:-1px;padding-left:20px;font-size:15px;color:#f6f6f6;font-family:"\5FAE\8F6F\96C5\9ED1";cursor:pointer;}
+.vtitle em{margin:10px 10px 0 0;}
+.vconlist{background:#f6f6f6;}
+.vconlist li a{height:30px;line-height:30px;display:block;font-size:14px;color:#866f67;padding-left:28px;font-family:"\5FAE\8F6F\96C5\9ED1";}
+.vconlist li.select a,.vconlist li a:hover{color:#ed4948;text-decoration:none;}

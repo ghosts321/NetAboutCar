@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.DrvExamplanMapper" >
+
+	<select id="findAll" parameterType="java.util.HashMap" resultType="com.nasoft.aboutcar.pilotapply.domain.DrvExamplan">
+		select distinct e.* from 
+		(xzsp_drv_examplan e left join xzsp_drv_permitapply p on e.certno=p.certno) 
+		left join xzsp_drv_userinfo u on e.certno=u.certno 
+		<where>
+			<if test="roleid != null and roleid != '' ">
+				<if test="roleid == '1001' ">
+					and u.areacode = #{areacode}
+				</if>
+				<if test="roleid == '1002' ">
+					and p.instid = #{instid}
+				</if>
+			</if>
+	    	<if test="certNo !=null and certNo !='' ">  
+	          and e.certno like CONCAT('%',#{certNo},'%' )
+	        </if> 
+		</where>
+    </select>
+    
+    <select id="findById" parameterType="java.lang.Integer" resultType="com.nasoft.aboutcar.pilotapply.domain.DrvExamplan">
+	    select 
+	    *
+	    from xzsp_drv_examplan
+	    where planid = #{planid,jdbcType=INTEGER}
+	</select>
+	
+    <select id="findStatusByCertno" parameterType="String" resultType="com.nasoft.aboutcar.pilotapply.domain.DrvExamplan">
+	    select 
+	    *
+	    from xzsp_drv_examplan
+	    where certno = #{certno,jdbcType=VARCHAR}
+	    and examstatus = '0'
+	</select>
+	
+  <insert id="addDrvExamplan" parameterType="com.nasoft.aboutcar.pilotapply.domain.DrvExamplan" >
+    insert into xzsp_drv_examplan (planid, certno, examtype, 
+      examname, examdate, examcontent, 
+      examaddr, totalscore, examstatus, 
+      remark, createuserid, createinstid, 
+      createdatetime, upduserid, updinstid, 
+      upddatetime)
+    values (#{planid,jdbcType=INTEGER}, #{certno,jdbcType=VARCHAR}, #{examtype,jdbcType=CHAR}, 
+      #{examname,jdbcType=VARCHAR}, #{examdate,jdbcType=DATE}, #{examcontent,jdbcType=VARCHAR}, 
+      #{examaddr,jdbcType=VARCHAR}, #{totalscore,jdbcType=INTEGER}, #{examstatus,jdbcType=CHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{createuserid,jdbcType=INTEGER}, #{createinstid,jdbcType=INTEGER}, 
+      #{createdatetime,jdbcType=TIMESTAMP}, #{upduserid,jdbcType=INTEGER}, #{updinstid,jdbcType=INTEGER}, 
+      #{upddatetime,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <update id="updateExamstatus" parameterType="com.nasoft.aboutcar.pilotapply.domain.DrvExamplan" >
+    update xzsp_drv_examplan
+    set examstatus = #{examstatus,jdbcType=CHAR}
+    where planid = #{planid,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

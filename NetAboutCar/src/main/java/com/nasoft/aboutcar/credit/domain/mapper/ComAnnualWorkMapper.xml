@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.ComAnnualWork" >
+  
+  <insert id="addComAnnualWork" parameterType="com.nasoft.aboutcar.credit.domain.ComAnnualWork" >
+    insert into cxkh_com_annual_work (id, year, com_license, 
+      score, start_date, end_date, 
+      assess_level, create_user, create_time, 
+      update_user, update_time,is_curr)
+    values (#{id,jdbcType=INTEGER}, #{year,jdbcType=CHAR}, #{com_license,jdbcType=CHAR}, 
+      #{score,jdbcType=INTEGER}, #{start_date,jdbcType=DATE}, #{end_date,jdbcType=DATE}, 
+      #{assess_level,jdbcType=CHAR}, #{create_user,jdbcType=INTEGER}, #{create_time,jdbcType=TIMESTAMP}, 
+      #{update_user,jdbcType=INTEGER}, #{update_time,jdbcType=TIMESTAMP},#{is_curr})
+  </insert>
+  
+  <select id="selectComByDate" resultType="com.nasoft.aboutcar.credit.domain.ComAnnualWork">
+	SELECT
+		*
+	FROM
+		cxkh_com_annual_work a
+	WHERE
+		a.com_license = #{comLicense}
+	AND	<![CDATA[#{nowDate} >= a.start_date
+	AND #{nowDate} <= a.end_date]]>
+  </select>
+  
+  
+  <select id="selectComByDate2" resultType="com.nasoft.aboutcar.credit.domain.ComAnnualWork">
+	SELECT
+		*
+	FROM
+		cxkh_com_annual_work a
+	WHERE
+		a.com_license = #{com_license}
+	AND	a.is_curr=#{is_curr}
+  </select>
+  
+  <select id="selectComAnnualWork" resultType="com.nasoft.aboutcar.credit.domain.ComAnnualWork">
+	SELECT
+		*
+	FROM
+		cxkh_com_annual_work a
+	WHERE
+		a.com_license = #{com_license}
+	order by a.year desc
+  </select>
+  
+  
+   <update id="updateComScore" parameterType="com.nasoft.aboutcar.credit.domain.ComAnnualWork" >
+    update cxkh_com_annual_work
+    <set>
+      <if test="score != null">
+        score = #{score},
+      </if>
+      <if test="update_time != null">
+        update_time = #{update_time},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  
+</mapper>

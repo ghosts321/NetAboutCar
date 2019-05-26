@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.DrvScoreRecord" >
+  
+  <insert id="addDrvScoreRecord" parameterType="com.nasoft.aboutcar.credit.domain.DrvScoreRecord" >
+    insert into cxkh_drv_score_record (rec_no, drv_name, certno, drv_license, rec_date, 
+      indic_code, indic_text, score, 
+      event_no, review_no, appeal_no, 
+      year, rec_status, create_user, 
+      create_time, update_user, update_time
+      )
+    values (#{rec_no,jdbcType=CHAR},#{drv_name,jdbcType=VARCHAR}, #{certno,jdbcType=VARCHAR}, #{drv_license,jdbcType=CHAR}, #{rec_date,jdbcType=DATE}, 
+      #{indic_code,jdbcType=CHAR}, #{indic_text,jdbcType=VARCHAR}, #{score,jdbcType=INTEGER}, 
+      #{event_no,jdbcType=CHAR}, #{review_no,jdbcType=CHAR}, #{appeal_no,jdbcType=CHAR}, 
+      #{year,jdbcType=CHAR}, #{rec_status,jdbcType=VARCHAR}, #{create_user,jdbcType=INTEGER}, 
+      #{create_time,jdbcType=TIMESTAMP}, #{update_user,jdbcType=INTEGER}, #{update_time,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  
+  <select id="selectByEventNo" parameterType="String" resultType="com.nasoft.aboutcar.credit.domain.DrvScoreRecord">
+	select * from cxkh_drv_score_record where event_no = #{event_no}
+  </select>
+  
+  
+  <select id="selectByRecNo" parameterType="String" resultType="com.nasoft.aboutcar.credit.domain.DrvScoreRecord">
+	select * from cxkh_drv_score_record where rec_no = #{rec_no}
+  </select>
+</mapper>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.SSM.DrvContract" >
+
+  <insert id="addDrvContract" parameterType="com.nasoft.SSM.domain.DrvContract" useGeneratedKeys="true" keyProperty="contractid">
+    insert into xzsp_drv_contract (contractid, url, type, 
+      startdate, enddate, createman, 
+      createinstid, createdate, upduserid, 
+      updinstid, upddatetime)
+    values (#{contractid,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
+      #{startdate,jdbcType=DATE}, #{enddate,jdbcType=DATE}, #{createman,jdbcType=VARCHAR}, 
+      #{createinstid,jdbcType=VARCHAR}, #{createdate,jdbcType=TIMESTAMP}, #{upduserid,jdbcType=VARCHAR}, 
+      #{updinstid,jdbcType=VARCHAR}, #{upddatetime,jdbcType=TIMESTAMP})
+  </insert>
+  
+</mapper>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.MngOrderStartInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.nasoft.aboutcar.supervise.domain.MngOrderStartInfo" >
+    <id column="order_start_id" property="orderStartId" jdbcType="INTEGER" />
+    <result column="company_id" property="companyId" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="depart_time" property="departTime" jdbcType="INTEGER" />
+    <result column="order_time" property="orderTime" jdbcType="INTEGER" />
+    <result column="passenger_note" property="passengerNote" jdbcType="VARCHAR" />
+    <result column="Departure" property="departure" jdbcType="VARCHAR" />
+    <result column="dep_longitude" property="depLongitude" jdbcType="DECIMAL" />
+    <result column="dep_latitude" property="depLatitude" jdbcType="DECIMAL" />
+    <result column="Destination" property="destination" jdbcType="VARCHAR" />
+    <result column="dept_longitude" property="deptLongitude" jdbcType="DECIMAL" />
+    <result column="dept_latitude" property="deptLatitude" jdbcType="DECIMAL" />
+    <result column="fare_type" property="fareType" jdbcType="VARCHAR" />
+    <result column="encrypt" property="encrypt" jdbcType="CHAR" />
+    <result column="create_user" property="createUser" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <select id="selectOrderReceivingTime" resultType="java.util.HashMap">
+	SELECT <![CDATA[ SUM(s.distribute_time-i.order_time <= 100) as one,
+		SUM(s.distribute_time-i.order_time between 101 and 200) as two,
+		SUM(s.distribute_time-i.order_time between 201 and 300) as three,
+		SUM(s.distribute_time-i.order_time between 301 and 400) as four, 
+		SUM(s.distribute_time-i.order_time between 401 and 500) as five, 
+		SUM(s.distribute_time-i.order_time > 500) as other]]>
+	from mng_order_start_info i LEFT JOIN mng_order_success s ON i.order_id = s.order_id
+	<where>
+		<if test="address != null and address != '' ">
+			and i.address = #{address}
+		</if>
+    	<if test="companyId !=null and companyId !='' "> 
+          	and i.company_id = #{companyId}
+        </if> 
+		<if test="beginTime != null and beginTime != '' ">
+			and i.create_time >= #{beginTime}
+		</if>
+    	<if test="endTime !=null and endTime !='' "> 
+          	<![CDATA[and i.create_time <= #{endTime}]]>
+        </if> 
+	</where>
+  </select>
+  
+  <select id="selectAddress" resultType="java.util.HashMap">
+	SELECT DISTINCT i.address,a.areaname 
+	FROM mng_order_start_info i LEFT JOIN mng_areainfo a ON i.address = a.areacode
+  </select>
+  
+  <select id="selectCompany" resultType="java.util.HashMap">
+	SELECT DISTINCT i.company_id,c.comname
+	FROM mng_order_start_info i LEFT JOIN xzsp_com_companyinfo c ON i.company_id = c.creditcode
+  </select>
+  
+  <insert id="addMngOrderStartInfo" parameterType="com.nasoft.aboutcar.supervise.domain.MngOrderStartInfo" >
+    insert into mng_order_start_info (order_start_id, company_id, address, 
+      order_id, depart_time, order_time, 
+      passenger_note, Departure, dep_longitude, 
+      dep_latitude, Destination, dept_longitude, 
+      dept_latitude, fare_type, encrypt, 
+      create_user, create_time, update_user, 
+      update_time)
+    values (#{orderStartId,jdbcType=INTEGER}, #{companyId,jdbcType=VARCHAR}, #{address,jdbcType=INTEGER}, 
+      #{orderId,jdbcType=VARCHAR}, #{departTime,jdbcType=INTEGER}, #{orderTime,jdbcType=INTEGER}, 
+      #{passengerNote,jdbcType=VARCHAR}, #{departure,jdbcType=VARCHAR}, #{depLongitude,jdbcType=DECIMAL}, 
+      #{depLatitude,jdbcType=DECIMAL}, #{destination,jdbcType=VARCHAR}, #{deptLongitude,jdbcType=DECIMAL}, 
+      #{deptLatitude,jdbcType=DECIMAL}, #{fareType,jdbcType=VARCHAR}, #{encrypt,jdbcType=CHAR}, 
+      #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  
+</mapper>

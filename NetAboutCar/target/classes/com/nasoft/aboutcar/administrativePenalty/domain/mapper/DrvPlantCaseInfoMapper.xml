@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nasoft.aboutcar.DrvPlantCaseInfoMapper">
+    
+       
+    <select id="findAllDrvPlantcaseinfo" resultType="com.nasoft.aboutcar.administrativePenalty.domain.DrvPlantCaseInfo" >  
+        select * from xzcf_dricase_info
+        <where>
+          1 = 1
+         
+         
+         <if test="id == 1 ">
+             and caseType='00'
+             
+             <if test="caseId != null and caseId != '' ">
+             and caseId like concat(concat('%', #{caseId}), '%')
+         	 </if> 
+         	 
+            <if test="carid != null and carid != '' ">
+             and carid like concat(concat('%', #{carid}), '%')
+            </if> 
+            
+         	 <if test="beginTime != null and beginTime != '' and endTime != null and endTime != '' ">      
+                      and caseTime between #{beginTime} and #{endTime}          
+         	 </if>
+         </if>
+         
+         <if test="id == 2 ">
+             and caseType='01'
+             
+             <if test="iding == 0 ">
+             and dealStatus='00'
+              
+             <if test="caseId != null and caseId != '' ">
+             and caseId like concat(concat('%', #{caseId}), '%')
+         	 </if> 
+         	 
+             <if test="carid != null and carid != '' ">
+             and carid like concat(concat('%', #{carid}), '%')
+             </if> 
+            
+         	 <if test="beginTime != null and beginTime != '' and endTime != null and endTime != '' ">      
+                      and caseTime between #{beginTime} and #{endTime}          
+         	 </if>
+             </if>
+             
+             <if test="iding == 1 ">
+             and dealStatus='01'
+              
+             <if test="caseId != null and caseId != '' ">
+             and caseId like concat(concat('%', #{caseId}), '%')
+         	 </if>
+         	 
+             <if test="carid != null and carid != '' ">
+             and carid like concat(concat('%', #{carid}), '%')
+             </if> 
+             
+         	 <if test="beginTime != null and beginTime != '' and endTime != null and endTime != '' ">      
+                      and caseTime between #{beginTime} and #{endTime}          
+         	 </if>
+             </if>
+             
+             <if test="iding == 2 ">
+             and dealStatus='02'
+              
+             <if test="caseId != null and caseId != '' ">
+             and caseId like concat(concat('%', #{caseId}), '%')
+         	 </if> 
+         	 
+             <if test="carid != null and carid != '' ">
+             and carid like concat(concat('%', #{carid}), '%')
+             </if> 
+             
+         	 <if test="beginTime != null and beginTime != '' and endTime != null and endTime != '' ">      
+                      and caseTime between #{beginTime} and #{endTime}          
+         	 </if>
+             </if>
+             
+             <if test="iding == 3 ">
+             and dealStatus='04'
+              
+             <if test="caseId != null and caseId != '' ">
+             and caseId like concat(concat('%', #{caseId}), '%')
+         	 </if> 
+         	 
+             <if test="carid != null and carid != '' ">
+             and carid like concat(concat('%', #{carid}), '%')
+             </if> 
+             
+         	 <if test="beginTime != null and beginTime != '' and endTime != null and endTime != '' ">      
+                      and caseTime between #{beginTime} and #{endTime}          
+         	 </if>
+             </if>
+         </if>
+         
+     </where>
+    </select>
+    
+    
+    <!-- 新增平台案件 -->
+    <insert id="drvplantCaseInfoInsert" parameterType="com.nasoft.aboutcar.administrativePenalty.domain.DrvPlantCaseInfo">
+	    
+        insert into xzcf_dricase_info (punishid,caseid,carid,drivcarno,drivename ,plateName ,casesource ,
+	    areacode ,instid ,caseuserid ,isregister  ,casetime ,casereason ,
+	    punishtype ,punishcontent,caseType,dealstatus,updatetime) 
+	    
+	    values (#{punishid},#{caseid},#{carid},#{drivcarno},#{drivename},#{plateName},#{casesource},
+	    #{areacode},#{instid},#{caseuserid},#{isregister},#{casetime},#{casereason},
+	    #{punishtype},#{punishcontent},#{caseType},#{dealstatus},#{updatetime})
+    </insert>
+    
+    
+    <select id="drvpenaltyDetail" resultType="com.nasoft.aboutcar.administrativePenalty.domain.DrvPlantCaseInfo" >
+        select * from xzcf_dricase_info where caseid=#{caseid}
+    </select>
+    
+    <select id="getDrvno" parameterType="java.lang.String" resultType="java.util.HashMap">
+        
+        select certno from xzsp_drv_record where certno=#{drivcarno}
+        
+    </select>
+    
+    <!-- 修改案件 -->
+    <update id="updateDrvCaseInfo" parameterType="com.nasoft.aboutcar.administrativePenalty.domain.DrvPlantCaseInfo">
+    	update xzcf_dricase_info set 
+    	carid = #{carid},
+    	drivcarno = #{drivcarno},
+    	casesource = #{casesource},
+    	areacode = #{areacode},
+    	instid = #{instid},
+    	caseuserid = #{caseuserid},
+    	isregister = #{isregister},
+    	casetime = #{casetime},
+    	casereason = #{casereason},
+    	punishtype = #{punishtype},
+    	dealstatus = #{dealstatus},
+    	evidenceview = #{evidenceview},
+    	punishcontent = #{punishcontent},
+    	dealview = #{dealview},
+    	updatetime = #{updatetime}
+    	where caseid = #{caseid}
+    </update>
+    
+    <!-- 新增平台案件 -->
+    <insert id="drvCaseDealInfoInsert" parameterType="com.nasoft.aboutcar.administrativePenalty.domain.DrvCaseDealInfo">
+	    insert into xzcf_drivercasedeal_info (caseId,dealUserId ,lastDealUserId ,nextDealUserId ,dealStatus ,
+	    punishType ,dealView ,evidenceView ,createUserId ,createInstId ,createTime ,updUserId ,updInstId ,updateTime ,delFlag ,evidenceurl ,punishurl,dealview) 
+	    values (#{caseId},#{dealUserId},#{lastDealUserId},#{nextDealUserId},#{dealStatus},
+	    #{punishType},#{dealView},#{evidenceView},#{createUserId},#{createInstId},#{createTime},#{updUserId},#{updInstId},#{updateTime},#{delFlag},#{evidenceurl},#{punishurl},#{dealview})
+    </insert>
+    
+    <!-- 删除驾驶员案件 -->
+    <delete id="delDrvCaseInfoByCaseId" parameterType="java.lang.String">
+	DELETE  FROM xzcf_dricase_info WHERE caseId = #{caseId}
+	</delete>
+	
+   <!-- 删除案件 -->
+    <delete id="delDrvCaseDealInfoByCaseId" parameterType="java.lang.String">
+	DELETE  FROM xzcf_dricase_info WHERE caseId = #{caseId}
+	</delete>  
+	
+	<!-- 查找 -->
+   <select id="findDrvComplainByCaseId" resultType="com.nasoft.aboutcar.complaint.domain.drvComplainInfo">
+    SELECT * FROM tsfw_drv_complain_info WHERE RIGHT(complain_code,6) = #{name}
+   </select>
+   
+   
+   <!-- 查找 -->
+   <select id="findDrvIllegalByCaseId" resultType="com.nasoft.aboutcar.supervise.domain.DrvIllegalInfo">
+    SELECT * FROM zfjc_drv_illegalinfo WHERE drv_illegal_id = #{name}
+   </select>
+   
+   
+   <!-- 查找 -->
+   <select id="findDrvComplainDisByCaseId" resultType="com.nasoft.aboutcar.complaint.domain.drvComplainDistribute">
+    SELECT * FROM tsfw_drv_complain_distribute WHERE RIGHT(drv_complain_info_id,6) = #{name}
+   </select>
+    
+    </mapper>

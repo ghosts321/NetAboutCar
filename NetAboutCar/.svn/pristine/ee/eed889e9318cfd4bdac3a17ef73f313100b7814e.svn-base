@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.DrvChangeapplyMapper" >
+   
+   <select id="selectByApplyid" parameterType="java.lang.Integer" resultType="com.nasoft.aboutcar.pilotapply.domain.DrvChangeapply">
+    select 
+    *
+    from xzsp_drv_changeapply
+    where applyid = #{applyid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByCertno" parameterType="String" resultType="com.nasoft.aboutcar.pilotapply.domain.DrvChangeapply">
+    SELECT *
+	FROM xzsp_drv_changeapply 
+	WHERE certno = #{certno,jdbcType=VARCHAR} 
+  </select>
+  
+  <select id="selectDetail" parameterType="String" resultType="java.util.HashMap">
+    select 
+    *
+    from xzsp_drv_changeapply p,xzsp_drv_userinfo u
+    where p.certno = u.certno
+    and u.certno = #{certno}
+  </select>
+  
+  <insert id="addDrvChangeapply" parameterType="com.nasoft.aboutcar.pilotapply.domain.DrvChangeapply" >
+    insert into xzsp_drv_changeapply (applyid, certno, instid, 
+      driveyears, company, contractid, 
+      workstatus, photo, certphoto, 
+      drivecardphoto, applydate, crimemark, 
+      recordcont, appstatus, checkstatus, 
+      remark, upduserid, updinstid, 
+      upddatetime, source, applytype, 
+      description)
+    values (#{applyid,jdbcType=INTEGER}, #{certno,jdbcType=VARCHAR}, #{instid,jdbcType=VARCHAR}, 
+      #{driveyears,jdbcType=INTEGER}, #{company,jdbcType=VARCHAR}, #{contractid,jdbcType=VARCHAR}, 
+      #{workstatus,jdbcType=CHAR}, #{photo,jdbcType=VARCHAR}, #{certphoto,jdbcType=VARCHAR}, 
+      #{drivecardphoto,jdbcType=VARCHAR}, #{applydate,jdbcType=TIMESTAMP}, #{crimemark,jdbcType=CHAR}, 
+      #{recordcont,jdbcType=VARCHAR}, #{appstatus,jdbcType=CHAR}, #{checkstatus,jdbcType=CHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{upduserid,jdbcType=INTEGER}, #{updinstid,jdbcType=INTEGER}, 
+      #{upddatetime,jdbcType=TIMESTAMP}, #{source,jdbcType=CHAR}, #{applytype,jdbcType=CHAR}, 
+      #{description,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="updateDrvChangeapply" parameterType="com.nasoft.aboutcar.pilotapply.domain.DrvChangeapply" >
+    update xzsp_drv_changeapply
+    set certno = #{certno,jdbcType=VARCHAR},
+      instid = #{instid,jdbcType=VARCHAR},
+      driveyears = #{driveyears,jdbcType=INTEGER},
+      company = #{company,jdbcType=VARCHAR},
+      contractid = #{contractid,jdbcType=VARCHAR},
+      workstatus = #{workstatus,jdbcType=CHAR},
+      photo = #{photo,jdbcType=VARCHAR},
+      certphoto = #{certphoto,jdbcType=VARCHAR},
+      drivecardphoto = #{drivecardphoto,jdbcType=VARCHAR},
+      applydate = #{applydate,jdbcType=TIMESTAMP},
+      crimemark = #{crimemark,jdbcType=CHAR},
+      recordcont = #{recordcont,jdbcType=VARCHAR},
+      appstatus = #{appstatus,jdbcType=CHAR},
+      checkstatus = #{checkstatus,jdbcType=CHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      upduserid = #{upduserid,jdbcType=INTEGER},
+      updinstid = #{updinstid,jdbcType=INTEGER},
+      upddatetime = #{upddatetime,jdbcType=TIMESTAMP},
+      source = #{source,jdbcType=CHAR},
+      applytype = #{applytype,jdbcType=CHAR},
+      description = #{description,jdbcType=VARCHAR}
+    where applyid = #{applyid,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateDrvChangeapplyByApplyid" parameterType="com.nasoft.aboutcar.pilotapply.domain.DrvChangeapply">
+	  update xzsp_drv_changeapply 
+	  <set>
+	  	<if test="appstatus != null">
+	  		appstatus=#{appstatus},
+	  	</if>
+	  	<if test="upddatetime != null">
+	  		upddatetime=#{upddatetime},
+	  	</if>
+	  </set>
+	  where	applyid=#{applyid,jdbcType= VARCHAR}
+ </update>
+ 
+</mapper>

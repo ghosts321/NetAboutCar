@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.IndicMapper" >
+<select id="selectAllIndic" parameterType="map" resultType="com.nasoft.aboutcar.credit.domain.Indic">
+SELECT
+  c.indic_code,
+  c.indic_text,
+  c.indic_desc,
+  c.indic_status,
+  c.score,
+  c.type_code,
+  t.type_name
+FROM cxkh_indic c
+  LEFT JOIN cxkh_indic_type t
+    ON c.type_code = t.type_code
+<where>
+	c.category = #{type}
+	<if test="indic_text != null and indic_text !=''">
+	AND c.indic_text like CONCAT('%',#{indic_text},'%' )
+	</if>
+</where>
+</select>
+<select id="selectAllTypeCode" parameterType="map" resultType="com.nasoft.aboutcar.credit.domain.IndicType">
+SELECT type_code,type_name FROM cxkh_indic_type where category = #{category}
+</select>
+<select id="selectOneById" parameterType="String" resultType="com.nasoft.aboutcar.credit.domain.Indic">
+	select * from cxkh_indic where indic_code = #{indic_code}
+	</select>
+	
+	<delete id="batchDelById" parameterType="String">
+	delete from cxkh_indic where indic_code = #{indic_code}
+	</delete>
+	
+	<insert id="addIndic" parameterType="com.nasoft.aboutcar.credit.domain.Indic">
+	insert into cxkh_indic(type_code,indic_code,indic_text,indic_desc,score,level,shared,indic_status,
+	category,create_user,create_time,update_user,update_time) values(
+	#{type_code},#{indic_code},#{indic_text},#{indic_desc},#{score},
+	#{level},#{shared},#{indic_status},#{category},
+	#{create_user},#{create_time},#{update_user},#{update_time}
+	)
+	</insert>
+	
+	<update id="updateIndic" parameterType="com.nasoft.aboutcar.credit.domain.Indic">
+	update cxkh_indic set 
+	type_code=#{type_code},
+	indic_code=#{indic_code},
+	indic_text=#{indic_text},
+	indic_desc=#{indic_desc},
+	score=#{score},
+	level=#{level},
+	indic_status=#{indic_status},
+	shared=#{shared},
+	update_user=#{update_user},
+	update_time=#{update_time}
+	<where>
+	indic_code=#{indic_code}
+	</where>
+	</update>
+	<update id="updateIndicStatus" parameterType="com.nasoft.aboutcar.credit.domain.Indic">
+	update cxkh_indic set indic_status=#{indic_status} <where>indic_code=#{indic_code}</where>
+	</update>
+	
+	<select id="findAllIndic" resultType="java.util.HashMap">
+	    SELECT
+			i.indic_code,i.indic_text,i.score,t.type_name
+		FROM
+			cxkh_indic i
+		LEFT JOIN cxkh_indic_type t ON i.type_code = t.type_code
+  	</select>
+  	
+</mapper>

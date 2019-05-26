@@ -1,0 +1,68 @@
+.mystyle{
+	border-color: #6fb3e0;
+	border-width: 1px;
+	width: 120px;
+	height: 18px !important;
+	border-radius: 4px !important;
+	font-size: 13px;
+	color: #666 !important;
+	z-index: 11;
+	-moz-transition: all .15s ease;
+	-webkit-transition: all .15s ease;
+	-o-transition: all .15s ease;
+	-ms-transition: all .15s ease;
+	transition: all .15s ease
+}
+.panel{
+ margin-bottom: 4px;
+}
+.col-sm-3{
+ width: 14%;
+}
+input[name="btSelectAll"]{
+ width:12px;
+}
+input[name="btSelectItem"]{
+ width:12px;
+}
+span.title{
+ display:block;
+ width:70px;
+ height:6px;
+ position:relative;
+ top:-15px;
+ text-align: center;
+ font-weight: bold;
+ background: white;
+}
+.col-sm-4 {
+    width: 60px;
+}
+
+ .panel-body{
+ padding: 9px;
+}
+.panel-default{
+ border-color: #cccccc;
+}
+.fixed-table-container{
+ border-color: #dddddd;
+}
+.title{
+ line-height: 0.428571;
+}
+.page-header{
+ margin: 0 0 10px;
+ border-bottom: 0;
+}
+
+.col-sm-1{
+ width: auto;
+}
+.form-horizontal .control-label{
+ padding-left: 23px;
+}
+
+h1 small{
+ color: inherit;
+}

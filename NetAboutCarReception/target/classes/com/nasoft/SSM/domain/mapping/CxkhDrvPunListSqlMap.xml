@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.nasoft.aboutcar.CxkhDrvPunListMapper">
+
+	<resultMap id="CxkhDrvPunListResultMap" type="com.nasoft.SSM.domain.CxkhDrvPunList">
+        <result property="listNo" column="list_no" jdbcType="CHAR"/>
+        <result property="punCode" column="pun_code" jdbcType="CHAR"/>
+        <result property="punText" column="pun_text" jdbcType="VARCHAR"/>
+        <result property="pubDate" column="pub_date" jdbcType="DATE"/>
+        <result property="pubEndDate" column="pub_end_date" jdbcType="DATE"/>
+        <result property="pubStatus" column="pub_status" jdbcType="VARCHAR"/>
+        <result property="changeReason" column="change_reason" jdbcType="VARCHAR"/>
+        <result property="createUser" column="create_user" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="INTEGER"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	   
+		list_no,pun_code,pun_text,pub_date,pub_end_date,pub_status,change_reason,create_user,create_time,update_user,update_time
+	   
+	</sql>
+
+	<insert id="insertIfNotnull"   parameterType="com.nasoft.SSM.domain.CxkhDrvPunList">
+
+        INSERT INTO cxkh_drv_pun_list 
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="listNo != null">
+        		list_no ,
+			</if>
+			<if test="punCode != null">
+        		pun_code ,
+			</if>
+			<if test="punText != null">
+        		pun_text ,
+			</if>
+			<if test="pubDate != null">
+        		pub_date ,
+			</if>
+			<if test="pubEndDate != null">
+        		pub_end_date ,
+			</if>
+			<if test="pubStatus != null">
+        		pub_status ,
+			</if>
+			<if test="changeReason != null">
+        		change_reason ,
+			</if>
+			<if test="createUser != null">
+        		create_user ,
+			</if>
+			<if test="createTime != null">
+        		create_time ,
+			</if>
+			<if test="updateUser != null">
+        		update_user ,
+			</if>
+			<if test="updateTime != null">
+        		update_time ,
+			</if>
+		</trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="listNo != null">
+        		#{listNo, jdbcType=CHAR} ,
+			</if>
+			<if test="punCode != null">
+        		#{punCode, jdbcType=CHAR} ,
+			</if>
+			<if test="punText != null">
+        		#{punText, jdbcType=VARCHAR} ,
+			</if>
+			<if test="pubDate != null">
+        		#{pubDate, jdbcType=DATE} ,
+			</if>
+			<if test="pubEndDate != null">
+        		#{pubEndDate, jdbcType=DATE} ,
+			</if>
+			<if test="pubStatus != null">
+        		#{pubStatus, jdbcType=VARCHAR} ,
+			</if>
+			<if test="changeReason != null">
+        		#{changeReason, jdbcType=VARCHAR} ,
+			</if>
+			<if test="createUser != null">
+        		#{createUser, jdbcType=INTEGER} ,
+			</if>
+			<if test="createTime != null">
+        		#{createTime, jdbcType=TIMESTAMP} ,
+			</if>
+			<if test="updateUser != null">
+        		#{updateUser, jdbcType=INTEGER} ,
+			</if>
+			<if test="updateTime != null">
+        		#{updateTime, jdbcType=TIMESTAMP} ,
+			</if>
+		</trim>
+    
+		
+	</insert>
+    
+	<update id="updateIfNotnull"  parameterType="com.nasoft.SSM.domain.CxkhDrvPunList">
+    
+        UPDATE cxkh_drv_pun_list
+			<set>
+				<if test="punCode != null">
+					pun_code = #{punCode, jdbcType=CHAR} ,
+				</if>
+				<if test="punText != null">
+					pun_text = #{punText, jdbcType=VARCHAR} ,
+				</if>
+				<if test="pubDate != null">
+					pub_date = #{pubDate, jdbcType=DATE} ,
+				</if>
+				<if test="pubEndDate != null">
+					pub_end_date = #{pubEndDate, jdbcType=DATE} ,
+				</if>
+				<if test="pubStatus != null">
+					pub_status = #{pubStatus, jdbcType=VARCHAR} ,
+				</if>
+				<if test="changeReason != null">
+					change_reason = #{changeReason, jdbcType=VARCHAR} ,
+				</if>
+				<if test="createUser != null">
+					create_user = #{createUser, jdbcType=INTEGER} ,
+				</if>
+				<if test="createTime != null">
+					create_time = #{createTime, jdbcType=TIMESTAMP} ,
+				</if>
+				<if test="updateUser != null">
+					update_user = #{updateUser, jdbcType=INTEGER} ,
+				</if>
+				<if test="updateTime != null">
+					update_time = #{updateTime, jdbcType=TIMESTAMP} ,
+				</if>
+			</set>
+        WHERE 
+	        list_no = #{listNo, jdbcType=CHAR} 
+    
+	</update>
+
+    <delete id="deleteById">
+    
+        DELETE FROM cxkh_drv_pun_list WHERE
+        list_no = #{listNo } 
+    
+    </delete>
+    
+    
+    <delete id="delete">
+    
+        DELETE FROM cxkh_drv_pun_list WHERE
+        
+    </delete>
+    
+		<select id="selectById" resultMap="CxkhDrvPunListResultMap">
+			SELECT <include refid="columns" />
+		   
+				FROM cxkh_drv_pun_list 
+				WHERE 
+					list_no = #{listNo, jdbcType=CHAR} 
+			
+		</select>
+	
+	<sql id="selectList_where">
+		<where>	      				
+	       <if test="listNo != null">
+		 	   	 	AND list_no = #{listNo, jdbcType=CHAR}
+			</if>
+	       <if test="punCode != null">
+		 	   	 	AND pun_code = #{punCode, jdbcType=CHAR}
+			</if>
+	       <if test="punText != null">
+		 	   	 	AND pun_text = #{punText, jdbcType=VARCHAR}
+			</if>
+	       <if test="pubDateBegin != null">
+				AND pub_date >= #{pubDateBegin }
+		   </if>
+		   <if test="pubDateEnd != null">
+				AND pub_date &lt;= #{pubDateEnd }
+		   </if>
+	       <if test="pubEndDateBegin != null">
+				AND pub_end_date >= #{pubEndDateBegin }
+		   </if>
+		   <if test="pubEndDateEnd != null">
+				AND pub_end_date &lt;= #{pubEndDateEnd }
+		   </if>
+	       <if test="pubStatus != null">
+		 	   	 	AND pub_status = #{pubStatus, jdbcType=VARCHAR}
+			</if>
+	       <if test="changeReason != null">
+		 	   	 	AND change_reason = #{changeReason, jdbcType=VARCHAR}
+			</if>
+	       <if test="createUser != null">
+		 		 		AND create_user = #{createUser, jdbcType=INTEGER}
+			</if>
+	       <if test="createTimeBegin != null">
+				AND create_time >= #{createTimeBegin }
+		   </if>
+		   <if test="createTimeEnd != null">
+				AND create_time &lt;= #{createTimeEnd }
+		   </if>
+	       <if test="updateUser != null">
+		 		 		AND update_user = #{updateUser, jdbcType=INTEGER}
+			</if>
+	       <if test="updateTimeBegin != null">
+				AND update_time >= #{updateTimeBegin }
+		   </if>
+		   <if test="updateTimeEnd != null">
+				AND update_time &lt;= #{updateTimeEnd }
+		   </if>
+		</where>
+	</sql>
+		
+    <select id="selectListCount" resultType="long">
+        SELECT count(*) FROM cxkh_drv_pun_list 
+		<include refid="selectList_where"/>    
+    </select>
+    
+   
+    <select id="selectList" resultMap="CxkhDrvPunListResultMap">
+    	SELECT <include refid="columns" />
+	    FROM cxkh_drv_pun_list 
+		<include refid="selectList_where"/>
+		
+		
+    </select>
+    
+    <resultMap type="java.util.HashMap" id="CxkhDrvPunListResultToMap">
+    	
+    </resultMap>
+    <select id="getVertical" resultMap="CxkhDrvPunListResultToMap">
+    	SELECT <include refid="columns" />
+	    FROM cxkh_drv_pun_list 
+		<include refid="selectList_where"/>
+    </select>
+
+	
+	
+</mapper>
+

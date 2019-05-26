@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.ComAppealD" >
+  
+  <select id="findComAppealD" resultType="java.util.HashMap">
+    SELECT
+		com.comname,
+		com.creditcode,
+		d.rec_no,
+		d.appeal_text,
+		d.appeal_status
+	FROM
+		cxkh_com_appeal_d d
+	LEFT JOIN cxkh_com_appeals s ON d.appeal_no = s.appeal_no
+	LEFT JOIN xzsp_com_companyinfo com ON s.creditcode = com.creditcode
+	<where>
+		<if test="creditcode != null and creditcode != '' ">
+			and com.creditcode like CONCAT('%',#{creditcode},'%' ) 
+		</if>
+		<if test="comname != null and comname != ''">
+			and com.comname like CONCAT('%',#{comname},'%' )
+		</if>
+	</where>
+  </select>
+  
+  <update id="updateComAppealD" parameterType="com.nasoft.aboutcar.credit.domain.ComAppealD" >
+    update cxkh_com_appeal_d
+    <set>
+   	  <if test="appeal_status != null" >
+        appeal_status = #{appeal_status},
+      </if>
+      <if test="appeal_result != null" >
+        appeal_result = #{appeal_result},
+      </if>
+      <if test="deal_result != null" >
+        deal_result = #{deal_result},
+      </if>
+      <if test="result_file != null" >
+        result_file = #{result_file},
+      </if>
+      <if test="update_user != null" >
+        update_user = #{update_user},
+      </if>
+      <if test="update_time != null" >
+        update_time = #{update_time},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  
+  <select id="findByRecNo" resultType="com.nasoft.aboutcar.credit.domain.ComAppealD">
+    SELECT * FROM cxkh_com_appeal_d where rec_no = #{rec_no}
+    <if test="appeal_no!=null">
+    	and appeal_no=#{appeal_no}
+    </if>
+  </select>
+  
+</mapper>

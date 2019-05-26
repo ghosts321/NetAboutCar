@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.nasoft.aboutcar.CxkhDrvPunRecordMapper">
+
+	<resultMap id="CxkhDrvPunRecordResultMap" type="com.nasoft.aboutcar.credit.domain.CxkhDrvPunRecord">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="listNo" column="list_no" jdbcType="CHAR"/>
+        <result property="drvLicense" column="drv_license" jdbcType="CHAR"/>
+        <result property="punCode" column="pun_code" jdbcType="CHAR"/>
+        <result property="punText" column="pun_text" jdbcType="VARCHAR"/>
+        <result property="punStatus" column="pun_status" jdbcType="VARCHAR"/>
+        <result property="punDate" column="pun_date" jdbcType="DATE"/>
+        <result property="cancelDate" column="cancel_date" jdbcType="DATE"/>
+        <result property="preCancelDate" column="pre_cancel_date" jdbcType="DATE"/>
+        <result property="cancelReason" column="cancel_reason" jdbcType="VARCHAR"/>
+        <result property="cancelFile" column="cancel_file" jdbcType="VARCHAR"/>
+        <result property="shared" column="shared" jdbcType="CHAR"/>
+        <result property="createUser" column="create_user" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="INTEGER"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	   
+		id,list_no,drv_license,pun_code,pun_text,pun_status,pun_date,cancel_date,pre_cancel_date,cancel_reason,cancel_file,shared,create_user,create_time,update_user,update_time
+	   
+	</sql>
+
+	<insert id="insertIfNotnull"   parameterType="com.nasoft.aboutcar.credit.domain.CxkhDrvPunRecord">
+		<selectKey   keyProperty="id"  resultType="java.lang.Integer">  
+		SELECT LAST_INSERT_ID()  
+	  </selectKey>
+        INSERT INTO cxkh_drv_pun_record 
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="listNo != null">
+        		list_no ,
+			</if>
+			<if test="drvLicense != null">
+        		drv_license ,
+			</if>
+			<if test="punCode != null">
+        		pun_code ,
+			</if>
+			<if test="punText != null">
+        		pun_text ,
+			</if>
+			<if test="punStatus != null">
+        		pun_status ,
+			</if>
+			<if test="punDate != null">
+        		pun_date ,
+			</if>
+			<if test="cancelDate != null">
+        		cancel_date ,
+			</if>
+			<if test="preCancelDate != null">
+        		pre_cancel_date ,
+			</if>
+			<if test="cancelReason != null">
+        		cancel_reason ,
+			</if>
+			<if test="cancelFile != null">
+        		cancel_file ,
+			</if>
+			<if test="shared != null">
+        		shared ,
+			</if>
+			<if test="createUser != null">
+        		create_user ,
+			</if>
+			<if test="createTime != null">
+        		create_time ,
+			</if>
+			<if test="updateUser != null">
+        		update_user ,
+			</if>
+			<if test="updateTime != null">
+        		update_time ,
+			</if>
+		</trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="listNo != null">
+        		#{listNo, jdbcType=CHAR} ,
+			</if>
+			<if test="drvLicense != null">
+        		#{drvLicense, jdbcType=CHAR} ,
+			</if>
+			<if test="punCode != null">
+        		#{punCode, jdbcType=CHAR} ,
+			</if>
+			<if test="punText != null">
+        		#{punText, jdbcType=VARCHAR} ,
+			</if>
+			<if test="punStatus != null">
+        		#{punStatus, jdbcType=VARCHAR} ,
+			</if>
+			<if test="punDate != null">
+        		#{punDate, jdbcType=DATE} ,
+			</if>
+			<if test="cancelDate != null">
+        		#{cancelDate, jdbcType=DATE} ,
+			</if>
+			<if test="preCancelDate != null">
+        		#{preCancelDate, jdbcType=DATE} ,
+			</if>
+			<if test="cancelReason != null">
+        		#{cancelReason, jdbcType=VARCHAR} ,
+			</if>
+			<if test="cancelFile != null">
+        		#{cancelFile, jdbcType=VARCHAR} ,
+			</if>
+			<if test="shared != null">
+        		#{shared, jdbcType=CHAR} ,
+			</if>
+			<if test="createUser != null">
+        		#{createUser, jdbcType=INTEGER} ,
+			</if>
+			<if test="createTime != null">
+        		#{createTime, jdbcType=TIMESTAMP} ,
+			</if>
+			<if test="updateUser != null">
+        		#{updateUser, jdbcType=INTEGER} ,
+			</if>
+			<if test="updateTime != null">
+        		#{updateTime, jdbcType=TIMESTAMP} ,
+			</if>
+		</trim>
+    
+		
+	</insert>
+    
+	<update id="updateIfNotnull"  parameterType="com.nasoft.aboutcar.credit.domain.CxkhDrvPunRecord">
+    
+        UPDATE cxkh_drv_pun_record
+			<set>
+				<if test="listNo != null">
+					list_no = #{listNo, jdbcType=CHAR} ,
+				</if>
+				<if test="drvLicense != null">
+					drv_license = #{drvLicense, jdbcType=CHAR} ,
+				</if>
+				<if test="punCode != null">
+					pun_code = #{punCode, jdbcType=CHAR} ,
+				</if>
+				<if test="punText != null">
+					pun_text = #{punText, jdbcType=VARCHAR} ,
+				</if>
+				<if test="punStatus != null">
+					pun_status = #{punStatus, jdbcType=VARCHAR} ,
+				</if>
+				<if test="punDate != null">
+					pun_date = #{punDate, jdbcType=DATE} ,
+				</if>
+				<if test="cancelDate != null">
+					cancel_date = #{cancelDate, jdbcType=DATE} ,
+				</if>
+				<if test="preCancelDate != null">
+					pre_cancel_date = #{preCancelDate, jdbcType=DATE} ,
+				</if>
+				<if test="cancelReason != null">
+					cancel_reason = #{cancelReason, jdbcType=VARCHAR} ,
+				</if>
+				<if test="cancelFile != null">
+					cancel_file = #{cancelFile, jdbcType=VARCHAR} ,
+				</if>
+				<if test="shared != null">
+					shared = #{shared, jdbcType=CHAR} ,
+				</if>
+				<if test="createUser != null">
+					create_user = #{createUser, jdbcType=INTEGER} ,
+				</if>
+				<if test="createTime != null">
+					create_time = #{createTime, jdbcType=TIMESTAMP} ,
+				</if>
+				<if test="updateUser != null">
+					update_user = #{updateUser, jdbcType=INTEGER} ,
+				</if>
+				<if test="updateTime != null">
+					update_time = #{updateTime, jdbcType=TIMESTAMP} ,
+				</if>
+			</set>
+        WHERE 
+	        id = #{id, jdbcType=INTEGER} 
+    
+	</update>
+
+    <delete id="deleteById">
+    
+        DELETE FROM cxkh_drv_pun_record WHERE
+        id = #{id } 
+    
+    </delete>
+    
+    
+    <delete id="delete">
+    
+        DELETE FROM cxkh_drv_pun_record WHERE
+        
+    </delete>
+    
+		<select id="selectById" resultMap="CxkhDrvPunRecordResultMap">
+			SELECT <include refid="columns" />
+		   
+				FROM cxkh_drv_pun_record 
+				WHERE 
+					id = #{id, jdbcType=INTEGER} 
+			
+		</select>
+	
+	<sql id="selectList_where">
+		<where>	      				
+	       <if test="id != null">
+		 		 		AND id = #{id, jdbcType=INTEGER}
+			</if>
+	       <if test="listNo != null">
+		 	   	 	AND list_no = #{listNo, jdbcType=CHAR}
+			</if>
+	       <if test="drvLicense != null">
+		 	   	 	AND drv_license = #{drvLicense, jdbcType=CHAR}
+			</if>
+	       <if test="punCode != null">
+		 	   	 	AND pun_code = #{punCode, jdbcType=CHAR}
+			</if>
+	       <if test="punText != null">
+		 	   	 	AND pun_text = #{punText, jdbcType=VARCHAR}
+			</if>
+	       <if test="punStatus != null">
+		 	   	 	AND pun_status = #{punStatus, jdbcType=VARCHAR}
+			</if>
+	       <if test="punDateBegin != null">
+				AND pun_date >= #{punDateBegin }
+		   </if>
+		   <if test="punDateEnd != null">
+				AND pun_date &lt;= #{punDateEnd }
+		   </if>
+	       <if test="cancelDateBegin != null">
+				AND cancel_date >= #{cancelDateBegin }
+		   </if>
+		   <if test="cancelDateEnd != null">
+				AND cancel_date &lt;= #{cancelDateEnd }
+		   </if>
+	       <if test="preCancelDateBegin != null">
+				AND pre_cancel_date >= #{preCancelDateBegin }
+		   </if>
+		   <if test="preCancelDateEnd != null">
+				AND pre_cancel_date &lt;= #{preCancelDateEnd }
+		   </if>
+	       <if test="cancelReason != null">
+		 	   	 	AND cancel_reason = #{cancelReason, jdbcType=VARCHAR}
+			</if>
+	       <if test="cancelFile != null">
+		 	   	 	AND cancel_file = #{cancelFile, jdbcType=VARCHAR}
+			</if>
+	       <if test="shared != null">
+		 	   	 	AND shared = #{shared, jdbcType=CHAR}
+			</if>
+	       <if test="createUser != null">
+		 		 		AND create_user = #{createUser, jdbcType=INTEGER}
+			</if>
+	       <if test="createTimeBegin != null">
+				AND create_time >= #{createTimeBegin }
+		   </if>
+		   <if test="createTimeEnd != null">
+				AND create_time &lt;= #{createTimeEnd }
+		   </if>
+	       <if test="updateUser != null">
+		 		 		AND update_user = #{updateUser, jdbcType=INTEGER}
+			</if>
+	       <if test="updateTimeBegin != null">
+				AND update_time >= #{updateTimeBegin }
+		   </if>
+		   <if test="updateTimeEnd != null">
+				AND update_time &lt;= #{updateTimeEnd }
+		   </if>
+		</where>
+	</sql>
+		
+    <select id="selectListCount" resultType="long">
+        SELECT count(*) FROM cxkh_drv_pun_record 
+		<include refid="selectList_where"/>    
+    </select>
+    
+   
+    <select id="selectList" resultMap="CxkhDrvPunRecordResultMap">
+    	SELECT <include refid="columns" />
+	    FROM cxkh_drv_pun_record 
+		<include refid="selectList_where"/>
+		
+		
+    </select>
+    
+    <resultMap type="java.util.HashMap" id="CxkhDrvPunRecordResultToMap">
+    	
+    </resultMap>
+    <select id="getVertical" resultMap="CxkhDrvPunRecordResultToMap">
+    	SELECT <include refid="columns" />
+	    FROM cxkh_drv_pun_record 
+		<include refid="selectList_where"/>
+    </select>
+
+	
+	
+</mapper>
+

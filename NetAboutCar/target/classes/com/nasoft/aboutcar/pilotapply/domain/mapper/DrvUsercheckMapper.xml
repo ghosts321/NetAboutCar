@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.DrvUsercheckMapper" >
+
+  <insert id="addDrvUsercheck" parameterType="com.nasoft.aboutcar.pilotapply.domain.DrvUsercheck" >
+    insert into xzsp_drv_usercheck (checkid, certno, checkitem, 
+      checkgov, checkresult, checkstatus, 
+      checktime)
+    values (#{checkid,jdbcType=INTEGER}, #{certno,jdbcType=VARCHAR}, #{checkitem,jdbcType=VARCHAR}, 
+      #{checkgov,jdbcType=CHAR}, #{checkresult,jdbcType=VARCHAR}, #{checkstatus,jdbcType=CHAR}, 
+      #{checktime,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <select id="selectByCertno" parameterType="String" resultType="com.nasoft.aboutcar.pilotapply.domain.DrvUsercheck">
+    select 
+    *
+    from xzsp_drv_usercheck
+    where certno = #{certno}
+  </select>
+  
+  <delete id="deleteByCertno" parameterType="String" >
+    delete from xzsp_drv_usercheck
+    where certno = #{certno}
+  </delete>
+  
+</mapper>

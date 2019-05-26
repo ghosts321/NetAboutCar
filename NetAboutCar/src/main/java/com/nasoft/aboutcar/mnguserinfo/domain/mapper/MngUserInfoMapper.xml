@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.nasoft.aboutcar.MngUserInfoMapper">
+
+	<!-- 用户登录验证 -->
+	<select id="mngUserVerification" parameterType="String" resultType="com.nasoft.aboutcar.mnguserinfo.domain.MngUserInfo">
+		select * from mng_userinfo mng where mng.username =#{userName}
+    </select>
+    
+    <!-- 根据用户id查询用户信息 -->
+    <select id="searchMngUserById" parameterType="String" resultType="com.nasoft.aboutcar.mnguserinfo.domain.MngUserInfo">
+		select * from mng_userinfo mng where mng.userid =#{userId}
+    </select>
+    
+	<!-- 根据条件查询所有用户 -->
+	<select id="findMngUser" parameterType="com.nasoft.aboutcar.mnguserinfo.domain.MngUserInfo" resultType="com.nasoft.aboutcar.mnguserinfo.domain.MngUserInfo">
+           <!-- <when test="areaCode == '000000'">
+                select u.userid ,u.username ,u.realname ,sex ,birthday ,address ,phonenum ,email ,positions ,
+		    	officeaddress ,telno ,fax ,areacode ,u.instid ,u.userflag ,u.createman ,u.createinstid ,u.createdate,
+		    	GROUP_CONCAT(tab.roleid)    roleId,
+		  		GROUP_CONCAT(tab.rolename)    roleName
+		    	FROM mng_userinfo u 
+				  LEFT JOIN (SELECT ur.userid,r.roleid,r.rolename 
+				FROM mng_userrole ur 
+				LEFT JOIN mng_roleinfo r 
+				ON r.roleid=ur.roleid) tab
+				ON u.userid = tab.userid where u.userflag = 1 
+				<if test="userId != null">
+					and u.userid = #{userId}
+				</if>
+				
+				<if test="userName != null and userName != '' ">
+					and u.username like CONCAT('%','${userName}','%' ) 
+				</if>
+				<if test="realName != null and realName != ''">
+					and u.realname like CONCAT('%','${realName}','%' )
+				</if>
+				GROUP BY u.userid
+           </when> -->
+               	  SELECT
+				  utab.userid,
+				  utab.username,
+				  utab.realname,
+				  sex,
+				  birthday,
+				  address,
+				  phonenum,
+				  email,
+				  positions,
+				  officeaddress,
+				  telno,
+				  fax,
+				  areacode,
+				  utab.instid,
+				  utab.userflag,
+				  utab.createman,
+				  utab.createinstid,
+				  utab.createdate,
+				  GROUP_CONCAT(tab.roleid)    roleId,
+				  GROUP_CONCAT(tab.rolename)    roleName
+				FROM (SELECT
+				        u.*
+				      FROM mng_userinfo u,
+				        mng_areainfo a
+				      WHERE u.areacode = a.areacode
+				      <choose>
+				      <when test="areaCode == '000000'">
+				      	AND a.pareacode != #{areaCode}
+				      </when>
+				      <otherwise>
+				          AND a.pareacode = #{areaCode}
+				      </otherwise>
+				      </choose>
+				          ) utab
+				  LEFT JOIN (SELECT
+				               ur.userid,
+				               r.roleid,
+				               r.rolename
+				             FROM mng_userrole ur
+				               LEFT JOIN mng_roleinfo r
+				                 ON r.roleid = ur.roleid) tab
+				    ON utab.userid = tab.userid
+				WHERE utab.userflag = 1
+				<if test="userId != null">
+					and utab.userid = #{userId}
+				</if>
+				
+				<if test="userName != null and userName != '' ">
+					and utab.username = #{userName}
+				</if>
+				<if test="realName != null and realName != ''">
+					and utab.realname like CONCAT('%','${realName}','%' )
+				</if>
+				GROUP BY utab.userid
+    </select>
+	
+	<insert id="insert" parameterType="com.nasoft.aboutcar.mnguserinfo.domain.MngUserInfo">
+	    insert into mng_Userinfo (username ,password ,realname ,sex ,birthday ,address ,
+	    phonenum ,email ,positions ,officeaddress ,telno ,fax ,areacode ,instid ,remark,createdate ) 
+	    values (#{userName},#{password},#{realName},#{sex},#{birthday},#{address},#{phoneNum},
+	    #{email},#{positions},#{officeAddress},#{telNo},#{fax},#{areaCode},#{instId},#{remark},#{createDate})
+    </insert>
+
+	<!-- 修改用户信息 -->
+	<update id="updateUserInfo" parameterType="com.nasoft.aboutcar.mnguserinfo.domain.MngUserInfo">
+		update mng_userinfo set password = #{password}, realname = #{realName},
+		sex = #{sex},birthday = #{birthday},address = #{address},phonenum = #{phoneNum},
+		email = #{email},positions = #{positions},officeaddress = #{officeAddress},
+		telno = #{telNo},fax = #{fax},
+		remark = #{remark},upduserid = #{updUserId},
+		updinstid = #{updInstId},upddatetime = #{updDateTime}
+		where  userid = #{userId}
+	</update>
+	
+	<!-- 删除用户(给用户置状态) -->
+	<update id="deleteUserInfo" parameterType="java.util.HashMap">
+		update mng_userinfo set userflag = 0 
+		where  userid = #{userId}
+	</update>
+	
+	<select id="execProce" parameterType="String" statementType="CALLABLE">
+		CALL test_myproce(#{uid})
+	</select>
+	
+	<select id="findUserByCertno" parameterType="string" resultType="com.nasoft.aboutcar.mnguserinfo.domain.MngUserInfo">
+	select *
+	 from mng_userinfo
+	 where certno=#{certno}
+	</select>
+	
+	<select id="findUserByUsername" parameterType="java.lang.String" resultType="java.util.Map">
+	SELECT
+		u.userid,i.instid
+	FROM
+		mng_userInfo u,
+		mng_userrole r,
+		mng_instinfo i
+	WHERE
+		u.userid = r.userid
+	AND r.createinstid = i.instid 
+	AND u.username=#{username}
+	</select>
+	
+	<!-- 根据用户id查询用户审批权限信息 -->
+    <select id="searchApprovalLimitById" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			*
+		FROM
+			sys_user_position u
+		LEFT JOIN sys_position_node pn ON u.position_id = pn.position_id
+		LEFT JOIN sys_workflow_node n ON pn.node_id = n.node_id
+		WHERE
+			u.user_id = #{userId}
+		AND n.node_type = #{nodeType}
+    </select>
+    
+</mapper>
+

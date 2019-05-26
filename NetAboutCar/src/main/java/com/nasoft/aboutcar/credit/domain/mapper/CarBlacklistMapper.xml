@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.CarBlacklist">
+	<select id="findAllCarBlacklist" parameterType="map" resultType="com.nasoft.aboutcar.credit.domain.CarBlacklist">
+	select * from cxkh_car_blacklist
+	<where>
+	status = '0'
+	<if test="carid != null and carid !=''">
+	and carid like CONCAT('%',#{carid},'%' )
+	</if>
+	</where>
+	</select>
+	<select id="selectOneById" parameterType="String" resultType="com.nasoft.aboutcar.credit.domain.CarBlacklist">
+	select * from cxkh_car_blacklist where id = #{id}
+	</select>
+	<select id="getCarNoList" resultType="com.nasoft.aboutcar.car.domain.CarInfo">
+	SELECT *
+	FROM xzsp_car_carinfo c
+	WHERE c.carnum NOT IN(SELECT
+	                        b.carnum
+	                      FROM cxkh_car_blacklist b
+	                      WHERE b.status = '0')
+	</select>
+	<insert id="addCarBlacklist" parameterType="com.nasoft.aboutcar.credit.domain.CarBlacklist">
+	insert into cxkh_car_blacklist values(
+	#{id},#{carid},#{carnum},#{enginenum},#{certno},#{storage_date},
+	#{storage_reason},#{storage_file},#{storager},#{remove_date},
+	#{remove_reason},#{remove_file},#{remover},#{pre_remove_date},#{status},
+	#{bl_type},#{create_user},#{create_time},#{update_user},#{update_time}
+	)
+	</insert>
+	
+	<update id="updateCarBlacklist" parameterType="com.nasoft.aboutcar.credit.domain.CarBlacklist">
+	update cxkh_car_blacklist set 
+	status = '1',
+	remove_date = #{remove_date},
+	remove_reason = #{remove_reason},
+	remove_file = #{remove_file},
+	remover = #{remover},
+	update_user = #{update_user},
+	update_time = #{update_time}
+	<where>
+	carid = #{carid}
+	</where>
+	</update>
+</mapper>

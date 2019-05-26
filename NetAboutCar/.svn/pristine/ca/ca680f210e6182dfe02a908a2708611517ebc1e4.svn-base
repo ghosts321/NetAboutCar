@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.MngUnoperatingDriverMapper" >
+  <resultMap id="BaseResultMap" type="com.nasoft.aboutcar.supervise.domain.MngUnoperatingDriver" >
+    <id column="unoperating_driver_id" property="unoperatingDriverId" jdbcType="INTEGER" />
+    <result column="region_code" property="regionCode" jdbcType="INTEGER" />
+    <result column="region_name" property="regionName" jdbcType="VARCHAR" />
+    <result column="company_id" property="companyId" jdbcType="VARCHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="license_id" property="licenseId" jdbcType="VARCHAR" />
+    <result column="driver_name" property="driverName" jdbcType="VARCHAR" />
+    <result column="begin_time" property="beginTime" jdbcType="DATE" />
+    <result column="end_time" property="endTime" jdbcType="DATE" />
+    <result column="create_user" property="createUser" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <select id="selectAll" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select * from mng_unoperating_driver
+    <where>
+   	    <if test="driverName != null and driverName != '' ">
+			and driver_name = #{driverName}
+		</if>
+		<if test="regionName != null and regionName != ''">
+			and region_name = #{regionName}
+		</if>
+    </where>
+   </select>
+  
+  <insert id="insert" parameterType="com.nasoft.aboutcar.supervise.domain.MngUnoperatingDriver" >
+    insert into mng_unoperating_driver (unoperating_driver_id, region_code, 
+      region_name, company_id, company_name, 
+      license_id, driver_name, begin_time, 
+      end_time, create_user, create_time, 
+      update_user, update_time)
+    values (#{unoperatingDriverId,jdbcType=INTEGER}, #{regionCode,jdbcType=INTEGER}, 
+      #{regionName,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
+      #{licenseId,jdbcType=VARCHAR}, #{driverName,jdbcType=VARCHAR}, #{beginTime,jdbcType=DATE}, 
+      #{endTime,jdbcType=DATE}, #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <select id="execUnoperatingDriverPro" parameterType="String" statementType="CALLABLE">
+		CALL unoperatingDriver_pro()
+  </select>
+  
+</mapper>

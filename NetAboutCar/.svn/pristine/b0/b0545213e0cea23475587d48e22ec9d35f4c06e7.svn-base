@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.nasoft.aboutcar.XzcfDricaseInfoMapper">
+
+	<resultMap id="XzcfDricaseInfoResultMap" type="com.nasoft.aboutcar.credit.domain.XzcfDricaseInfo">
+        <result property="plateName" column="plateName" jdbcType="VARCHAR"/>
+        <result property="punishid" column="punishid" jdbcType="VARCHAR"/>
+        <result property="caseid" column="caseid" jdbcType="VARCHAR"/>
+        <result property="carid" column="carid" jdbcType="VARCHAR"/>
+        <result property="casesource" column="casesource" jdbcType="CHAR"/>
+        <result property="drivcarno" column="drivcarno" jdbcType="VARCHAR"/>
+        <result property="areacode" column="areacode" jdbcType="CHAR"/>
+        <result property="instid" column="instid" jdbcType="CHAR"/>
+        <result property="casetime" column="casetime" jdbcType="TIMESTAMP"/>
+        <result property="casereason" column="casereason" jdbcType="VARCHAR"/>
+        <result property="caseuserid" column="caseuserid" jdbcType="VARCHAR"/>
+        <result property="punishtype" column="punishtype" jdbcType="VARCHAR"/>
+        <result property="punishcontent" column="punishcontent" jdbcType="VARCHAR"/>
+        <result property="punishstatus" column="punishstatus" jdbcType="CHAR"/>
+        <result property="appealpunishtype" column="appealpunishtype" jdbcType="CHAR"/>
+        <result property="appealpunishcon" column="appealpunishcon" jdbcType="VARCHAR"/>
+        <result property="isappeal" column="isappeal" jdbcType="CHAR"/>
+        <result property="isregister" column="isregister" jdbcType="CHAR"/>
+        <result property="createuserid" column="createuserid" jdbcType="INTEGER"/>
+        <result property="createinstid" column="createinstid" jdbcType="VARCHAR"/>
+        <result property="createtime" column="createtime" jdbcType="TIMESTAMP"/>
+        <result property="upduserid" column="upduserid" jdbcType="INTEGER"/>
+        <result property="updinstid" column="updinstid" jdbcType="VARCHAR"/>
+        <result property="updatetime" column="updatetime" jdbcType="TIMESTAMP"/>
+        <result property="delflag" column="delflag" jdbcType="INTEGER"/>
+        <result property="caseType" column="caseType" jdbcType="CHAR"/>
+        <result property="dealstatus" column="dealstatus" jdbcType="CHAR"/>
+        <result property="drivename" column="drivename" jdbcType="VARCHAR"/>
+        <result property="evidenceurl" column="evidenceurl" jdbcType="VARCHAR"/>
+        <result property="punishurl" column="punishurl" jdbcType="VARCHAR"/>
+        <result property="dealview" column="dealview" jdbcType="VARCHAR"/>
+        <result property="evidenceview" column="evidenceview" jdbcType="VARCHAR"/>
+        <result property="pubishrule" column="pubishrule" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	   
+		plateName,punishid,caseid,carid,casesource,drivcarno,areacode,instid,casetime,casereason,caseuserid,punishtype,punishcontent,punishstatus,appealpunishtype,appealpunishcon,isappeal,isregister,createuserid,createinstid,createtime,upduserid,updinstid,updatetime,delflag,caseType,dealstatus,drivename,evidenceurl,punishurl,dealview,evidenceview,pubishrule
+	   
+	</sql>
+
+	<insert id="insertIfNotnull"   parameterType="com.nasoft.aboutcar.credit.domain.XzcfDricaseInfo">
+		<selectKey   keyProperty="caseid"  resultType="java.lang.String">  
+		SELECT LAST_INSERT_ID()  
+	  </selectKey>
+        INSERT INTO xzcf_dricase_info 
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="plateName != null">
+        		plateName ,
+			</if>
+			<if test="punishid != null">
+        		punishid ,
+			</if>
+			<if test="carid != null">
+        		carid ,
+			</if>
+			<if test="casesource != null">
+        		casesource ,
+			</if>
+			<if test="drivcarno != null">
+        		drivcarno ,
+			</if>
+			<if test="areacode != null">
+        		areacode ,
+			</if>
+			<if test="instid != null">
+        		instid ,
+			</if>
+			<if test="casetime != null">
+        		casetime ,
+			</if>
+			<if test="casereason != null">
+        		casereason ,
+			</if>
+			<if test="caseuserid != null">
+        		caseuserid ,
+			</if>
+			<if test="punishtype != null">
+        		punishtype ,
+			</if>
+			<if test="punishcontent != null">
+        		punishcontent ,
+			</if>
+			<if test="punishstatus != null">
+        		punishstatus ,
+			</if>
+			<if test="appealpunishtype != null">
+        		appealpunishtype ,
+			</if>
+			<if test="appealpunishcon != null">
+        		appealpunishcon ,
+			</if>
+			<if test="isappeal != null">
+        		isappeal ,
+			</if>
+			<if test="isregister != null">
+        		isregister ,
+			</if>
+			<if test="createuserid != null">
+        		createuserid ,
+			</if>
+			<if test="createinstid != null">
+        		createinstid ,
+			</if>
+			<if test="createtime != null">
+        		createtime ,
+			</if>
+			<if test="upduserid != null">
+        		upduserid ,
+			</if>
+			<if test="updinstid != null">
+        		updinstid ,
+			</if>
+			<if test="updatetime != null">
+        		updatetime ,
+			</if>
+			<if test="delflag != null">
+        		delflag ,
+			</if>
+			<if test="caseType != null">
+        		caseType ,
+			</if>
+			<if test="dealstatus != null">
+        		dealstatus ,
+			</if>
+			<if test="drivename != null">
+        		drivename ,
+			</if>
+			<if test="evidenceurl != null">
+        		evidenceurl ,
+			</if>
+			<if test="punishurl != null">
+        		punishurl ,
+			</if>
+			<if test="dealview != null">
+        		dealview ,
+			</if>
+			<if test="evidenceview != null">
+        		evidenceview ,
+			</if>
+			<if test="pubishrule != null">
+        		pubishrule ,
+			</if>
+		</trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="plateName != null">
+        		#{plateName, jdbcType=VARCHAR} ,
+			</if>
+			<if test="punishid != null">
+        		#{punishid, jdbcType=VARCHAR} ,
+			</if>
+			<if test="carid != null">
+        		#{carid, jdbcType=VARCHAR} ,
+			</if>
+			<if test="casesource != null">
+        		#{casesource, jdbcType=CHAR} ,
+			</if>
+			<if test="drivcarno != null">
+        		#{drivcarno, jdbcType=VARCHAR} ,
+			</if>
+			<if test="areacode != null">
+        		#{areacode, jdbcType=CHAR} ,
+			</if>
+			<if test="instid != null">
+        		#{instid, jdbcType=CHAR} ,
+			</if>
+			<if test="casetime != null">
+        		#{casetime, jdbcType=TIMESTAMP} ,
+			</if>
+			<if test="casereason != null">
+        		#{casereason, jdbcType=VARCHAR} ,
+			</if>
+			<if test="caseuserid != null">
+        		#{caseuserid, jdbcType=VARCHAR} ,
+			</if>
+			<if test="punishtype != null">
+        		#{punishtype, jdbcType=VARCHAR} ,
+			</if>
+			<if test="punishcontent != null">
+        		#{punishcontent, jdbcType=VARCHAR} ,
+			</if>
+			<if test="punishstatus != null">
+        		#{punishstatus, jdbcType=CHAR} ,
+			</if>
+			<if test="appealpunishtype != null">
+        		#{appealpunishtype, jdbcType=CHAR} ,
+			</if>
+			<if test="appealpunishcon != null">
+        		#{appealpunishcon, jdbcType=VARCHAR} ,
+			</if>
+			<if test="isappeal != null">
+        		#{isappeal, jdbcType=CHAR} ,
+			</if>
+			<if test="isregister != null">
+        		#{isregister, jdbcType=CHAR} ,
+			</if>
+			<if test="createuserid != null">
+        		#{createuserid, jdbcType=INTEGER} ,
+			</if>
+			<if test="createinstid != null">
+        		#{createinstid, jdbcType=VARCHAR} ,
+			</if>
+			<if test="createtime != null">
+        		#{createtime, jdbcType=TIMESTAMP} ,
+			</if>
+			<if test="upduserid != null">
+        		#{upduserid, jdbcType=INTEGER} ,
+			</if>
+			<if test="updinstid != null">
+        		#{updinstid, jdbcType=VARCHAR} ,
+			</if>
+			<if test="updatetime != null">
+        		#{updatetime, jdbcType=TIMESTAMP} ,
+			</if>
+			<if test="delflag != null">
+        		#{delflag, jdbcType=INTEGER} ,
+			</if>
+			<if test="caseType != null">
+        		#{caseType, jdbcType=CHAR} ,
+			</if>
+			<if test="dealstatus != null">
+        		#{dealstatus, jdbcType=CHAR} ,
+			</if>
+			<if test="drivename != null">
+        		#{drivename, jdbcType=VARCHAR} ,
+			</if>
+			<if test="evidenceurl != null">
+        		#{evidenceurl, jdbcType=VARCHAR} ,
+			</if>
+			<if test="punishurl != null">
+        		#{punishurl, jdbcType=VARCHAR} ,
+			</if>
+			<if test="dealview != null">
+        		#{dealview, jdbcType=VARCHAR} ,
+			</if>
+			<if test="evidenceview != null">
+        		#{evidenceview, jdbcType=VARCHAR} ,
+			</if>
+			<if test="pubishrule != null">
+        		#{pubishrule, jdbcType=VARCHAR} ,
+			</if>
+		</trim>
+    
+		
+	</insert>
+    
+	<update id="updateIfNotnull"  parameterType="com.nasoft.aboutcar.credit.domain.XzcfDricaseInfo">
+    
+        UPDATE xzcf_dricase_info
+			<set>
+				<if test="plateName != null">
+					plateName = #{plateName, jdbcType=VARCHAR} ,
+				</if>
+				<if test="punishid != null">
+					punishid = #{punishid, jdbcType=VARCHAR} ,
+				</if>
+				<if test="carid != null">
+					carid = #{carid, jdbcType=VARCHAR} ,
+				</if>
+				<if test="casesource != null">
+					casesource = #{casesource, jdbcType=CHAR} ,
+				</if>
+				<if test="drivcarno != null">
+					drivcarno = #{drivcarno, jdbcType=VARCHAR} ,
+				</if>
+				<if test="areacode != null">
+					areacode = #{areacode, jdbcType=CHAR} ,
+				</if>
+				<if test="instid != null">
+					instid = #{instid, jdbcType=CHAR} ,
+				</if>
+				<if test="casetime != null">
+					casetime = #{casetime, jdbcType=TIMESTAMP} ,
+				</if>
+				<if test="casereason != null">
+					casereason = #{casereason, jdbcType=VARCHAR} ,
+				</if>
+				<if test="caseuserid != null">
+					caseuserid = #{caseuserid, jdbcType=VARCHAR} ,
+				</if>
+				<if test="punishtype != null">
+					punishtype = #{punishtype, jdbcType=VARCHAR} ,
+				</if>
+				<if test="punishcontent != null">
+					punishcontent = #{punishcontent, jdbcType=VARCHAR} ,
+				</if>
+				<if test="punishstatus != null">
+					punishstatus = #{punishstatus, jdbcType=CHAR} ,
+				</if>
+				<if test="appealpunishtype != null">
+					appealpunishtype = #{appealpunishtype, jdbcType=CHAR} ,
+				</if>
+				<if test="appealpunishcon != null">
+					appealpunishcon = #{appealpunishcon, jdbcType=VARCHAR} ,
+				</if>
+				<if test="isappeal != null">
+					isappeal = #{isappeal, jdbcType=CHAR} ,
+				</if>
+				<if test="isregister != null">
+					isregister = #{isregister, jdbcType=CHAR} ,
+				</if>
+				<if test="createuserid != null">
+					createuserid = #{createuserid, jdbcType=INTEGER} ,
+				</if>
+				<if test="createinstid != null">
+					createinstid = #{createinstid, jdbcType=VARCHAR} ,
+				</if>
+				<if test="createtime != null">
+					createtime = #{createtime, jdbcType=TIMESTAMP} ,
+				</if>
+				<if test="upduserid != null">
+					upduserid = #{upduserid, jdbcType=INTEGER} ,
+				</if>
+				<if test="updinstid != null">
+					updinstid = #{updinstid, jdbcType=VARCHAR} ,
+				</if>
+				<if test="updatetime != null">
+					updatetime = #{updatetime, jdbcType=TIMESTAMP} ,
+				</if>
+				<if test="delflag != null">
+					delflag = #{delflag, jdbcType=INTEGER} ,
+				</if>
+				<if test="caseType != null">
+					caseType = #{caseType, jdbcType=CHAR} ,
+				</if>
+				<if test="dealstatus != null">
+					dealstatus = #{dealstatus, jdbcType=CHAR} ,
+				</if>
+				<if test="drivename != null">
+					drivename = #{drivename, jdbcType=VARCHAR} ,
+				</if>
+				<if test="evidenceurl != null">
+					evidenceurl = #{evidenceurl, jdbcType=VARCHAR} ,
+				</if>
+				<if test="punishurl != null">
+					punishurl = #{punishurl, jdbcType=VARCHAR} ,
+				</if>
+				<if test="dealview != null">
+					dealview = #{dealview, jdbcType=VARCHAR} ,
+				</if>
+				<if test="evidenceview != null">
+					evidenceview = #{evidenceview, jdbcType=VARCHAR} ,
+				</if>
+				<if test="pubishrule != null">
+					pubishrule = #{pubishrule, jdbcType=VARCHAR} ,
+				</if>
+			</set>
+        WHERE 
+	        caseid = #{caseid, jdbcType=VARCHAR} 
+    
+	</update>
+
+    <delete id="deleteById">
+    
+        DELETE FROM xzcf_dricase_info WHERE
+        caseid = #{caseid } 
+    
+    </delete>
+    
+    
+    <delete id="delete">
+    
+        DELETE FROM xzcf_dricase_info WHERE
+        
+    </delete>
+    
+		<select id="selectById" resultMap="XzcfDricaseInfoResultMap">
+			SELECT <include refid="columns" />
+		   
+				FROM xzcf_dricase_info 
+				WHERE 
+					caseid = #{caseid, jdbcType=VARCHAR} 
+			
+		</select>
+	
+	<sql id="selectList_where">
+		<where>	      				
+	       <if test="plateName != null">
+		 	   	 	AND plateName = #{plateName, jdbcType=VARCHAR}
+			</if>
+	       <if test="punishid != null">
+		 	   	 	AND punishid = #{punishid, jdbcType=VARCHAR}
+			</if>
+	       <if test="caseid != null">
+		 	   	 	AND caseid = #{caseid, jdbcType=VARCHAR}
+			</if>
+	       <if test="carid != null">
+		 	   	 	AND carid = #{carid, jdbcType=VARCHAR}
+			</if>
+	       <if test="casesource != null">
+		 	   	 	AND casesource = #{casesource, jdbcType=CHAR}
+			</if>
+	       <if test="drivcarno != null">
+		 	   	 	AND drivcarno = #{drivcarno, jdbcType=VARCHAR}
+			</if>
+	       <if test="areacode != null">
+		 	   	 	AND areacode = #{areacode, jdbcType=CHAR}
+			</if>
+	       <if test="instid != null">
+		 	   	 	AND instid = #{instid, jdbcType=CHAR}
+			</if>
+	       <if test="casetimeBegin != null">
+				AND casetime >= #{casetimeBegin }
+		   </if>
+		   <if test="casetimeEnd != null">
+				AND casetime &lt;= #{casetimeEnd }
+		   </if>
+	       <if test="casereason != null">
+		 	   	 	AND casereason = #{casereason, jdbcType=VARCHAR}
+			</if>
+	       <if test="caseuserid != null">
+		 	   	 	AND caseuserid = #{caseuserid, jdbcType=VARCHAR}
+			</if>
+	       <if test="punishtype != null">
+		 	   	 	AND punishtype = #{punishtype, jdbcType=VARCHAR}
+			</if>
+	       <if test="punishcontent != null">
+		 	   	 	AND punishcontent = #{punishcontent, jdbcType=VARCHAR}
+			</if>
+	       <if test="punishstatus != null">
+		 	   	 	AND punishstatus = #{punishstatus, jdbcType=CHAR}
+			</if>
+	       <if test="appealpunishtype != null">
+		 	   	 	AND appealpunishtype = #{appealpunishtype, jdbcType=CHAR}
+			</if>
+	       <if test="appealpunishcon != null">
+		 	   	 	AND appealpunishcon = #{appealpunishcon, jdbcType=VARCHAR}
+			</if>
+	       <if test="isappeal != null">
+		 	   	 	AND isappeal = #{isappeal, jdbcType=CHAR}
+			</if>
+	       <if test="isregister != null">
+		 	   	 	AND isregister = #{isregister, jdbcType=CHAR}
+			</if>
+	       <if test="createuserid != null">
+		 		 		AND createuserid = #{createuserid, jdbcType=INTEGER}
+			</if>
+	       <if test="createinstid != null">
+		 	   	 	AND createinstid = #{createinstid, jdbcType=VARCHAR}
+			</if>
+	       <if test="createtimeBegin != null">
+				AND createtime >= #{createtimeBegin }
+		   </if>
+		   <if test="createtimeEnd != null">
+				AND createtime &lt;= #{createtimeEnd }
+		   </if>
+	       <if test="upduserid != null">
+		 		 		AND upduserid = #{upduserid, jdbcType=INTEGER}
+			</if>
+	       <if test="updinstid != null">
+		 	   	 	AND updinstid = #{updinstid, jdbcType=VARCHAR}
+			</if>
+	       <if test="updatetimeBegin != null">
+				AND updatetime >= #{updatetimeBegin }
+		   </if>
+		   <if test="updatetimeEnd != null">
+				AND updatetime &lt;= #{updatetimeEnd }
+		   </if>
+	       <if test="delflag != null">
+		 		 		AND delflag = #{delflag, jdbcType=INTEGER}
+			</if>
+	       <if test="caseType != null">
+		 	   	 	AND caseType = #{caseType, jdbcType=CHAR}
+			</if>
+	       <if test="dealstatus != null">
+		 	   	 	AND dealstatus = #{dealstatus, jdbcType=CHAR}
+			</if>
+	       <if test="drivename != null">
+		 	   	 	AND drivename = #{drivename, jdbcType=VARCHAR}
+			</if>
+	       <if test="evidenceurl != null">
+		 	   	 	AND evidenceurl = #{evidenceurl, jdbcType=VARCHAR}
+			</if>
+	       <if test="punishurl != null">
+		 	   	 	AND punishurl = #{punishurl, jdbcType=VARCHAR}
+			</if>
+	       <if test="dealview != null">
+		 	   	 	AND dealview = #{dealview, jdbcType=VARCHAR}
+			</if>
+	       <if test="evidenceview != null">
+		 	   	 	AND evidenceview = #{evidenceview, jdbcType=VARCHAR}
+			</if>
+	       <if test="pubishrule != null">
+		 	   	 	AND pubishrule = #{pubishrule, jdbcType=VARCHAR}
+			</if>
+		</where>
+	</sql>
+		
+    <select id="selectListCount" resultType="long">
+        SELECT count(*) FROM xzcf_dricase_info 
+		<include refid="selectList_where"/>    
+    </select>
+    
+   
+    <select id="selectList" resultMap="XzcfDricaseInfoResultMap">
+    	SELECT <include refid="columns" />
+	    FROM xzcf_dricase_info 
+		<include refid="selectList_where"/>
+		
+		
+    </select>
+    
+    <resultMap type="java.util.HashMap" id="XzcfDricaseInfoResultToMap">
+    	
+    </resultMap>
+    <select id="getVertical" resultMap="XzcfDricaseInfoResultToMap">
+    	SELECT <include refid="columns" />
+	    FROM xzcf_dricase_info 
+		<include refid="selectList_where"/>
+    </select>
+
+	
+	
+</mapper>
+

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nasoft.aboutcar.administrativePenalty">
+    
+    <select id="plantCaseAppealfindAll" resultType="java.util.HashMap" >  
+	select a.caseId,a.plateName,a.source,b.appealuserid,a.caseTime,a.updatetime from xzcf_plantcase_info a join xzcf_plantcase_appeal b 		
+	<where>
+	      a.caseId = b.caseId and a.dealStatus = '03'
+		<if test="caseId != null and caseId !=''">
+		and caseId = #{caseId}
+		</if>
+		<if test="plantName != null and plantName !=''">
+		 and plateName = #{plateName}
+		</if>
+        <if test="begin_time != null and begin_time != '' ">
+			and caseTime >= #{begin_time}
+		</if>
+    	<if test="end_time !=null and end_time !='' "> 
+          	<![CDATA[and caseTime <= #{end_time}]]>
+        </if> 		
+		</where>
+		
+	</select>
+    
+    <select id="appealDetailbyId" parameterType="java.lang.String" resultType="com.nasoft.aboutcar.administrativePenalty.domain.PlantCaseInfo">
+	SELECT* FROM xzcf_plantcase_info  WHERE caseId = #{caseId}
+	</select>
+   
+   <select id="caseAppealbyId" parameterType="java.lang.String" resultType="com.nasoft.aboutcar.administrativePenalty.domain.PlantCaseAppeal">
+	SELECT* FROM xzcf_plantcase_appeal  WHERE caseId = #{caseId}
+	</select>
+	
+	<update id="updateCaseInfo" parameterType="com.nasoft.aboutcar.administrativePenalty.domain.PlantCaseInfo" >
+     update xzcf_plantcase_info
+     set dealStatus = "00",isappeal = "02",punishType = #{punishType},punishcontent = #{punishContent}
+     where caseId = #{caseId}
+    </update>
+    
+    <update id="updateDealStatus" parameterType="com.nasoft.aboutcar.administrativePenalty.domain.PlantCaseInfo" >
+     update xzcf_plantcase_info
+     set dealStatus = "04",isappeal = "04"
+     where caseId = #{caseId}
+    </update>
+    
+    <update id="updateCaseAppeal" parameterType="com.nasoft.aboutcar.administrativePenalty.domain.PlantCaseAppeal" >
+     update xzcf_plantcase_appeal
+     set appealtype = 2
+     where caseId = #{caseId}
+    </update>
+    
+    <select id="drvCaseAppealfindAll" resultType="java.util.HashMap" >  
+	select a.caseid,a.carid,a.drivcarno,a.casesource,b.appealuserid,a.casetime,a.updatetime from xzcf_dricase_info a join xzcf_drivecase_appeal b 		
+	<where>
+	      a.caseid = b.caseid and a.dealstatus = '03'
+		<if test="caseid != null and caseid !=''">
+		and caseid = #{caseid}
+		</if>
+		<if test="carid != null and carid !=''">
+		 and carid = #{carid}
+		</if>
+		<if test="begin_time != null and begin_time != '' ">
+			and casetime >= #{begin_time}
+		</if>
+    	<if test="end_time !=null and end_time !='' "> 
+          	<![CDATA[and casetime <= #{end_time}]]>
+        </if> 		
+		</where>
+		
+	</select>
+	
+	 <select id="drvappealDetailbyId" parameterType="java.lang.String" resultType="com.nasoft.aboutcar.administrativePenalty.domain.DrvPlantCaseInfo">
+	select a.caseid,a.carid,a.drivcarno,a.casesource,a.casereason,a.areacode,a.instid,a.caseuserid,b.evidenceview,a.casetime,a.updatetime,a.punishtype,a.punishcontent from xzcf_dricase_info a join xzcf_drivercasedeal_info b	
+ WHERE a.caseid = b.caseid and a.caseid = #{caseid}
+	</select>
+	
+	<select id="drvcaseAppealbyId" parameterType="java.lang.String" resultType="com.nasoft.aboutcar.administrativePenalty.domain.DrvCaseAppeal">
+	SELECT* FROM xzcf_drivecase_appeal  WHERE caseid = #{caseid}
+	</select>
+	
+	<update id="drvupdateCaseInfo" parameterType="com.nasoft.aboutcar.administrativePenalty.domain.DrvPlantCaseInfo" >
+     update xzcf_dricase_info
+     set dealstatus = "00",isappeal = "02",punishtype = #{punishtype},punishcontent = #{punishcontent}
+     where caseid = #{caseid}
+    </update>
+    
+    <update id="drvupdateDealStatus" parameterType="com.nasoft.aboutcar.administrativePenalty.domain.DrvPlantCaseInfo" >
+     update xzcf_dricase_info
+     set dealstatus = "04",isappeal = "03"
+     where caseid = #{caseid}
+    </update>
+    
+    <update id="drvupdateCaseAppeal" parameterType="com.nasoft.aboutcar.administrativePenalty.domain.DrvCaseAppeal" >
+     update xzcf_drivecase_appeal
+     set appealtype = 2
+     where caseid = #{caseid}
+    </update>
+    
+     <select id="findplantanalysisList" resultType="java.util.HashMap">
+	SELECT SUM(plateName = "滴滴") as one,
+		SUM(plateName = "易道") as two,
+		SUM(plateName = "神州") as three,
+		SUM(plateName = "优步") as four
+	from xzcf_plantcase_info
+	<where>
+		<if test="areacode != null and areacode != '' ">
+			and areacode = #{areacode}
+		</if>
+    	<if test="punishType !=null and punishType !='' "> 
+          	and punishType = #{punishType}
+        </if> 
+        <if test="instid !=null and instid !='' "> 
+          	and instid = #{instid}
+        </if> 
+		<if test="beginTime != null and beginTime != '' ">
+			and caseTime >= #{beginTime}
+		</if>
+    	<if test="endTime !=null and endTime !='' "> 
+          	<![CDATA[and updatetime <= #{endTime}]]>
+        </if> 
+        
+	</where>
+  </select>
+  
+  <select id="finddrvanalysisList" resultType="java.util.HashMap">
+	select sum(casesource = "01") as one,SUM(casesource = "02") as two from xzcf_dricase_info
+	<where>
+		<if test="areacode != null and areacode != '' ">
+			and areacode = #{areacode}
+		</if>
+    	<if test="punishType !=null and punishType !='' "> 
+          	and punishtype = #{punishType}
+        </if> 
+        <if test="instid !=null and instid !='' "> 
+          	and instid = #{instid}
+        </if> 
+		<if test="beginTime != null and beginTime != '' ">
+			and casetime >= #{beginTime}
+		</if>
+    	<if test="endTime !=null and endTime !='' "> 
+          	<![CDATA[and updatetime <= #{endTime}]]>
+        </if> 
+        
+	</where>
+  </select>
+</mapper>

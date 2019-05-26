@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nasoft.SSM.DrvUserreg">
+	
+	<select id="isexistUser" parameterType="String" resultType="com.nasoft.SSM.domain.DrvUserreg">
+		select * from xzsp_drv_userreg where certno=#{certno} 
+	</select>
+	
+	<select id="findByUserInfo" parameterType="com.nasoft.SSM.domain.DrvUserreg" resultType="com.nasoft.SSM.domain.DrvUserreg">
+		select * from xzsp_drv_userreg where certno=#{certno} and password=#{password} and areaname = #{areaname}
+	</select>
+	
+	<insert id="addDrvUserreg" parameterType="com.nasoft.SSM.domain.DrvUserreg">
+		insert into xzsp_drv_userreg (certno, password,areaname, phoneno, 
+	      regdatetime, updtime, status, 
+	      pwderrtimes, lockdatetime, smssendtime, 
+	      smssendcount, smsfirsttime, smserrcount, 
+	      smslocktime)
+	    values (#{certno,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},#{areaname,jdbcType=VARCHAR}, #{phoneno,jdbcType=VARCHAR}, 
+	      #{regdatetime,jdbcType=TIMESTAMP}, #{updtime,jdbcType=TIMESTAMP}, #{status,jdbcType=CHAR}, 
+	      #{pwderrtimes,jdbcType=INTEGER}, #{lockdatetime,jdbcType=TIMESTAMP}, #{smssendtime,jdbcType=TIMESTAMP}, 
+	      #{smssendcount,jdbcType=INTEGER}, #{smsfirsttime,jdbcType=TIMESTAMP}, #{smserrcount,jdbcType=INTEGER}, 
+	      #{smslocktime,jdbcType=TIMESTAMP})
+	</insert>
+	<update id="changePassword" parameterType="com.nasoft.SSM.domain.DrvUserreg">
+	UPDATE xzsp_drv_userreg
+	<set>
+	password = #{password}
+	</set>
+	<where>
+	certno = #{certno} AND
+	areaname = #{areaname}
+	</where>
+	</update>
+</mapper>

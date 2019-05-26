@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nasoft.aboutcar.car">
+    <select id="findAllCar" resultType="com.nasoft.aboutcar.car.domain.CarInfo" >  
+        select * from xzsp_car_carinfo
+    </select>
+    
+    <select id="findCarByCarId" parameterType="java.lang.String" resultType="com.nasoft.aboutcar.car.domain.CarInfo" >  
+        select * from xzsp_car_carinfo where carid=#{carId}
+    </select>
+    
+    <select id="findAllCarHis" resultType="com.nasoft.aboutcar.car.domain.CarInfoHis" >  
+        select * from xzsp_car_carinfo_his
+    </select>
+    
+    <select id="findAllCarPermitApplyByCarId" parameterType="java.lang.String" resultType="com.nasoft.aboutcar.car.domain.CarPermitApply" >  
+        select * from xzsp_car_permitapply where carid=#{carId}
+    </select>
+    
+    <select id="findCarPermitApplyByApplyId" parameterType="java.lang.String" resultType="com.nasoft.aboutcar.car.domain.CarPermitApply" >  
+        select * from xzsp_car_permitapply where applyid=#{applyId}
+    </select>
+    
+    <select id="findAllCarPermitApply" parameterType="java.util.HashMap" resultType="java.util.HashMap" >  
+        select cp.applyid applyId,cp.carid carId,ci.carnum carNum,cp.applytype applyType,cp.appstatus appStatus,cp.applydate applyDate from xzsp_car_permitapply cp	 LEFT JOIN xzsp_car_carinfo ci ON cp.carid=ci.carid 
+        <where>
+       ( cp.appstatus='10'  
+        <if test=" carValidate != null and carValidate !=''">
+        or cp.appstatus='0' or cp.appstatus='-1'
+        </if>
+		<if test="dexternalExporation != null and dexternalExporation != ''">
+		or cp.appstatus='1' or cp.appstatus='-2'
+		</if>
+		<if test="changeProperty != null and changeProperty !=''">
+		or cp.appstatus='2' or cp.appstatus='-3'
+		</if>
+		<if test="devBespeak != null and devBespeak !=''" >
+		or cp.appstatus='3' or cp.appstatus='-4'
+		</if>
+		<if test="carCert !=null  and carCert !=''">
+		or cp.appstatus='4' 
+		</if>
+		<if test="carChangePropety != null and carChangePropety != ''">
+		or cp.appstatus='5' or cp.appstatus='-6'
+		</if>)
+			<if test="roleid != null and roleid != '' ">
+				<!-- <if test="roleid == '1001' ">
+					and ci.areacode = #{areacode}
+				</if> -->
+				<if test="roleid != '1000' ">
+					and cp.instid = #{instid}
+				</if>
+			</if>
+	        <if test="carNum != null and carNum !=''">
+				and ci.carnum like CONCAT('%','${carNum}','%' ) 
+			</if>
+		</where>
+		 order by cp.createdate desc
+    </select>
+    
+    <select id="findAllCarPermitApplyHis" resultType="com.nasoft.aboutcar.car.domain.CarPermitApplyHis" >  
+        select * from xzsp_car_permitapply_his
+    </select>
+    
+    <select id="findAllCarPermitcert" resultType="com.nasoft.aboutcar.car.domain.CarPermitcert" >  
+        select * from xzsp_car_permitcert
+    </select>
+    
+    <select id="findCarCertByCertNo" parameterType="java.lang.String" resultType="com.nasoft.aboutcar.car.domain.CarPermitcert" >  
+        select * from xzsp_car_permitcert where certno=#{certNo}
+    </select>
+    
+    <select id="selectAllCertInfo" resultType="java.util.HashMap">
+	    select 
+	    f.carid,f.carnum,f.enginenum,f.certno,f.receivedate,f.areacode,p.instid,c.pcertid,c.applyid,c.senddate,c.enddate,c.pcertno,c.status
+	    from xzsp_car_permitapply p,xzsp_car_carinfo f,xzsp_car_permitcert c
+	    where c.certno = f.certno and p.applyid = c.applyid
+	    and p.appstatus = '5'
+	    <if test="roleid != null and roleid != '' ">
+			<if test="roleid == '1001' ">
+				and f.areacode = #{areacode}
+			</if>
+			<if test="roleid == '1002' ">
+				and p.instid = #{instid}
+			</if>
+		</if>
+	    <if test="carNum != null and carNUm != '' ">
+			and f.carnum like CONCAT('%',#{carNum},'%' ) 
+		</if>
+		<if test="certNo != null and certNo != ''">
+			and f.certno like CONCAT('%',#{certNo},'%' )
+		</if>
+		 order by c.createdatetime desc
+	</select>
+	
+	<update id="updateByApplyid" parameterType="com.nasoft.aboutcar.car.domain.CarPermitcert" >
+     update xzsp_car_permitcert
+     set status = #{status}
+     where applyid = #{applyId}
+    </update>
+    
+    <select id="findInstInfoByInstId" parameterType="java.lang.String" resultType="com.nasoft.aboutcar.instInfo.domain.InstInfo" >
+       select * from mng_instinfo where instid=#{instId}
+    </select>
+    
+   <select id="findApproveByApplyId" parameterType="java.lang.String" resultType="com.nasoft.aboutcar.car.domain.CarApprove" >
+       select * from xzsp_car_approve where applyid=#{applyId}
+    </select>
+    
+    
+    <insert id="insertApprove" parameterType="com.nasoft.aboutcar.car.domain.CarApprove">
+    	insert into xzsp_car_approve values(
+    	   #{appRid,jdbcType=VARCHAR},
+    	   #{applyId,jdbcType=VARCHAR},
+    	   #{apprType,jdbcType=VARCHAR},
+    	   #{opinions,jdbcType=VARCHAR},
+    	   #{description,jdbcType=VARCHAR},
+    	   #{apprUserId,jdbcType=INTEGER},
+    	   #{apprInstId,jdbcType=INTEGER},
+    	   #{apprDateTime,jdbcType=VARCHAR}
+    	)
+    </insert>
+    
+    <insert id="insertCarPermitcert" parameterType="com.nasoft.aboutcar.car.domain.CarPermitcert">
+    	insert into xzsp_car_permitcert values(
+    	   #{pcertId,jdbcType=VARCHAR},
+    	   #{applyId,jdbcType=VARCHAR},
+    	   #{pcertNo,jdbcType=VARCHAR},
+    	   #{certNo,jdbcType=VARCHAR},
+    	   #{appId,jdbcType=VARCHAR},
+    	   #{sendDate,jdbcType=VARCHAR},
+    	   #{endDate,jdbcType=VARCHAR},
+    	   #{instId,jdbcType=VARCHAR},
+    	   #{status,jdbcType=INTEGER},
+    	   #{createMan,jdbcType=INTEGER},
+    	   #{createInstId,jdbcType=INTEGER},
+    	   #{createDate,jdbcType=VARCHAR},
+    	   #{updUserId,jdbcType=INTEGER},
+    	   #{updInstId,jdbcType=INTEGER},
+    	   #{updDateTime,jdbcType=VARCHAR}
+    	)
+    	
+    </insert>
+    
+    <update id="updateApplyStatus" parameterType="com.nasoft.aboutcar.car.domain.CarPermitApply" >
+    	update xzsp_car_permitapply set 
+    	   appstatus=#{appStatus,jdbcType=VARCHAR} 
+    	   where carid=#{carId}
+    </update>
+    <!-- 打印汽车运输证 -->
+    <select id="certByCarid" parameterType="java.lang.String" resultType="java.util.Map">
+    SELECT 
+  p.senddate,
+  i.instname,
+  c.mancompany,
+  c.address,
+  c.carnum,
+  c.cartype,
+  c.seatnum,
+  c.length,
+  c.width,
+  c.height,
+  c.receivedate 
+FROM
+  xzsp_car_permitcert p,
+  mng_instinfo i,
+  xzsp_car_carinfo c 
+WHERE p.instid = i.instid 
+  AND c.certno = p.certno 
+  AND c.carid=#{carid}
+    </select>
+    <select id="findCarApproveByApplyId" parameterType="java.lang.String" resultType="java.util.Map">
+SELECT
+	i.instname,u.username,x.apprtype,x.opinions,x.description,x.apprdatetime
+FROM
+	xzsp_car_approve x,
+	mng_instinfo i,
+	mng_userinfo u
+WHERE
+	x.apprinstid = i.instid
+AND x.appruserid = u.userid 
+AND x.applyid=#{applyid}
+    </select>
+    <select id="findCarChangeApplyByApplyId" parameterType="java.lang.String" resultType="com.nasoft.aboutcar.car.domain.CarChangeApply">
+    select * from xzsp_car_changeapply where applyid=#{applyId}
+    
+    </select>
+    <update id="updateChangeApplyStatus" parameterType="com.nasoft.aboutcar.car.domain.CarChangeApply">
+    	update xzsp_car_changeapply set 
+    	   appstatus=#{appStatus,jdbcType=VARCHAR} 
+    	   where carid=#{carId}
+    </update>
+</mapper>

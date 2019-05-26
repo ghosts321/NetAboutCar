@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- 存放手写的sql -->
+<mapper namespace="com.nasoft.aboutcar.CxkhDrvAppealsMapper">
+	
+	
+    <resultMap type="java.util.HashMap" id="CxkhDrvAppealsResultToMap2">
+    	
+    </resultMap>
+    
+    
+    
+	<resultMap id="CxkhDrvAppealDResultMap2" type="com.nasoft.aboutcar.credit.controller.CxkhDrvAppealDetailModel">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="appealNo" column="appeal_no" jdbcType="CHAR"/>
+        <result property="recNo" column="rec_no" jdbcType="CHAR"/>
+        <result property="appealText" column="appeal_text" jdbcType="VARCHAR"/>
+        <result property="appealFile" column="appeal_file" jdbcType="VARCHAR"/>
+        <result property="appealResult" column="appeal_result" jdbcType="VARCHAR"/>
+        <result property="resultFile" column="result_file" jdbcType="VARCHAR"/>
+        <result property="createUser" column="create_user" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="INTEGER"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="dealResult" column="deal_result" jdbcType="VARCHAR"/>
+        <result property="certno" column="certno" jdbcType="VARCHAR"/>
+        <result property="drvName" column="drv_name" jdbcType="VARCHAR"/>
+        <result property="appealStatus" column="appeal_status" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	
+	<sql id="columns2">
+	   
+		d.id,d.appeal_no,d.rec_no,d.appeal_text,d.appeal_file,d.appeal_result,d.appeal_status,d.result_file,d.create_user,d.create_time,
+		d.update_user,d.update_time,d.deal_result,
+		a.drv_name,a.certno
+	   
+	</sql>
+    
+    <select id="selectList2" resultMap="CxkhDrvAppealDResultMap2">
+    	 SELECT <include refid="columns2" />  	 
+    	 FROM cxkh_drv_appeal_d d
+    	 left join cxkh_drv_appeals a on d.appeal_no=a.appeal_no 
+		<include refid="selectList_where"/>
+		
+    </select>
+	
+	
+</mapper>

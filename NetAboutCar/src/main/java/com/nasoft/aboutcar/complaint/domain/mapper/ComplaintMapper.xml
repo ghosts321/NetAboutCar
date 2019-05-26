@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.ComplaintMapper" >
+
+   <insert id="addComplaint" parameterType="com.nasoft.aboutcar.complaint.domain.comComplainInfo">
+      insert into tsfw_com_complain_info
+  (complain_info_id,complain_code,compn_name,compn_sex,compn_tel,compn_number,compn_email,compn_address,
+  compn_compy,compn_reason,create_time,data_source,compn_state,compn_time,create_user,compn_file) 
+     values (#{complain_info_id,jdbcType=INTEGER},#{complain_code,jdbcType=VARCHAR},#{compn_name,jdbcType=VARCHAR},#{compn_sex,jdbcType=CHAR},
+             #{compn_tel,jdbcType=VARCHAR},#{compn_number,jdbcType=VARCHAR},#{compn_email,jdbcType=VARCHAR},
+             #{compn_address,jdbcType=VARCHAR},#{compn_compy,jdbcType=VARCHAR},
+             #{compn_reason,jdbcType=VARCHAR},#{create_time},#{data_source,jdbcType=CHAR},#{compn_state,jdbcType=CHAR},
+             #{compn_time}, #{create_user,jdbcType=VARCHAR},#{compn_file,jdbcType=VARCHAR})     
+   </insert>
+   
+   <select id="findAllComplaint"  parameterType="java.util.HashMap" resultType="java.util.HashMap" >
+     select * from tsfw_com_complain_info
+      <where>
+         compn_state="1"
+         <if test="complain_code != null and complain_code != '' ">
+             and complain_code like CONCAT('%%',#{complain_code},'%%')
+         </if> 
+         <if test="compn_compy != null and compn_compy != '' ">
+             and compn_compy like CONCAT('%%',#{compn_compy},'%%') 
+         </if>
+      
+         <if test="begin_time != null and begin_time != ''  ">      
+                  and compn_time >= #{begin_time}          
+         </if>
+         <if test="end_time != null and end_time != ''">
+                and compn_time &lt;=#{end_time}
+         </if>
+       <!--   <if test="begin_time != null and begin_time != '' and end_time != null and end_time != '' ">      
+                      and compn_time between #{begin_time} and #{end_time}          
+         </if> -->
+     </where>
+     order by compn_time desc  
+   </select>
+   
+      <select id="findhandle" parameterType="java.util.HashMap" resultType="java.util.HashMap" >
+         SELECT DISTINCT a.*,b.distri_time FROM tsfw_com_complain_info a JOIN tsfw_com_complain_distribute b ON a.complain_info_id=b.complain_info_id 
+            <where>
+         a.compn_state between 3 and 7
+         <if test="complain_code != null and complain_code != '' ">
+             and a.complain_code like CONCAT('%%',#{complain_code},'%%') 
+         </if> 
+         <if test="compn_compy != null and compn_compy != '' ">
+             and a.compn_compy  like CONCAT('%%',#{compn_compy},'%%') 
+         </if>
+   
+         <if test="begin_time != null and begin_time != ''  ">      
+                  and compn_time >= #{begin_time}          
+         </if>
+         <if test="end_time != null and end_time != ''">
+                and compn_time &lt;=#{end_time}
+         </if>  
+         
+       <!--   <if test="begin_time != null and begin_time != '' and end_time != null and end_time != '' ">      
+                      and a.compn_time between #{begin_time} and #{end_time}          
+         </if> -->
+     </where>
+        order by a.compn_time desc 
+      </select>   
+   
+   
+     <select id="findappeal" parameterType="java.util.HashMap" resultType="java.util.HashMap" >
+         SELECT DISTINCT a.*,b.appl_time FROM tsfw_com_complain_info a JOIN tsfw_com_complain_appeal b ON a.complain_info_id=b.complain_info_id 
+            <where>
+         a.compn_state="5"
+         <if test="complain_code != null and complain_code != '' ">
+             and a.complain_code = #{complain_code}
+         </if> 
+         <if test="car_number != null and car_number != '' ">
+             and a.car_number = #{car_number}
+         </if>
+
+         <if test="begin_time != null and begin_time != ''  ">      
+                  and compn_time >= #{begin_time}          
+         </if>
+         <if test="end_time != null and end_time != ''">
+                and compn_time &lt;=#{end_time}
+         </if> 
+         
+         <!-- <if test="begin_time != null and begin_time != '' and end_time != null and end_time != '' ">      
+                      and a.compn_time between #{begin_time} and #{end_time}          
+         </if> -->
+     </where>
+        order by a.compn_time desc 
+      </select>   
+   
+    <select id="comComplaintStatistics" parameterType="java.util.HashMap" resultType="java.util.HashMap" >
+    SELECT SUM(compn_state=1) AS a,SUM(compn_state=2) AS b,SUM(compn_state=3) AS c,SUM(compn_state=4) AS d,
+    SUM(compn_state=8) AS e FROM tsfw_com_complain_info 
+      <where>
+      <if test="compn_compy != null and compn_compy != '' ">
+             and compn_compy  like CONCAT('%%',#{compn_compy},'%%') 
+         </if>
+      <if test="begin_time != null and begin_time != ''  ">      
+                  and compn_time >= #{begin_time}          
+         </if>
+         <if test="end_time != null and end_time != ''">
+                and compn_time &lt;=#{end_time}
+         </if> 
+      
+      </where>
+    </select>
+    
+   
+   
+      <select id="findaccept"  parameterType="java.util.HashMap" resultType="java.util.HashMap" >
+     select * from tsfw_com_complain_info
+      <where>
+         compn_state="2"
+         <if test="complain_code != null and complain_code != '' ">
+             and complain_code like CONCAT('%%',#{complain_code},'%%') 
+         </if> 
+         <if test="compn_compy != null and compn_compy != '' ">
+             and compn_compy  like CONCAT('%%',#{compn_compy},'%%') 
+         </if>
+    
+         <if test="begin_time != null and begin_time != ''  ">      
+                  and compn_time >= #{begin_time}          
+         </if>
+         <if test="end_time != null and end_time != ''">
+                and compn_time &lt;=#{end_time}
+         </if>  
+         
+        <!--  <if test="begin_time != null and begin_time != '' and end_time != null and end_time != '' ">      
+                      and compn_time between #{begin_time} and #{end_time}          
+         </if> -->
+     </where>
+     order by compn_time desc  
+   </select>
+   
+        <select id="selectcom"  parameterType="java.util.HashMap" resultType="java.util.HashMap" >
+       select * from tsfw_com_complain_info
+       <where>
+         <if test="complain_code != null and complain_code != '' ">
+              complain_code like CONCAT('%%',#{complain_code},'%%') 
+         </if> 
+         <if test="compn_compy != null and compn_compy != '' ">
+             and compn_compy  like CONCAT('%%',#{compn_compy},'%%') 
+         </if>
+           <if test="compn_state!= null and compn_state!= '' ">
+               and compn_state = #{compn_state}
+         </if>
+         <if test="begin_time != null and begin_time != ''  ">      
+                  and compn_time >= #{begin_time}          
+         </if>
+         <if test="end_time != null and end_time != ''">
+                and compn_time &lt;=#{end_time}
+         </if>
+         
+     </where>
+     order by compn_time desc  
+   </select>
+   
+   <select id="comHandleSelect" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+   SELECT allot_depme,SUM(a.compn_state !=8)AS compn_handle,SUM(a.compn_state =8)AS compn_end,
+SUM(a.compn_state BETWEEN 0 AND 8)AS compn_sum,ROUND(SUM(a.compn_state = 8)/SUM(a.compn_state BETWEEN 0 AND 8)*100,2) AS compn_rate
+FROM  tsfw_com_complain_info a JOIN tsfw_com_complain_distribute b ON  a.complain_info_id=b.complain_info_id 
+   <where>
+      <if test="allot_depme!=null and allot_depme!=''">
+       b.allot_depme=#{allot_depme}
+      </if>
+      <if test="begin_time != null and begin_time != ''  ">      
+                  and a.compn_time >= #{begin_time}          
+         </if>
+         <if test="end_time != null and end_time != ''">
+                and a.compn_time &lt;=#{end_time}
+         </if>
+   </where>
+   GROUP BY b.allot_depme
+   </select>
+   
+   
+   <select id="selectComName" resultType="java.util.HashMap">
+    select comname from xzsp_com_companyinfo
+   </select>
+   
+   <select id="selectblack" resultType="java.util.HashMap" >
+   select * from cxkh_com_blacklist where com_name=#{compn_compy}
+   </select>
+   
+   <select id="selectComCode" resultType="java.util.HashMap">
+    select creditcode,busiliceno from xzsp_com_companyinfo where comname=#{compn_compy}
+   </select>
+   
+   <select id="selectAllCompn" resultType="java.util.HashMap" >
+   select DISTINCT compn_compy from tsfw_com_complain_info
+   </select>
+   
+   <select id="findcompcodebyId" parameterType="java.lang.String"   resultType="com.nasoft.aboutcar.complaint.domain.comComplainInfo">
+      select * from tsfw_com_complain_info where complain_code=#{complain_code}
+   </select>
+
+   <select id="findacceptbyId" parameterType="int"   resultType="com.nasoft.aboutcar.complaint.domain.comComplainDistribute">
+      select * from tsfw_com_complain_distribute where complain_info_id =#{complain_info_id}
+   </select>
+   
+    <select id="finddisposetbyId" parameterType="int"   resultType="com.nasoft.aboutcar.complaint.domain.comComplainDispose">
+      select * from tsfw_com_complain_dispose where complain_info_id =#{complain_info_id}
+   </select>
+   
+    <select id="findappealbyId" parameterType="int"   resultType="com.nasoft.aboutcar.complaint.domain.comComplainAppeal">
+      select * from tsfw_com_complain_appeal where complain_info_id =#{complain_info_id}
+   </select>
+   
+   <select id="findDisAppealbyID" parameterType="int" resultType="com.nasoft.aboutcar.complaint.domain.comDisAppeal">
+    select disappeal_idea from tsfw_com_disappeal where complain_info_id=#{complain_info_id}
+   </select>
+   
+   <delete id="comDel" parameterType="java.lang.String">
+   delete from tsfw_com_complain_info where complain_code = #{complain_code}
+   </delete>
+   
+   <delete id="deleteblack" parameterType="java.lang.String">
+   delete from cxkh_com_blacklist where com_name=#{compn_compy}
+   </delete>
+   
+   <update id="updatecomp" parameterType="com.nasoft.aboutcar.complaint.domain.comComplainInfo">
+      update tsfw_com_complain_info set 
+        compn_name=#{compn_name},
+        compn_sex=#{compn_sex},
+        data_source=#{data_source},
+        compn_tel=#{compn_tel},
+        compn_number=#{compn_number},
+        compn_email=#{compn_email},
+        compn_address=#{compn_address},
+        compn_compy=#{compn_compy},
+        compn_file=#{compn_file},
+        compn_reason=#{compn_reason},
+        update_user=#{update_user},
+        update_time=#{update_time}
+        where complain_code=#{complain_code}
+   </update>
+   
+   <update id="comitcomp" parameterType="com.nasoft.aboutcar.complaint.domain.comComplainInfo">
+      update tsfw_com_complain_info set 
+           compn_state=#{compn_state}
+        where complain_code=#{complain_code}
+   </update>
+   
+   <insert id="acceptcomit" parameterType="com.nasoft.aboutcar.complaint.domain.comComplainDistribute">
+         insert into tsfw_com_complain_distribute (complain_distribute_id,complain_info_id,allot_depme,distri_idea,distri_peo,distri_time)
+           values(#{complain_distribute_id,jdbcType=INTEGER},#{complain_info_id,jdbcType=INTEGER},#{allot_depme,jdbcType=VARCHAR},
+           #{distri_idea,jdbcType=VARCHAR},#{distri_peo,jdbcType=VARCHAR},#{distri_time})
+   </insert>
+   
+     <insert id="tohandlecomit" parameterType="com.nasoft.aboutcar.complaint.domain.comComplainDispose">
+        insert into tsfw_com_complain_dispose (complain_dispose_id,complain_info_id,dis_type,is_integrity,is_blacklist,survey_file,
+             survey_idea,dis_idea,idea_peo,idea_time)
+             values(#{complain_dispose_id,jdbcType=INTEGER},#{complain_info_id,jdbcType=INTEGER},#{dis_type,jdbcType=VARCHAR},
+              #{is_integrity,jdbcType=CHAR},#{is_blacklist,jdbcType=CHAR},#{survey_file,jdbcType=VARCHAR},#{survey_idea,jdbcType=VARCHAR},
+              #{dis_idea,jdbcType=VARCHAR}, #{idea_peo,jdbcType=VARCHAR},#{idea_time})
+     
+     </insert>
+   
+     
+     <insert id="insertblack" parameterType="com.nasoft.aboutcar.complaint.domain.comBlackList">
+        insert into cxkh_com_blacklist (com_license,credit_code,org_code,com_name,storage_date,storager)
+        values(
+        #{com_license},
+        #{credit_code},
+        #{org_code},
+        #{com_name},
+        #{storage_date},
+        #{storager}
+        )
+
+     </insert>
+     
+     <insert id="insertplantcase" parameterType="com.nasoft.aboutcar.administrativePenalty.domain.PlantCaseInfo">
+      insert into xzcf_plantcase_info(caseId,punishId,plateName,source,caseTime,caseReason,caseType,dealStatus,updatetime,createinstid,isappeal,createuserid,
+       instid,caseUserId) 
+     values(
+      #{caseId},
+      #{punishId},
+      #{plateName},
+      #{source},
+      #{caseTime},
+      #{caseReason},
+      #{caseType},
+      #{dealStatus},
+      #{updateTime},
+      #{createInstId},
+      #{isAppeal},
+      #{createUserId},
+      #{instId},
+      #{caseUserId}
+      
+     )
+     </insert>
+     
+     <insert id="saveDisAppeal" parameterType="com.nasoft.aboutcar.complaint.domain.comDisAppeal">
+     insert into tsfw_com_disappeal (id,complain_info_id,disappeal_idea)
+     values(
+     #{id},
+     #{complain_info_id},
+     #{disappeal_idea}
+     ) 
+     </insert>
+     
+     <update id="updatetblack" parameterType="com.nasoft.aboutcar.complaint.domain.comBlackList" >
+     update cxkh_com_blacklist set
+     com_license=#{com_license},
+     credit_code= #{credit_code},
+     org_code = #{org_code},
+     com_name = #{com_name},
+     storage_date = #{storage_date},
+     storager = #{storager}  
+     </update>
+     
+     <update id="appealcomit" parameterType="com.nasoft.aboutcar.complaint.domain.comComplainAppeal">
+       update tsfw_com_complain_appeal set 
+       appl_dis_idea=#{appl_dis_idea},
+       appl_dis_result=#{appl_dis_result},
+       appl_dis_peo=#{appl_dis_peo},
+       appl_dis_time=#{appl_dis_time}
+       where complain_info_id=#{complain_info_id}
+     </update>
+     
+     <update id="updateplant" parameterType="com.nasoft.aboutcar.administrativePenalty.domain.PlantCaseInfo">
+     update xzcf_plantcase_info set 
+     isappeal=#{isAppeal},
+     updatetime=#{updateTime}
+      where caseId=#{caseId}
+     </update>
+     
+     
+     <update id="disposeUpdate" parameterType="com.nasoft.aboutcar.complaint.domain.comComplainDispose">
+       update tsfw_com_complain_dispose set
+       dis_type=#{dis_type}, 
+       appl_idea_peo=#{appl_idea_peo},
+       appl_idea_time=#{appl_idea_time},
+       survey_idea=#{survey_idea},
+       dis_idea=#{dis_idea},
+       is_integrity=#{is_integrity},
+       is_blacklist=#{is_blacklist},
+       survey_file=#{survey_file} 
+       where complain_info_id=#{complain_info_id}
+     </update>
+     
+     <update id="feedback" parameterType="java.lang.String">
+        update tsfw_com_complain_info set 
+         compn_state="8"
+         where complain_code = #{complain_code}
+     </update>
+     
+   
+   
+   
+   <select id="comDaichuliDetail" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+  	SELECT  a.complain_code complain_code,a.compn_compy compn_compy,a.compn_name compn_name,
+	a.compn_tel compn_tel,a.compn_time compn_time,b.distri_time distri_time,a.compn_state compn_state
+	FROM tsfw_com_complain_info a JOIN tsfw_com_complain_distribute b ON a.complain_info_id=b.complain_info_id 
+
+   <where>
+   compn_state != 8 and b.allot_depme=#{allotdepme}
+      <if test="complain_code!=null and complain_code!=''">
+       and complain_code=#{complain_code}
+      </if>
+      <if test="begin_time != null and begin_time != ''  ">      
+                  and distri_time >= #{begin_time}          
+         </if>
+         <if test="end_time != null and end_time != ''">
+                and distri_time &lt;=#{end_time}
+         </if>
+   </where>
+   
+   </select>
+   
+    <select id="comEndDetails" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+  	SELECT  a.complain_code complain_code,a.compn_compy compn_compy,a.compn_name compn_name,
+	a.compn_tel compn_tel,a.compn_time compn_time,b.distri_time distri_time,a.compn_state compn_state
+	FROM tsfw_com_complain_info a JOIN tsfw_com_complain_distribute b ON a.complain_info_id=b.complain_info_id 
+
+   <where>
+   compn_state = 8 and b.allot_depme=#{allotdepme}
+      <if test="complain_code!=null and complain_code!=''">
+       and complain_code=#{complain_code}
+      </if>
+      <if test="begin_time != null and begin_time != ''  ">      
+                  and distri_time >= #{begin_time}          
+         </if>
+         <if test="end_time != null and end_time != ''">
+                and distri_time &lt;=#{end_time}
+         </if>
+   </where>
+   
+   </select>
+     
+</mapper>

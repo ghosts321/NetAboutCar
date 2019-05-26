@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.nasoft.aboutcar.PlatformMapper">
+
+	<select id="selectByCondition" parameterType="hashmap" resultType="com.nasoft.SSM.domain.PlatformPermitcert">
+	    select *
+	    from  xzsp_com_permitcert 
+	    where creditcode=#{creditcode}  
+   </select>
+ 	<select id="findComPermitApplyByCertNo" parameterType="java.lang.String" resultType="com.nasoft.SSM.domain.PlatformApply" >  
+		SELECT * FROM xzsp_com_permitapply p WHERE 
+		p.creditcode = #{creditcode} UNION ALL 
+		SELECT * FROM xzsp_com_changeapply c WHERE c.creditcode = #{creditcode}
+    </select>
+    
+	<select id="findPlatformByCreditCode" parameterType="String" resultType="com.nasoft.SSM.domain.Platform">
+    	select *  from xzsp_com_companyinfo  where creditcode = #{creditCode}
+    </select>
+    
+    <select id="findComPermitApplyByApplyid" parameterType="java.lang.String" resultType="com.nasoft.SSM.domain.PlatformApply" >  
+        select * from xzsp_com_permitapply where applyid=#{applyId}
+    </select>
+    
+    <select id="findComPermitApplyByMap" parameterType="java.util.HashMap" resultType="com.nasoft.SSM.domain.PlatformApply" >
+    	select * from 
+    	<if test="applyType == 1">xzsp_com_permitapply</if>
+        <if test="applyType == 2">xzsp_com_changeapply</if>
+    	<where>applyid=#{applyid}</where>
+    </select>
+    
+    <select id="findComChangeApplyByApplyid" parameterType="java.lang.String" resultType="com.nasoft.SSM.domain.PlatformApply">
+    	select * from xzsp_com_changeapply where applyid=#{applyId}
+    </select>
+    
+    <select id="selectAllPlatForm"  resultType="com.nasoft.SSM.domain.Platform" >  
+        select * from xzsp_com_companyinfo
+    </select>
+    
+    <delete id="deletePlatformByCreditCode" parameterType="java.lang.String">
+    	delete from xzsp_com_companyinfo where creditcode=#{creditCode}
+    </delete>
+    
+    <delete id="deletePermitApplyByApplyId" parameterType="java.lang.String">
+    	delete from xzsp_com_permitapply where applyid=#{applyId}
+    </delete>
+    
+    <delete id="deleteChangeApplyByApplyId" parameterType="java.lang.String">
+    	delete from xzsp_com_changeapply where applyid=#{applyId}
+    </delete>
+    
+    <!--添加平台基本信息 -->
+    <insert id="insertPlatform" parameterType="com.nasoft.SSM.domain.Platform">
+    	insert into xzsp_com_companyinfo(creditCode,comName,shortName,platformName,busiliceNo,regAddress,busiAddress,postAddress,areaCode,contactsTel,corpName,corpcertNo,corpTelNo,prinName,printelNo,createMan,createInstId,createDate,updUserId,updInstId,updDateTime) values(
+	    	 #{creditCode,jdbcType=VARCHAR},
+	    	 #{comName,jdbcType=VARCHAR},
+	    	 #{shortName,jdbcType=VARCHAR},
+	    	 #{platformName,jdbcType=VARCHAR},
+	    	 #{busiliceNo,jdbcType=VARCHAR},
+	    	 #{regAddress,jdbcType=VARCHAR},
+	    	 #{busiAddress,jdbcType=VARCHAR},
+	    	 #{postAddress,jdbcType=VARCHAR},
+	    	 #{areaCode,jdbcType=VARCHAR},
+	    	 #{contactsTel,jdbcType=VARCHAR},
+	    	 #{corpName,jdbcType=VARCHAR},
+	    	 #{corpcertNo,jdbcType=VARCHAR},
+	    	 #{corpTelNo,jdbcType=VARCHAR},
+	    	 #{prinName,jdbcType=VARCHAR},
+	    	 #{printelNo,jdbcType=VARCHAR},
+	    	 #{createMan,jdbcType=INTEGER},
+             #{createInstId,jdbcType=INTEGER},
+             #{createDate,jdbcType=VARCHAR}, 
+             #{updUserId,jdbcType=INTEGER},
+             #{updInstId,jdbcType=INTEGER},
+             #{updDateTime,jdbcType=VARCHAR}
+    	 )
+    </insert>
+    
+    <update id="updatePlatform" parameterType="com.nasoft.SSM.domain.Platform">
+    update xzsp_com_companyinfo 
+    <set>
+    comname = #{comName},
+    shortname = #{shortName},
+    platformname = #{platformName},
+    busiliceno = #{busiliceNo},
+    regaddress = #{regAddress},
+    busiaddress = #{busiAddress},
+    postaddress = #{postAddress},
+    areacode = #{areaCode},
+    contactstel = #{contactsTel},
+    corpname = #{corpName},
+    corpcertno = #{corpcertNo},
+    corptelno = #{corpTelNo},
+    prinname = #{prinName},
+    printelno = #{printelNo},
+    upduserid = #{updUserId},
+    updinstid = #{updInstId},
+    upddatetime = #{updDateTime}
+    </set>
+    <where>
+    creditcode = #{creditCode}
+    </where>
+    </update>
+    
+    <!--添加平台申请信息 -->
+    <insert id="insertPlatformApply" parameterType="com.nasoft.SSM.domain.PlatformApply">
+         insert into 
+         <if test="applyType == 1">xzsp_com_permitapply</if>
+         <if test="applyType == 2">xzsp_com_changeapply</if>
+          values(
+              #{applyId,jdbcType=VARCHAR},
+              #{hisId,jdbcType=VARCHAR},
+              #{creditCode,jdbcType=VARCHAR},
+              #{instId,jdbcType=VARCHAR},
+              #{applyCompany,jdbcType=VARCHAR},
+              #{dutyName,jdbcType=VARCHAR},
+              #{handleName,jdbcType=VARCHAR},
+              #{address,jdbcType=VARCHAR},
+              #{zipCode,jdbcType=VARCHAR},
+              #{tel,jdbcType=VARCHAR},
+              #{mobile,jdbcType=VARCHAR},
+              #{email,jdbcType=VARCHAR},
+              #{applayTab,jdbcType=VARCHAR},
+              #{applyDate,jdbcType=VARCHAR},
+              #{copyFile,jdbcType=VARCHAR},
+              #{principalFile,jdbcType=VARCHAR},
+              #{creditFile,jdbcType=VARCHAR},
+              #{entrustFile,jdbcType=VARCHAR},
+              #{entrustBook,jdbcType=VARCHAR},
+              #{tradePhoto,jdbcType=VARCHAR},
+              #{agencyPhoto,jdbcType=VARCHAR},
+              #{ratifyPhoto,jdbcType=VARCHAR},
+              #{sjjhjclnl,jdbcType=VARCHAR},
+              #{wlsjxxtj,jdbcType=VARCHAR},
+              #{dataaccess,jdbcType=VARCHAR},
+              #{serverdescription,jdbcType=VARCHAR},
+              #{wlaqglzdwb,jdbcType=VARCHAR},
+              #{aqbhjscswb,jdbcType=VARCHAR},
+              #{tgzfjsfw,jdbcType=VARCHAR},
+              #{serveraddress,jdbcType=VARCHAR},
+              #{jyglzd,jdbcType=VARCHAR},
+              #{aqscglzdwb,jdbcType=VARCHAR},
+              #{fwzlbzzdwb,jdbcType=VARCHAR},
+              #{appStatus,jdbcType=VARCHAR},
+              #{applyType,jdbcType=VARCHAR},
+              #{remark,jdbcType=VARCHAR},
+              #{flfgyqtgqtcl,jdbcType=VARCHAR},
+              #{createMan,jdbcType=INTEGER},
+              #{createInstId,jdbcType=INTEGER},
+              #{createDate,jdbcType=VARCHAR},
+              #{updUserId,jdbcType=INTEGER},
+              #{updInstId,jdbcType=INTEGER},
+              #{updDateTime,jdbcType=VARCHAR},
+              #{annex,jdbcType=VARCHAR},
+              #{deactiveInfo,jdbcType=VARCHAR}
+         )
+    </insert>
+    
+    <select id="findAllApplByCreditcode" parameterType="String" resultType="com.nasoft.SSM.domain.PlatformApply">
+    SELECT * FROM xzsp_com_permitapply WHERE creditcode = #{creditcode}
+    </select>
+     
+    <select id="findPunishInfo" resultType="java.util.HashMap" >
+    	SELECT
+			com.comname,
+			com.creditcode,
+			p.pun_text,
+			sum(s.score) score
+		FROM
+			cxkh_com_pun_record p
+		LEFT JOIN cxkh_com_score_record s ON p.com_license = s.com_license
+		LEFT JOIN xzsp_com_companyinfo com ON p.com_license = com.creditcode
+		WHERE
+			p.com_license = #{creditcode}
+    </select>
+    
+    <select id="findComScoreRecord" resultType="com.nasoft.SSM.domain.ComScoreRecord" >
+    	SELECT
+			*
+		FROM
+			cxkh_com_score_record s 
+		WHERE
+			s.com_license = #{creditcode}
+    </select>
+    
+    <insert id="addComAppealD" parameterType="com.nasoft.SSM.domain.ComAppealD" >
+	    insert into cxkh_com_appeal_d (id, rec_no, appeal_no, 
+	      appeal_text, appeal_file, appeal_status, appeal_result, 
+	      result_file, create_user, create_time, 
+	      update_user, update_time)
+	    values (#{id,jdbcType=INTEGER}, #{rec_no,jdbcType=CHAR}, #{appeal_no,jdbcType=CHAR}, 
+	      #{appeal_text,jdbcType=VARCHAR}, #{appeal_file,jdbcType=VARCHAR}, #{appeal_status,jdbcType=VARCHAR}, #{appeal_result,jdbcType=VARCHAR}, 
+	      #{result_file,jdbcType=VARCHAR}, #{create_user,jdbcType=INTEGER}, #{create_time,jdbcType=TIMESTAMP}, 
+	      #{update_user,jdbcType=INTEGER}, #{update_time,jdbcType=TIMESTAMP})
+  	</insert>
+  	
+  	<insert id="addComAppeals" parameterType="com.nasoft.SSM.domain.ComAppeals" >
+	    insert into cxkh_com_appeals (appeal_no, appeal_status, creditcode, 
+	      com_license, appeal_text, appeal_file, 
+	      appeal_date, deal_result, dealer, 
+	      review_result, reviewer, appeal_result, 
+	      result_file, create_user, create_time, 
+	      update_user, update_time)
+	    values (#{appeal_no,jdbcType=CHAR}, #{appeal_status,jdbcType=VARCHAR}, #{creditcode,jdbcType=VARCHAR}, 
+	      #{com_license,jdbcType=CHAR}, #{appeal_text,jdbcType=VARCHAR}, #{appeal_file,jdbcType=VARCHAR}, 
+	      #{appeal_date,jdbcType=TIMESTAMP}, #{deal_result,jdbcType=VARCHAR}, #{dealer,jdbcType=VARCHAR}, 
+	      #{review_result,jdbcType=VARCHAR}, #{reviewer,jdbcType=VARCHAR}, #{appeal_result,jdbcType=VARCHAR}, 
+	      #{result_file,jdbcType=VARCHAR}, #{create_user,jdbcType=INTEGER}, #{create_time,jdbcType=TIMESTAMP}, 
+	      #{update_user,jdbcType=INTEGER}, #{update_time,jdbcType=TIMESTAMP})
+	 </insert>
+	 
+	 <select id="findComAppealsByCreditcode" parameterType="String" resultType="com.nasoft.SSM.domain.ComAppeals">
+    	SELECT * FROM cxkh_com_appeals WHERE creditcode = #{creditcode}
+     </select>
+     
+     <update id="updateComScoreRecord" parameterType="map" >
+	    update cxkh_com_score_record
+	    <set>
+	      <if test="appeal_no != null">
+	        appeal_no = #{appeal_no},
+	      </if>
+	    </set>
+	    where rec_no = #{rec_no}
+	  </update>
+</mapper>
+

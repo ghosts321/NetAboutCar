@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nasoft.aboutcar.CaseManageMapper">
+    
+     <!-- 查找表所有数据 -->    
+    <select id="findAllPlantCaseInfo" resultType="java.util.HashMap" >  
+        select * from xzcf_plantcase_info
+        
+        <where>
+        
+         <if test="caseId != null and caseId != '' ">
+             and caseId like concat(concat('%', #{caseId}), '%')
+         </if> 
+         <if test="compn_compy != null and compn_compy != '' ">
+             and compn_compy = #{compn_compy}
+         </if>
+         
+         
+         <if test="begin_time != null and begin_time != '' and end_time != null and end_time != '' ">      
+                      and caseTime between #{begin_time} and #{end_time}          
+         </if>
+     </where>
+    </select>
+    
+    <!-- 根据案件ID查找 -->
+    <select id="manageDetail" resultType="com.nasoft.aboutcar.administrativePenalty.domain.CaseManageInfo" >
+        select * from xzcf_plantcase_info where caseId=#{caseId}
+    </select>
+    <!-- 修改案件 -->
+    <update id="updateCaseManageInfo" parameterType="com.nasoft.aboutcar.administrativePenalty.domain.CaseManageInfo">
+    	update xzcf_plantcase_info set 
+    	caseId = #{caseId},
+    	plateName = #{plateName},
+    	source = #{source},
+    	isregister = #{isRegister},
+    	areaCode = #{areaCode},
+    	createInstId = #{createInstId},
+    	caseTime = #{caseTime},
+    	caseReason = #{caseReason},
+    	updatetime = #{updateTime}
+    	where caseId = #{caseId}
+    </update>
+    
+    <!-- 新增修改历史 -->
+    <insert id="insertPlantManageHisInfo" parameterType="com.nasoft.aboutcar.administrativePenalty.domain.PlantManageHisInfo">
+        insert into xzcf_casealter_his (caseId,altercontentb,alterzd,upduserid,updatetime,altercontenta)
+        
+        values(#{caseId},#{altercontentb},#{alterzd},#{upduserid},#{updatetime},#{altercontenta})
+        
+    </insert>
+    
+     <!-- 根据案件ID查找历史 -->
+    <select id="manageHistory" resultType="java.util.HashMap" >
+        select * from xzcf_casealter_his where caseId=#{caseId}
+    </select>
+    
+     <!-- 查找平台名称 -->
+   <select id="selectComName" resultType="java.util.HashMap">
+    select comname from xzsp_com_companyinfo
+   </select>
+        
+    </mapper>

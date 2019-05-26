@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- 存放手写的sql -->
+<mapper namespace="com.nasoft.aboutcar.CxkhComPunListMapper">
+	
+	
+    <resultMap type="java.util.HashMap" id="CxkhComPunListResultToMap2">
+    	
+    </resultMap>
+	
+	
+	<select id="findCreditPlatByComname" parameterType="String" resultType="hashmap">
+ SELECT 
+  cc.comname,
+  cc.creditcode,
+  sum(csr.score) score,
+  cps.pun_text punText,
+  cpl.list_no listNo
+FROM
+  cxkh_com_pun_list cpl,
+  cxkh_com_pun_list_d cpld,
+  xzsp_com_companyinfo cc,
+  cxkh_com_score_record csr,
+  cxkh_punished_set cps 
+WHERE cpl.list_no = cpld.list_no 
+  AND cpld.com_license = cc.busiliceno 
+  AND csr.com_license = cc.busiliceno 
+  AND cps.pun_code = cpl.pun_code
+  AND cps.pun_text=#{pubText}
+  AND cpl.pub_status=#{pubStatus}
+  <if test="comname != null and comname != ''">
+  AND cc.comname like CONCAT('%',#{comname},'%' )
+  </if>
+ </select>
+ <select id="findCxhkPlatPunListByListNo" parameterType="String" resultType="hashmap">
+SELECT 
+  cpld.com_license,
+  cpl.* 
+FROM
+  cxkh_com_pun_list_d cpld,
+  cxkh_com_pun_list cpl 
+WHERE cpl.list_no = cpld.list_no 
+  AND cpld.list_no = #{listNo}
+ </select>
+ <update id="updateCxhkPlatPunList" parameterType="map">
+   update cxkh_com_pun_list 
+   set pub_status=#{pubStatus}
+   where list_no=#{listNo}
+ </update>
+ 
+ 
+	 <select id="listforPunish" resultType="hashmap">
+	  SELECT 
+	 cd.year,
+	 cd.score,
+	 cd.assess_level, 
+	 xd.comname, 
+	 xd.creditcode 
+	FROM
+	  cxkh_com_annual_work cd 
+	  LEFT JOIN xzsp_com_companyinfo xd 
+	  ON cd.com_license = xd.creditcode 
+		<where>
+			and cd.is_curr='1'
+			and cd.score>=#{minScore}
+			<![CDATA[and cd.score<=#{maxScore}]]>
+		</where>
+	  </select>
+
+	
+	
+</mapper>

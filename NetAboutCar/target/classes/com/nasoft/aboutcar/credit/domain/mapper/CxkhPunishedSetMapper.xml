@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.nasoft.aboutcar.CxkhPunishedSetMapper">
+
+	<resultMap id="CxkhPunishedSetResultMap" type="com.nasoft.aboutcar.credit.domain.CxkhPunishedSet">
+        <result property="punCode" column="pun_code" jdbcType="INTEGER"/>
+        <result property="punType" column="pun_type" jdbcType="CHAR"/>
+        <result property="punText" column="pun_text" jdbcType="VARCHAR"/>
+        <result property="punDesc" column="pun_desc" jdbcType="VARCHAR"/>
+        <result property="minScore" column="min_score" jdbcType="INTEGER"/>
+        <result property="maxScore" column="max_score" jdbcType="INTEGER"/>
+        <result property="validDate" column="valid_date" jdbcType="DATE"/>
+        <result property="invalidDate" column="invalid_date" jdbcType="DATE"/>
+        <result property="available" column="available" jdbcType="CHAR"/>
+        <result property="createUser" column="create_user" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="INTEGER"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	   
+		pun_code,pun_type,pun_text,pun_desc,min_score,max_score,valid_date,invalid_date,available,create_user,create_time,update_user,update_time
+	   
+	</sql>
+
+	<insert id="insertIfNotnull"   parameterType="com.nasoft.aboutcar.credit.domain.CxkhPunishedSet">
+		<selectKey   keyProperty="punCode"  resultType="java.lang.Integer">  
+		SELECT LAST_INSERT_ID()  
+	  </selectKey>
+        INSERT INTO cxkh_punished_set 
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="punType != null">
+        		pun_type ,
+			</if>
+			<if test="punText != null">
+        		pun_text ,
+			</if>
+			<if test="punDesc != null">
+        		pun_desc ,
+			</if>
+			<if test="minScore != null">
+        		min_score ,
+			</if>
+			<if test="maxScore != null">
+        		max_score ,
+			</if>
+			<if test="validDate != null">
+        		valid_date ,
+			</if>
+			<if test="invalidDate != null">
+        		invalid_date ,
+			</if>
+			<if test="available != null">
+        		available ,
+			</if>
+			<if test="createUser != null">
+        		create_user ,
+			</if>
+			<if test="createTime != null">
+        		create_time ,
+			</if>
+			<if test="updateUser != null">
+        		update_user ,
+			</if>
+			<if test="updateTime != null">
+        		update_time ,
+			</if>
+		</trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="punType != null">
+        		#{punType, jdbcType=CHAR} ,
+			</if>
+			<if test="punText != null">
+        		#{punText, jdbcType=VARCHAR} ,
+			</if>
+			<if test="punDesc != null">
+        		#{punDesc, jdbcType=VARCHAR} ,
+			</if>
+			<if test="minScore != null">
+        		#{minScore, jdbcType=INTEGER} ,
+			</if>
+			<if test="maxScore != null">
+        		#{maxScore, jdbcType=INTEGER} ,
+			</if>
+			<if test="validDate != null">
+        		#{validDate, jdbcType=DATE} ,
+			</if>
+			<if test="invalidDate != null">
+        		#{invalidDate, jdbcType=DATE} ,
+			</if>
+			<if test="available != null">
+        		#{available, jdbcType=CHAR} ,
+			</if>
+			<if test="createUser != null">
+        		#{createUser, jdbcType=INTEGER} ,
+			</if>
+			<if test="createTime != null">
+        		#{createTime, jdbcType=TIMESTAMP} ,
+			</if>
+			<if test="updateUser != null">
+        		#{updateUser, jdbcType=INTEGER} ,
+			</if>
+			<if test="updateTime != null">
+        		#{updateTime, jdbcType=TIMESTAMP} ,
+			</if>
+		</trim>
+    
+		
+	</insert>
+    
+	<update id="updateIfNotnull"  parameterType="com.nasoft.aboutcar.credit.domain.CxkhPunishedSet">
+    
+        UPDATE cxkh_punished_set
+			<set>
+				<if test="punType != null">
+					pun_type = #{punType, jdbcType=CHAR} ,
+				</if>
+				<if test="punText != null">
+					pun_text = #{punText, jdbcType=VARCHAR} ,
+				</if>
+				<if test="punDesc != null">
+					pun_desc = #{punDesc, jdbcType=VARCHAR} ,
+				</if>
+				<if test="minScore != null">
+					min_score = #{minScore, jdbcType=INTEGER} ,
+				</if>
+				<if test="maxScore != null">
+					max_score = #{maxScore, jdbcType=INTEGER} ,
+				</if>
+				<if test="validDate != null">
+					valid_date = #{validDate, jdbcType=DATE} ,
+				</if>
+				<if test="invalidDate != null">
+					invalid_date = #{invalidDate, jdbcType=DATE} ,
+				</if>
+				<if test="available != null">
+					available = #{available, jdbcType=CHAR} ,
+				</if>
+				<if test="createUser != null">
+					create_user = #{createUser, jdbcType=INTEGER} ,
+				</if>
+				<if test="createTime != null">
+					create_time = #{createTime, jdbcType=TIMESTAMP} ,
+				</if>
+				<if test="updateUser != null">
+					update_user = #{updateUser, jdbcType=INTEGER} ,
+				</if>
+				<if test="updateTime != null">
+					update_time = #{updateTime, jdbcType=TIMESTAMP} ,
+				</if>
+			</set>
+        WHERE 
+	        pun_code = #{punCode, jdbcType=INTEGER} 
+    
+	</update>
+
+    <delete id="deleteById">
+    
+        DELETE FROM cxkh_punished_set WHERE
+        pun_code = #{punCode } 
+    
+    </delete>
+    
+    
+    <delete id="delete">
+    
+        DELETE FROM cxkh_punished_set WHERE
+        
+    </delete>
+    
+		<select id="selectById" resultMap="CxkhPunishedSetResultMap">
+			SELECT <include refid="columns" />
+		   
+				FROM cxkh_punished_set 
+				WHERE 
+					pun_code = #{punCode, jdbcType=INTEGER} 
+			
+		</select>
+	
+	<sql id="selectList_where">
+		<where>	      				
+	       <if test="punCode != null">
+		 		 		AND pun_code = #{punCode, jdbcType=INTEGER}
+			</if>
+	       <if test="punType != null">
+		 	   	 	AND pun_type = #{punType, jdbcType=CHAR}
+			</if>
+	       <if test="punText != null">
+		 	   	 	AND pun_text = #{punText, jdbcType=VARCHAR}
+			</if>
+	       <if test="punDesc != null">
+		 	   	 	AND pun_desc = #{punDesc, jdbcType=VARCHAR}
+			</if>
+	       <if test="minScore != null">
+		 		 		AND min_score = #{minScore, jdbcType=INTEGER}
+			</if>
+	       <if test="maxScore != null">
+		 		 		AND max_score = #{maxScore, jdbcType=INTEGER}
+			</if>
+	       <if test="validDateBegin != null">
+				AND valid_date >= #{validDateBegin }
+		   </if>
+		   <if test="validDateEnd != null">
+				AND valid_date &lt;= #{validDateEnd }
+		   </if>
+	       <if test="invalidDateBegin != null">
+				AND invalid_date >= #{invalidDateBegin }
+		   </if>
+		   <if test="invalidDateEnd != null">
+				AND invalid_date &lt;= #{invalidDateEnd }
+		   </if>
+	       <if test="available != null">
+		 	   	 	AND available = #{available, jdbcType=CHAR}
+			</if>
+	       <if test="createUser != null">
+		 		 		AND create_user = #{createUser, jdbcType=INTEGER}
+			</if>
+	       <if test="createTimeBegin != null">
+				AND create_time >= #{createTimeBegin }
+		   </if>
+		   <if test="createTimeEnd != null">
+				AND create_time &lt;= #{createTimeEnd }
+		   </if>
+	       <if test="updateUser != null">
+		 		 		AND update_user = #{updateUser, jdbcType=INTEGER}
+			</if>
+	       <if test="updateTimeBegin != null">
+				AND update_time >= #{updateTimeBegin }
+		   </if>
+		   <if test="updateTimeEnd != null">
+				AND update_time &lt;= #{updateTimeEnd }
+		   </if>
+		</where>
+	</sql>
+		
+    <select id="selectListCount" resultType="long">
+        SELECT count(*) FROM cxkh_punished_set 
+		<include refid="selectList_where"/>    
+    </select>
+    
+   
+    <select id="selectList" resultMap="CxkhPunishedSetResultMap">
+    	SELECT <include refid="columns" />
+	    FROM cxkh_punished_set 
+		<include refid="selectList_where"/>
+		
+		
+    </select>
+    
+    <resultMap type="java.util.HashMap" id="CxkhPunishedSetResultToMap">
+    	
+    </resultMap>
+    <select id="getVertical" resultMap="CxkhPunishedSetResultToMap">
+    	SELECT <include refid="columns" />
+	    FROM cxkh_punished_set 
+		<include refid="selectList_where"/>
+    </select>
+
+	
+	
+</mapper>
+

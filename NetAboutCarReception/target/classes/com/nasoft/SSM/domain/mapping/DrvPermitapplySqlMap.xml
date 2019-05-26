@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.SSM.DrvPermitapply" >
+	
+  <select id="selectByApplyid" parameterType="java.lang.Integer" resultType="com.nasoft.SSM.domain.DrvPermitapply">
+    select 
+    *
+    from xzsp_drv_permitapply
+    where applyid = #{applyid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByCertno" parameterType="String" resultType="com.nasoft.SSM.domain.DrvPermitapply">
+    SELECT *
+FROM xzsp_drv_permitapply 
+WHERE certno = #{certno,jdbcType=VARCHAR} 
+  </select>
+  
+  <select id="selectProgressByCertno" parameterType="String" resultType="com.nasoft.SSM.domain.DrvPermitapply">
+  SELECT
+  p.applyid,
+  p.certno,
+  p.applytype,
+  p.appstatus,
+  p.applydate
+FROM xzsp_drv_permitapply p
+WHERE p.certno = #{certno,jdbcType=VARCHAR} 
+UNION ALL SELECT
+  m.applyid,
+  m.certno,
+  m.applytype,
+  m.appstatus,
+  m.applydate
+FROM xzsp_drv_makeupapp m
+WHERE m.certno = #{certno,jdbcType=VARCHAR} 
+UNION ALL SELECT
+  c.applyid,
+  c.certno,
+  c.applytype,
+  c.appstatus,
+  c.applydate
+FROM xzsp_drv_changeapply c
+WHERE c.certno = #{certno,jdbcType=VARCHAR} 
+  </select>
+  
+  <delete id="deleteByApplyid" parameterType="java.lang.Integer" >
+    delete from xzsp_drv_permitapply
+    where applyid = #{applyid,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="addDrvPermitapply" parameterType="com.nasoft.SSM.domain.DrvPermitapply" >
+    insert into xzsp_drv_permitapply (applyid, certno,instid, driveyears, 
+      company, contractid, workstatus, 
+      photo, certphoto, drivecardphoto, 
+      applydate, crimemark, recordcont, 
+      appstatus, remark, upduserid, 
+      updinstid, upddatetime, source, 
+      applytype)
+    values (#{applyid,jdbcType=INTEGER}, #{certno,jdbcType=VARCHAR},#{instid,jdbcType=VARCHAR}, #{driveyears,jdbcType=INTEGER}, 
+      #{company,jdbcType=VARCHAR}, #{contractid,jdbcType=VARCHAR}, #{workstatus,jdbcType=CHAR}, 
+      #{photo,jdbcType=VARCHAR}, #{certphoto,jdbcType=VARCHAR}, #{drivecardphoto,jdbcType=VARCHAR}, 
+      #{applydate,jdbcType=TIMESTAMP}, #{crimemark,jdbcType=CHAR}, #{recordcont,jdbcType=VARCHAR}, 
+      #{appstatus,jdbcType=CHAR}, #{remark,jdbcType=VARCHAR}, #{upduserid,jdbcType=INTEGER}, 
+      #{updinstid,jdbcType=INTEGER}, #{upddatetime,jdbcType=TIMESTAMP}, #{source,jdbcType=CHAR}, 
+      #{applytype,jdbcType=CHAR})
+  </insert>
+  
+  <update id="updateDrvPermitapply" parameterType="com.nasoft.SSM.domain.DrvPermitapply" >
+    update xzsp_drv_permitapply
+    set certno = #{certno,jdbcType=VARCHAR},
+      instid = #{instid,jdbcType=VARCHAR},
+      driveyears = #{driveyears,jdbcType=INTEGER},
+      company = #{company,jdbcType=VARCHAR},
+      contractid = #{contractid,jdbcType=VARCHAR},
+      workstatus = #{workstatus,jdbcType=CHAR},
+      photo = #{photo,jdbcType=VARCHAR},
+      certphoto = #{certphoto,jdbcType=VARCHAR},
+      drivecardphoto = #{drivecardphoto,jdbcType=VARCHAR},
+      applydate = #{applydate,jdbcType=TIMESTAMP},
+      crimemark = #{crimemark,jdbcType=CHAR},
+      recordcont = #{recordcont,jdbcType=VARCHAR},
+      appstatus = #{appstatus,jdbcType=CHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      upduserid = #{upduserid,jdbcType=INTEGER},
+      updinstid = #{updinstid,jdbcType=INTEGER},
+      upddatetime = #{upddatetime,jdbcType=TIMESTAMP},
+      source = #{source,jdbcType=CHAR},
+      applytype = #{applytype,jdbcType=CHAR},
+      description = #{description,jdbcType=CHAR}
+    where applyid = #{applyid,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

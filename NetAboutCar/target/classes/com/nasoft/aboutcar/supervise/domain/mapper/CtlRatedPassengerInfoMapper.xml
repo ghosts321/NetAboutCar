@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.CtlRatedPassengerInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.nasoft.aboutcar.supervise.domain.CtlRatedPassengerInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="company_id" property="companyId" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="evaluate_time" property="evaluateTime" jdbcType="DECIMAL" />
+    <result column="service_score" property="serviceScore" jdbcType="INTEGER" />
+    <result column="driver_score" property="driverScore" jdbcType="INTEGER" />
+    <result column="vehicle_score" property="vehicleScore" jdbcType="INTEGER" />
+    <result column="detail" property="detail" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <select id="findAllRatedPassengerInfo" parameterType="java.util.HashMap" resultType="com.nasoft.aboutcar.supervise.domain.CtlRatedPassengerInfo">
+		select * from ctl_rated_passenger_info
+		<where>
+			<if test="companyId != null and companyId !=''">
+				company_id = #{companyId}
+			</if>
+		</where>
+  </select>
+  
+  <insert id="addCtlRatedPassengerInfo" parameterType="com.nasoft.aboutcar.supervise.domain.CtlRatedPassengerInfo" >
+    insert into ctl_rated_passenger_info (id, company_id, order_id, 
+      evaluate_time, service_score, driver_score, 
+      vehicle_score, detail, create_user, 
+      create_time, update_user, update_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{companyId,jdbcType=VARCHAR}, #{orderId,jdbcType=INTEGER}, 
+      #{evaluateTime,jdbcType=DECIMAL}, #{serviceScore,jdbcType=INTEGER}, #{driverScore,jdbcType=INTEGER}, 
+      #{vehicleScore,jdbcType=INTEGER}, #{detail,jdbcType=VARCHAR}, #{createUser,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+</mapper>

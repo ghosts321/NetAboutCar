@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nasoft.aboutcar.contentMapper">
+    <select id="findAllContent"  resultType="com.nasoft.SSM.domain.Content" >  
+        select * from mng_content  order by createdate desc
+    </select>
+     <select id="findAllContentByType"  parameterType="java.lang.String" resultType="com.nasoft.SSM.domain.Content" >  
+        select * from mng_content where type=#{type} 
+        <if test="title != null and title!=''">
+			and title like CONCAT('%','${title}','%' ) 
+		</if>
+        order by createdate desc
+    </select>
+    
+    
+     <select id="findAllLbContent" resultType="com.nasoft.SSM.domain.LbContent" >  
+        select * from mng_Lbcontent
+    </select>
+    
+</mapper>

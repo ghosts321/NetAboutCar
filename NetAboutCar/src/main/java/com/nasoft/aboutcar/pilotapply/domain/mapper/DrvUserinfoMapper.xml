@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.DrvUserinfoMapper" >
+
+  <insert id="addDrvUserinfo" parameterType="com.nasoft.aboutcar.pilotapply.domain.DrvUserinfo" >
+    insert into xzsp_drv_userinfo (certno, username, sex, 
+      areacode, censusaddr, nation, 
+      political, birthday, drivecardno, 
+      carddate, carissuingagency, cardrivingtype, 
+      address, telno, contactname, 
+      contactemployer, contacttelno, familybg, 
+      education, filenumber, residencepermit, createuserid, createinstid, 
+      createdatetime, upduserid, updinstid, 
+      upddatetime)
+    values (#{certno,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{sex,jdbcType=CHAR}, 
+      #{areacode,jdbcType=CHAR}, #{censusaddr,jdbcType=VARCHAR}, #{nation,jdbcType=CHAR}, 
+      #{political,jdbcType=CHAR}, #{birthday,jdbcType=DATE}, #{drivecardno,jdbcType=VARCHAR}, 
+      #{carddate,jdbcType=DATE}, #{carissuingagency,jdbcType=VARCHAR}, #{cardrivingtype,jdbcType=CHAR}, 
+      #{address,jdbcType=VARCHAR}, #{telno,jdbcType=VARCHAR}, #{contactname,jdbcType=VARCHAR}, 
+      #{contactemployer,jdbcType=VARCHAR}, #{contacttelno,jdbcType=VARCHAR}, #{familybg,jdbcType=CHAR}, 
+      #{education,jdbcType=CHAR},#{filenumber,jdbcType=VARCHAR},#{residencepermit,jdbcType=VARCHAR}, #{createuserid,jdbcType=INTEGER}, #{createinstid,jdbcType=INTEGER}, 
+      #{createdatetime,jdbcType=TIMESTAMP}, #{upduserid,jdbcType=INTEGER}, #{updinstid,jdbcType=INTEGER}, 
+      #{upddatetime,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <select id="findDrvUserInfo" parameterType="java.util.HashMap" resultType="com.nasoft.aboutcar.pilotapply.domain.DrvUserinfo">
+		select u.*,p.checkstatus checkStatus from xzsp_drv_userinfo u,xzsp_drv_permitapply p where  u.certno=p.certno
+		<if test="username != null and username != ''">
+			and u.username like CONCAT('%','${username}','%' )
+		</if>
+		<if test="certno != null and certno != ''">
+			and u.certno like CONCAT('%','${certno}','%' )
+		</if>
+		<choose>
+			<when test="checkStatus != null and checkStatus != ''">
+				and p.checkstatus = #{checkStatus}
+			</when>
+	      <otherwise>
+	         and p.checkstatus in (1,2,3)
+	      </otherwise>
+        </choose>
+  </select>
+  
+    <select id="findDrvUserByCertNo" parameterType="String" resultType="com.nasoft.aboutcar.pilotapply.domain.DrvUserinfo">
+    	select * from xzsp_drv_userinfo where certno =#{certno}
+    </select>
+  
+  
+   <update id="updateDrvUserPermit" parameterType="java.util.HashMap">
+		update xzsp_drv_permitapply set checkstatus = #{checkStatus}
+		<if test="recordcont != null and recordcont != '' ">
+			,recordcont = #{recordcont}
+		</if>
+		where  certno = #{certno}
+	</update>
+  
+</mapper>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.SSM.DrvMakeupapp">
+	<insert id="addDrvMakeupapp" parameterType="com.nasoft.SSM.domain.DrvMakeupapp">
+		insert into xzsp_drv_makeupapp values (
+		#{applyid},#{certno},#{applytype},#{applydate},#{originalcertnum},
+		#{certdate},#{appstatus},#{remark},#{upduserid},#{updinstid},#{upddatetime}
+		)
+	</insert>
+	<select id="selectByCertno" parameterType="String" resultType="com.nasoft.SSM.domain.DrvMakeupapp">
+    select 
+    *
+    from xzsp_drv_makeupapp m
+    where m.certno = #{certno}
+  </select>
+</mapper>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.nasoft.aboutcar.plantCaseInfoMapper">
+
+    <select id="findComname" resultType="java.lang.String">
+    select comname from xzsp_com_companyinfo where creditcode = #{userName}
+    </select>
+    
+    <select id="findBycomname" parameterType="hashmap" resultType="com.nasoft.SSM.domain.PlantCaseInfo">
+	    select * from xzcf_plantcase_info where plateName =#{comname} and dealStatus = '02' and isregister = '01'
+   </select>
+   <select id="findBycaseId" parameterType="hashmap" resultType="com.nasoft.SSM.domain.PlantCaseInfo">
+	    select * from xzcf_plantcase_info where caseId =#{caseId}
+   </select>
+   
+   <insert id="addPlantAppeal" parameterType="com.nasoft.SSM.domain.PlantCaseAppeal" >
+    insert into xzcf_plantcase_appeal (caseId, appealcontent, appealuserid)
+    values (#{caseId,jdbcType=VARCHAR}, 
+    		#{appealcontent,jdbcType=VARCHAR}, 
+          	#{appealuserid,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  <update id="updateCaseInfo" parameterType="com.nasoft.SSM.domain.PlantCaseInfo" >
+     update xzcf_plantcase_info
+     set dealStatus = "03",isappeal = "01"
+     where caseId = #{caseId}
+    </update>
+    <update id="updateCaseDeal" parameterType="com.nasoft.SSM.domain.CaseDealInfo" >
+     update xzcf_casedeal_info
+     set dealStatus = "03"
+     where caseId = #{caseId}
+    </update>
+    
+    <select id="findByusername" parameterType="hashmap" resultType="com.nasoft.SSM.domain.DrvPlantCaseInfo">
+	    select * from xzcf_dricase_info where drivcarno =#{userName} and dealstatus = '02' and isregister = '01'
+   </select>
+   
+   <select id="findBycaseid" parameterType="hashmap" resultType="com.nasoft.SSM.domain.DrvPlantCaseInfo">
+	    select * from xzcf_dricase_info where caseid =#{caseid}
+   </select>
+   
+   <insert id="addDrvAppeal" parameterType="com.nasoft.SSM.domain.DrvCaseAppeal" >
+    insert into xzcf_drivecase_appeal (caseid, appealcontent, appealuserid)
+    values (#{caseid,jdbcType=VARCHAR}, 
+    		#{appealcontent,jdbcType=VARCHAR}, 
+          	#{appealuserid,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  <update id="updateDrvCaseInfo" parameterType="com.nasoft.SSM.domain.DrvPlantCaseInfo" >
+     update xzcf_dricase_info
+     set dealstatus = "03",isappeal = "01"
+     where caseid = #{caseid}
+    </update>
+    <update id="updateDrvCaseDeal" parameterType="com.nasoft.SSM.domain.DrvCaseDealInfo" >
+     update xzcf_drivercasedeal_info
+     set dealstatus = "03"
+     where caseid = #{caseid}
+    </update>
+  
+</mapper>
+

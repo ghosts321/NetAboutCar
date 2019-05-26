@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.nasoft.aboutcar.CxkhDrvAppealsMapper">
+
+	<resultMap id="CxkhDrvAppealsResultMap" type="com.nasoft.aboutcar.credit.domain.CxkhDrvAppeals">
+        <result property="appealNo" column="appeal_no" jdbcType="CHAR"/>
+        <result property="appealStatus" column="appeal_status" jdbcType="VARCHAR"/>
+        <result property="drvLicense" column="drv_license" jdbcType="CHAR"/>
+        <result property="appealText" column="appeal_text" jdbcType="VARCHAR"/>
+        <result property="appealFile" column="appeal_file" jdbcType="VARCHAR"/>
+        <result property="appealDate" column="appeal_date" jdbcType="TIMESTAMP"/>
+        <result property="dealResult" column="deal_result" jdbcType="VARCHAR"/>
+        <result property="dealer" column="dealer" jdbcType="INTEGER"/>
+        <result property="reviewResult" column="review_result" jdbcType="VARCHAR"/>
+        <result property="reviewer" column="reviewer" jdbcType="INTEGER"/>
+        <result property="appealResult" column="appeal_result" jdbcType="VARCHAR"/>
+        <result property="resultFile" column="result_file" jdbcType="VARCHAR"/>
+        <result property="createUser" column="create_user" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="INTEGER"/>
+        <result property="certno" column="certno" jdbcType="VARCHAR"/>
+        <result property="drvName" column="drv_name" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	   
+		appeal_no,appeal_status,drv_license,appeal_text,appeal_file,appeal_date,deal_result,dealer,review_result,reviewer,appeal_result,result_file,create_user,create_time,update_user,certno,drv_name,update_time
+	   
+	</sql>
+
+	<insert id="insertIfNotnull"   parameterType="com.nasoft.aboutcar.credit.domain.CxkhDrvAppeals">
+		<selectKey   keyProperty="appealNo"  resultType="java.lang.String">  
+		SELECT LAST_INSERT_ID()  
+	  </selectKey>
+        INSERT INTO cxkh_drv_appeals 
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="appealStatus != null">
+        		appeal_status ,
+			</if>
+			<if test="drvLicense != null">
+        		drv_license ,
+			</if>
+			<if test="appealText != null">
+        		appeal_text ,
+			</if>
+			<if test="appealFile != null">
+        		appeal_file ,
+			</if>
+			<if test="appealDate != null">
+        		appeal_date ,
+			</if>
+			<if test="dealResult != null">
+        		deal_result ,
+			</if>
+			<if test="dealer != null">
+        		dealer ,
+			</if>
+			<if test="reviewResult != null">
+        		review_result ,
+			</if>
+			<if test="reviewer != null">
+        		reviewer ,
+			</if>
+			<if test="appealResult != null">
+        		appeal_result ,
+			</if>
+			<if test="resultFile != null">
+        		result_file ,
+			</if>
+			<if test="createUser != null">
+        		create_user ,
+			</if>
+			<if test="createTime != null">
+        		create_time ,
+			</if>
+			<if test="updateUser != null">
+        		update_user ,
+			</if>
+			<if test="certno != null">
+        		certno ,
+			</if>
+			<if test="drvName != null">
+        		drv_name ,
+			</if>
+			<if test="updateTime != null">
+        		update_time ,
+			</if>
+		</trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="appealStatus != null">
+        		#{appealStatus, jdbcType=VARCHAR} ,
+			</if>
+			<if test="drvLicense != null">
+        		#{drvLicense, jdbcType=CHAR} ,
+			</if>
+			<if test="appealText != null">
+        		#{appealText, jdbcType=VARCHAR} ,
+			</if>
+			<if test="appealFile != null">
+        		#{appealFile, jdbcType=VARCHAR} ,
+			</if>
+			<if test="appealDate != null">
+        		#{appealDate, jdbcType=TIMESTAMP} ,
+			</if>
+			<if test="dealResult != null">
+        		#{dealResult, jdbcType=VARCHAR} ,
+			</if>
+			<if test="dealer != null">
+        		#{dealer, jdbcType=INTEGER} ,
+			</if>
+			<if test="reviewResult != null">
+        		#{reviewResult, jdbcType=VARCHAR} ,
+			</if>
+			<if test="reviewer != null">
+        		#{reviewer, jdbcType=INTEGER} ,
+			</if>
+			<if test="appealResult != null">
+        		#{appealResult, jdbcType=VARCHAR} ,
+			</if>
+			<if test="resultFile != null">
+        		#{resultFile, jdbcType=VARCHAR} ,
+			</if>
+			<if test="createUser != null">
+        		#{createUser, jdbcType=INTEGER} ,
+			</if>
+			<if test="createTime != null">
+        		#{createTime, jdbcType=TIMESTAMP} ,
+			</if>
+			<if test="updateUser != null">
+        		#{updateUser, jdbcType=INTEGER} ,
+			</if>
+			<if test="certno != null">
+        		#{certno, jdbcType=VARCHAR} ,
+			</if>
+			<if test="drvName != null">
+        		#{drvName, jdbcType=VARCHAR} ,
+			</if>
+			<if test="updateTime != null">
+        		#{updateTime, jdbcType=TIMESTAMP} ,
+			</if>
+		</trim>
+    
+		
+	</insert>
+    
+	<update id="updateIfNotnull"  parameterType="com.nasoft.aboutcar.credit.domain.CxkhDrvAppeals">
+    
+        UPDATE cxkh_drv_appeals
+			<set>
+				<if test="appealStatus != null">
+					appeal_status = #{appealStatus, jdbcType=VARCHAR} ,
+				</if>
+				<if test="drvLicense != null">
+					drv_license = #{drvLicense, jdbcType=CHAR} ,
+				</if>
+				<if test="appealText != null">
+					appeal_text = #{appealText, jdbcType=VARCHAR} ,
+				</if>
+				<if test="appealFile != null">
+					appeal_file = #{appealFile, jdbcType=VARCHAR} ,
+				</if>
+				<if test="appealDate != null">
+					appeal_date = #{appealDate, jdbcType=TIMESTAMP} ,
+				</if>
+				<if test="dealResult != null">
+					deal_result = #{dealResult, jdbcType=VARCHAR} ,
+				</if>
+				<if test="dealer != null">
+					dealer = #{dealer, jdbcType=INTEGER} ,
+				</if>
+				<if test="reviewResult != null">
+					review_result = #{reviewResult, jdbcType=VARCHAR} ,
+				</if>
+				<if test="reviewer != null">
+					reviewer = #{reviewer, jdbcType=INTEGER} ,
+				</if>
+				<if test="appealResult != null">
+					appeal_result = #{appealResult, jdbcType=VARCHAR} ,
+				</if>
+				<if test="resultFile != null">
+					result_file = #{resultFile, jdbcType=VARCHAR} ,
+				</if>
+				<if test="createUser != null">
+					create_user = #{createUser, jdbcType=INTEGER} ,
+				</if>
+				<if test="createTime != null">
+					create_time = #{createTime, jdbcType=TIMESTAMP} ,
+				</if>
+				<if test="updateUser != null">
+					update_user = #{updateUser, jdbcType=INTEGER} ,
+				</if>
+				<if test="certno != null">
+					certno = #{certno, jdbcType=VARCHAR} ,
+				</if>
+				<if test="drvName != null">
+					drv_name = #{drvName, jdbcType=VARCHAR} ,
+				</if>
+				<if test="updateTime != null">
+					update_time = #{updateTime, jdbcType=TIMESTAMP} ,
+				</if>
+			</set>
+        WHERE 
+	        appeal_no = #{appealNo, jdbcType=CHAR} 
+    
+	</update>
+
+    <delete id="deleteById">
+    
+        DELETE FROM cxkh_drv_appeals WHERE
+        appeal_no = #{appealNo } 
+    
+    </delete>
+    
+    
+    <delete id="delete">
+    
+        DELETE FROM cxkh_drv_appeals WHERE
+        
+    </delete>
+    
+		<select id="selectById" resultMap="CxkhDrvAppealsResultMap">
+			SELECT <include refid="columns" />
+		   
+				FROM cxkh_drv_appeals 
+				WHERE 
+					appeal_no = #{appealNo, jdbcType=CHAR} 
+			
+		</select>
+	
+	<sql id="selectList_where">
+		<where>	      				
+	       <if test="appealNo != null">
+		 	   	 	AND appeal_no = #{appealNo, jdbcType=CHAR}
+			</if>
+	       <if test="appealStatus != null">
+		 	   	 	AND appeal_status = #{appealStatus, jdbcType=VARCHAR}
+			</if>
+	       <if test="drvLicense != null">
+		 	   	 	AND drv_license = #{drvLicense, jdbcType=CHAR}
+			</if>
+	       <if test="appealText != null">
+		 	   	 	AND appeal_text = #{appealText, jdbcType=VARCHAR}
+			</if>
+	       <if test="appealFile != null">
+		 	   	 	AND appeal_file = #{appealFile, jdbcType=VARCHAR}
+			</if>
+	       <if test="appealDateBegin != null">
+				AND appeal_date >= #{appealDateBegin }
+		   </if>
+		   <if test="appealDateEnd != null">
+				AND appeal_date &lt;= #{appealDateEnd }
+		   </if>
+	       <if test="dealResult != null">
+		 	   	 	AND deal_result = #{dealResult, jdbcType=VARCHAR}
+			</if>
+	       <if test="dealer != null">
+		 		 		AND dealer = #{dealer, jdbcType=INTEGER}
+			</if>
+	       <if test="reviewResult != null">
+		 	   	 	AND review_result = #{reviewResult, jdbcType=VARCHAR}
+			</if>
+	       <if test="reviewer != null">
+		 		 		AND reviewer = #{reviewer, jdbcType=INTEGER}
+			</if>
+	       <if test="appealResult != null">
+		 	   	 	AND appeal_result = #{appealResult, jdbcType=VARCHAR}
+			</if>
+	       <if test="resultFile != null">
+		 	   	 	AND result_file = #{resultFile, jdbcType=VARCHAR}
+			</if>
+	       <if test="createUser != null">
+		 		 		AND create_user = #{createUser, jdbcType=INTEGER}
+			</if>
+	       <if test="createTimeBegin != null">
+				AND create_time >= #{createTimeBegin }
+		   </if>
+		   <if test="createTimeEnd != null">
+				AND create_time &lt;= #{createTimeEnd }
+		   </if>
+	       <if test="updateUser != null">
+		 		 		AND update_user = #{updateUser, jdbcType=INTEGER}
+			</if>
+	       <if test="certno != null">
+		 	   	 	AND certno = #{certno, jdbcType=VARCHAR}
+			</if>
+	       <if test="drvName != null">
+		 	   	 	AND drv_name = #{drvName, jdbcType=VARCHAR}
+			</if>
+	       <if test="updateTimeBegin != null">
+				AND update_time >= #{updateTimeBegin }
+		   </if>
+		   <if test="updateTimeEnd != null">
+				AND update_time &lt;= #{updateTimeEnd }
+		   </if>
+		</where>
+	</sql>
+		
+    <select id="selectListCount" resultType="long">
+        SELECT count(*) FROM cxkh_drv_appeals 
+		<include refid="selectList_where"/>    
+    </select>
+    
+   
+    <select id="selectList" resultMap="CxkhDrvAppealsResultMap">
+    	SELECT <include refid="columns" />
+	    FROM cxkh_drv_appeals 
+		<include refid="selectList_where"/>
+		
+		
+    </select>
+    
+    <resultMap type="java.util.HashMap" id="CxkhDrvAppealsResultToMap">
+    	
+    </resultMap>
+    <select id="getVertical" resultMap="CxkhDrvAppealsResultToMap">
+    	SELECT <include refid="columns" />
+	    FROM cxkh_drv_appeals 
+		<include refid="selectList_where"/>
+    </select>
+
+	
+	
+</mapper>
+

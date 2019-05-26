@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.SetAssemblePlace">
+	<select id="findAllAssemblePlaceSet" parameterType="java.util.HashMap" resultType="com.nasoft.aboutcar.setAssemblePlace.domain.SetAssemblePlace">
+		select * from yyjg_assemble_place_set
+		<where>
+			<if test="placeName != null and placeName !=''">
+			and place_name like concat(concat('%',#{placeName}),'%')  
+			</if>
+			<if test="isUse != null and isUse !=''">
+			and is_use = #{isUse}
+			</if>
+		</where>
+		ORDER BY create_time desc
+	</select>
+	
+	<select id="selectAssemblePlaceIsHave" parameterType="java.util.HashMap" resultType="com.nasoft.aboutcar.setAssemblePlace.domain.SetAssemblePlace">
+		select * from yyjg_assemble_place_set
+		<where>
+			<if test="placeName != null and placeName != ''">
+				place_name = #{placeName}
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectAssemblePlaceById" parameterType="java.util.HashMap" resultType="com.nasoft.aboutcar.setAssemblePlace.domain.SetAssemblePlace">
+		select * from yyjg_assemble_place_set 
+		<where>
+			id = #{id}
+			<if test="place_name != null and place_name != ''">
+				and place_name like concat(concat('%',#{place_name}),'%')  
+			</if>
+		</where>
+	</select>
+	
+	<insert id="addAssemblePlaceSet" parameterType="com.nasoft.aboutcar.setAssemblePlace.domain.SetAssemblePlace" >
+		insert into yyjg_assemble_place_set(place_name,time_rate,car_warning_val,car_alarm_val,is_use,map_type,rotundity_radius,map_sign,create_user,create_time) values (
+		#{place_name},#{time_rate},#{car_warning_val},#{car_alarm_val},1,
+		#{map_type},#{rotundity_radius},#{map_sign},#{create_user},#{create_time}
+		)
+	</insert>
+	
+	<update id="setState" parameterType="java.util.HashMap">
+		update yyjg_assemble_place_set
+		<set>
+			<if test="is_use == 0">
+				is_use=1
+			</if>
+			<if test="is_use == 1">
+				is_use=0
+			</if>
+		</set>
+		<where>
+			id=#{id}
+		</where>
+	</update>
+	
+	<update id="updateAssemblePlace" parameterType="com.nasoft.aboutcar.setAssemblePlace.domain.SetAssemblePlace">
+		update yyjg_assemble_place_set
+			<set>
+			place_name=#{place_name},
+			time_rate=#{time_rate},
+			car_warning_val=#{car_warning_val},
+			car_alarm_val=#{car_alarm_val},
+			update_user=#{update_user},
+			update_time=#{update_time}
+			</set>
+			<where>
+			id=#{id}
+			</where>
+	</update>
+	
+	<delete id="delAssemblePlaceById" parameterType="java.lang.String">
+		delete from yyjg_assemble_place_set
+		<where>
+		id=#{id}
+		</where>
+	</delete>
+</mapper>

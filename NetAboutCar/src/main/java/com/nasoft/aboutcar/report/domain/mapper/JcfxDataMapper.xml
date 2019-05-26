@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.nasoft.aboutcar.JcfxDataMapper">
+
+	<resultMap id="JcfxDataResultMap" type="com.nasoft.aboutcar.report.domain.JcfxData">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="dataCode" column="data_code" jdbcType="VARCHAR"/>
+        <result property="dim1" column="dim1" jdbcType="VARCHAR"/>
+        <result property="dim2" column="dim2" jdbcType="VARCHAR"/>
+        <result property="dim3" column="dim3" jdbcType="VARCHAR"/>
+        <result property="dim4" column="dim4" jdbcType="VARCHAR"/>
+        <result property="dim5" column="dim5" jdbcType="VARCHAR"/>
+        <result property="dim6" column="dim6" jdbcType="VARCHAR"/>
+        <result property="dim7" column="dim7" jdbcType="VARCHAR"/>
+        <result property="dim8" column="dim8" jdbcType="VARCHAR"/>
+        <result property="dim9" column="dim9" jdbcType="VARCHAR"/>
+        <result property="dim10" column="dim10" jdbcType="VARCHAR"/>
+        <result property="value1" column="value1" jdbcType="DECIMAL"/>
+        <result property="value2" column="value2" jdbcType="DECIMAL"/>
+        <result property="value3" column="value3" jdbcType="DECIMAL"/>
+        <result property="value4" column="value4" jdbcType="DECIMAL"/>
+        <result property="value5" column="value5" jdbcType="DECIMAL"/>
+        <result property="value6" column="value6" jdbcType="DECIMAL"/>
+        <result property="value7" column="value7" jdbcType="DECIMAL"/>
+        <result property="value8" column="value8" jdbcType="DECIMAL"/>
+        <result property="value9" column="value9" jdbcType="DECIMAL"/>
+        <result property="value10" column="value10" jdbcType="DECIMAL"/>
+        <result property="createUser" column="create_user" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="INTEGER"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	   
+		id,data_code,dim1,dim2,dim3,dim4,dim5,dim6,dim7,dim8,dim9,dim10,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,create_user,create_time,update_user,update_time
+	   
+	</sql>
+
+	<insert id="insertIfNotnull"   parameterType="com.nasoft.aboutcar.report.domain.JcfxData">
+		<selectKey   keyProperty="id"  resultType="java.lang.Integer">  
+		SELECT LAST_INSERT_ID()  
+	  </selectKey>
+        INSERT INTO jcfx_data 
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="dataCode != null">
+        		data_code ,
+			</if>
+			<if test="dim1 != null">
+        		dim1 ,
+			</if>
+			<if test="dim2 != null">
+        		dim2 ,
+			</if>
+			<if test="dim3 != null">
+        		dim3 ,
+			</if>
+			<if test="dim4 != null">
+        		dim4 ,
+			</if>
+			<if test="dim5 != null">
+        		dim5 ,
+			</if>
+			<if test="dim6 != null">
+        		dim6 ,
+			</if>
+			<if test="dim7 != null">
+        		dim7 ,
+			</if>
+			<if test="dim8 != null">
+        		dim8 ,
+			</if>
+			<if test="dim9 != null">
+        		dim9 ,
+			</if>
+			<if test="dim10 != null">
+        		dim10 ,
+			</if>
+			<if test="value1 != null">
+        		value1 ,
+			</if>
+			<if test="value2 != null">
+        		value2 ,
+			</if>
+			<if test="value3 != null">
+        		value3 ,
+			</if>
+			<if test="value4 != null">
+        		value4 ,
+			</if>
+			<if test="value5 != null">
+        		value5 ,
+			</if>
+			<if test="value6 != null">
+        		value6 ,
+			</if>
+			<if test="value7 != null">
+        		value7 ,
+			</if>
+			<if test="value8 != null">
+        		value8 ,
+			</if>
+			<if test="value9 != null">
+        		value9 ,
+			</if>
+			<if test="value10 != null">
+        		value10 ,
+			</if>
+			<if test="createUser != null">
+        		create_user ,
+			</if>
+			<if test="createTime != null">
+        		create_time ,
+			</if>
+			<if test="updateUser != null">
+        		update_user ,
+			</if>
+			<if test="updateTime != null">
+        		update_time ,
+			</if>
+		</trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="dataCode != null">
+        		#{dataCode, jdbcType=VARCHAR} ,
+			</if>
+			<if test="dim1 != null">
+        		#{dim1, jdbcType=VARCHAR} ,
+			</if>
+			<if test="dim2 != null">
+        		#{dim2, jdbcType=VARCHAR} ,
+			</if>
+			<if test="dim3 != null">
+        		#{dim3, jdbcType=VARCHAR} ,
+			</if>
+			<if test="dim4 != null">
+        		#{dim4, jdbcType=VARCHAR} ,
+			</if>
+			<if test="dim5 != null">
+        		#{dim5, jdbcType=VARCHAR} ,
+			</if>
+			<if test="dim6 != null">
+        		#{dim6, jdbcType=VARCHAR} ,
+			</if>
+			<if test="dim7 != null">
+        		#{dim7, jdbcType=VARCHAR} ,
+			</if>
+			<if test="dim8 != null">
+        		#{dim8, jdbcType=VARCHAR} ,
+			</if>
+			<if test="dim9 != null">
+        		#{dim9, jdbcType=VARCHAR} ,
+			</if>
+			<if test="dim10 != null">
+        		#{dim10, jdbcType=VARCHAR} ,
+			</if>
+			<if test="value1 != null">
+        		#{value1, jdbcType=DECIMAL} ,
+			</if>
+			<if test="value2 != null">
+        		#{value2, jdbcType=DECIMAL} ,
+			</if>
+			<if test="value3 != null">
+        		#{value3, jdbcType=DECIMAL} ,
+			</if>
+			<if test="value4 != null">
+        		#{value4, jdbcType=DECIMAL} ,
+			</if>
+			<if test="value5 != null">
+        		#{value5, jdbcType=DECIMAL} ,
+			</if>
+			<if test="value6 != null">
+        		#{value6, jdbcType=DECIMAL} ,
+			</if>
+			<if test="value7 != null">
+        		#{value7, jdbcType=DECIMAL} ,
+			</if>
+			<if test="value8 != null">
+        		#{value8, jdbcType=DECIMAL} ,
+			</if>
+			<if test="value9 != null">
+        		#{value9, jdbcType=DECIMAL} ,
+			</if>
+			<if test="value10 != null">
+        		#{value10, jdbcType=DECIMAL} ,
+			</if>
+			<if test="createUser != null">
+        		#{createUser, jdbcType=INTEGER} ,
+			</if>
+			<if test="createTime != null">
+        		#{createTime, jdbcType=TIMESTAMP} ,
+			</if>
+			<if test="updateUser != null">
+        		#{updateUser, jdbcType=INTEGER} ,
+			</if>
+			<if test="updateTime != null">
+        		#{updateTime, jdbcType=TIMESTAMP} ,
+			</if>
+		</trim>
+    
+		
+	</insert>
+    
+	<update id="updateIfNotnull"  parameterType="com.nasoft.aboutcar.report.domain.JcfxData">
+    
+        UPDATE jcfx_data
+			<set>
+				<if test="dataCode != null">
+					data_code = #{dataCode, jdbcType=VARCHAR} ,
+				</if>
+				<if test="dim1 != null">
+					dim1 = #{dim1, jdbcType=VARCHAR} ,
+				</if>
+				<if test="dim2 != null">
+					dim2 = #{dim2, jdbcType=VARCHAR} ,
+				</if>
+				<if test="dim3 != null">
+					dim3 = #{dim3, jdbcType=VARCHAR} ,
+				</if>
+				<if test="dim4 != null">
+					dim4 = #{dim4, jdbcType=VARCHAR} ,
+				</if>
+				<if test="dim5 != null">
+					dim5 = #{dim5, jdbcType=VARCHAR} ,
+				</if>
+				<if test="dim6 != null">
+					dim6 = #{dim6, jdbcType=VARCHAR} ,
+				</if>
+				<if test="dim7 != null">
+					dim7 = #{dim7, jdbcType=VARCHAR} ,
+				</if>
+				<if test="dim8 != null">
+					dim8 = #{dim8, jdbcType=VARCHAR} ,
+				</if>
+				<if test="dim9 != null">
+					dim9 = #{dim9, jdbcType=VARCHAR} ,
+				</if>
+				<if test="dim10 != null">
+					dim10 = #{dim10, jdbcType=VARCHAR} ,
+				</if>
+				<if test="value1 != null">
+					value1 = #{value1, jdbcType=DECIMAL} ,
+				</if>
+				<if test="value2 != null">
+					value2 = #{value2, jdbcType=DECIMAL} ,
+				</if>
+				<if test="value3 != null">
+					value3 = #{value3, jdbcType=DECIMAL} ,
+				</if>
+				<if test="value4 != null">
+					value4 = #{value4, jdbcType=DECIMAL} ,
+				</if>
+				<if test="value5 != null">
+					value5 = #{value5, jdbcType=DECIMAL} ,
+				</if>
+				<if test="value6 != null">
+					value6 = #{value6, jdbcType=DECIMAL} ,
+				</if>
+				<if test="value7 != null">
+					value7 = #{value7, jdbcType=DECIMAL} ,
+				</if>
+				<if test="value8 != null">
+					value8 = #{value8, jdbcType=DECIMAL} ,
+				</if>
+				<if test="value9 != null">
+					value9 = #{value9, jdbcType=DECIMAL} ,
+				</if>
+				<if test="value10 != null">
+					value10 = #{value10, jdbcType=DECIMAL} ,
+				</if>
+				<if test="createUser != null">
+					create_user = #{createUser, jdbcType=INTEGER} ,
+				</if>
+				<if test="createTime != null">
+					create_time = #{createTime, jdbcType=TIMESTAMP} ,
+				</if>
+				<if test="updateUser != null">
+					update_user = #{updateUser, jdbcType=INTEGER} ,
+				</if>
+				<if test="updateTime != null">
+					update_time = #{updateTime, jdbcType=TIMESTAMP} ,
+				</if>
+			</set>
+        WHERE 
+	        id = #{id, jdbcType=INTEGER} 
+    
+	</update>
+
+    <delete id="deleteById">
+    
+        DELETE FROM jcfx_data WHERE
+        id = #{id } 
+    
+    </delete>
+    
+    
+    <delete id="delete">
+    
+        DELETE FROM jcfx_data WHERE
+        
+    </delete>
+    
+		<select id="selectById" resultMap="JcfxDataResultMap">
+			SELECT <include refid="columns" />
+		   
+				FROM jcfx_data 
+				WHERE 
+					id = #{id, jdbcType=INTEGER} 
+			
+		</select>
+	
+	<sql id="selectList_where">
+		<where>	      				
+	       <if test="entity.id != null">
+		 		 		AND id = #{entity.id, jdbcType=INTEGER}
+			</if>
+	       <if test="entity.dataCode != null">
+		 	   <choose>
+		 	   	  <when test="@Ognl@startWith(entity.dataCode,'like')">
+		 	   	  	   AND data_code ${entity.dataCode }
+		 	   	  </when>
+		 	   	  <otherwise>
+		 	   	  	   AND data_code = #{entity.dataCode, jdbcType=VARCHAR}
+		 	   	  </otherwise>
+		 	   </choose>
+			</if>
+	       <if test="entity.dim1 != null">
+		 	   <choose>
+		 	   	  <when test="@Ognl@startWith(entity.dim1,'like')">
+		 	   	  	   AND dim1 ${entity.dim1 }
+		 	   	  </when>
+		 	   	  <otherwise>
+		 	   	  	   AND dim1 = #{entity.dim1, jdbcType=VARCHAR}
+		 	   	  </otherwise>
+		 	   </choose>
+			</if>
+	       <if test="entity.dim2 != null">
+		 	   <choose>
+		 	   	  <when test="@Ognl@startWith(entity.dim2,'like')">
+		 	   	  	   AND dim2 ${entity.dim2 }
+		 	   	  </when>
+		 	   	  <otherwise>
+		 	   	  	   AND dim2 = #{entity.dim2, jdbcType=VARCHAR}
+		 	   	  </otherwise>
+		 	   </choose>
+			</if>
+	       <if test="entity.dim3 != null">
+		 	   <choose>
+		 	   	  <when test="@Ognl@startWith(entity.dim3,'like')">
+		 	   	  	   AND dim3 ${entity.dim3 }
+		 	   	  </when>
+		 	   	  <otherwise>
+		 	   	  	   AND dim3 = #{entity.dim3, jdbcType=VARCHAR}
+		 	   	  </otherwise>
+		 	   </choose>
+			</if>
+	       <if test="entity.dim4 != null">
+		 	   <choose>
+		 	   	  <when test="@Ognl@startWith(entity.dim4,'like')">
+		 	   	  	   AND dim4 ${entity.dim4 }
+		 	   	  </when>
+		 	   	  <otherwise>
+		 	   	  	   AND dim4 = #{entity.dim4, jdbcType=VARCHAR}
+		 	   	  </otherwise>
+		 	   </choose>
+			</if>
+	       <if test="entity.dim5 != null">
+		 	   <choose>
+		 	   	  <when test="@Ognl@startWith(entity.dim5,'like')">
+		 	   	  	   AND dim5 ${entity.dim5 }
+		 	   	  </when>
+		 	   	  <otherwise>
+		 	   	  	   AND dim5 = #{entity.dim5, jdbcType=VARCHAR}
+		 	   	  </otherwise>
+		 	   </choose>
+			</if>
+	       <if test="entity.dim6 != null">
+		 	   <choose>
+		 	   	  <when test="@Ognl@startWith(entity.dim6,'like')">
+		 	   	  	   AND dim6 ${entity.dim6 }
+		 	   	  </when>
+		 	   	  <otherwise>
+		 	   	  	   AND dim6 = #{entity.dim6, jdbcType=VARCHAR}
+		 	   	  </otherwise>
+		 	   </choose>
+			</if>
+	       <if test="entity.dim7 != null">
+		 	   <choose>
+		 	   	  <when test="@Ognl@startWith(entity.dim7,'like')">
+		 	   	  	   AND dim7 ${entity.dim7 }
+		 	   	  </when>
+		 	   	  <otherwise>
+		 	   	  	   AND dim7 = #{entity.dim7, jdbcType=VARCHAR}
+		 	   	  </otherwise>
+		 	   </choose>
+			</if>
+	       <if test="entity.dim8 != null">
+		 	   <choose>
+		 	   	  <when test="@Ognl@startWith(entity.dim8,'like')">
+		 	   	  	   AND dim8 ${entity.dim8 }
+		 	   	  </when>
+		 	   	  <otherwise>
+		 	   	  	   AND dim8 = #{entity.dim8, jdbcType=VARCHAR}
+		 	   	  </otherwise>
+		 	   </choose>
+			</if>
+	       <if test="entity.dim9 != null">
+		 	   <choose>
+		 	   	  <when test="@Ognl@startWith(entity.dim9,'like')">
+		 	   	  	   AND dim9 ${entity.dim9 }
+		 	   	  </when>
+		 	   	  <otherwise>
+		 	   	  	   AND dim9 = #{entity.dim9, jdbcType=VARCHAR}
+		 	   	  </otherwise>
+		 	   </choose>
+			</if>
+	       <if test="entity.dim10 != null">
+		 	   <choose>
+		 	   	  <when test="@Ognl@startWith(entity.dim10,'like')">
+		 	   	  	   AND dim10 ${entity.dim10 }
+		 	   	  </when>
+		 	   	  <otherwise>
+		 	   	  	   AND dim10 = #{entity.dim10, jdbcType=VARCHAR}
+		 	   	  </otherwise>
+		 	   </choose>
+			</if>
+	       <if test="entity.value1 != null">
+		 		 		AND value1 = #{entity.value1, jdbcType=DECIMAL}
+			</if>
+	       <if test="entity.value2 != null">
+		 		 		AND value2 = #{entity.value2, jdbcType=DECIMAL}
+			</if>
+	       <if test="entity.value3 != null">
+		 		 		AND value3 = #{entity.value3, jdbcType=DECIMAL}
+			</if>
+	       <if test="entity.value4 != null">
+		 		 		AND value4 = #{entity.value4, jdbcType=DECIMAL}
+			</if>
+	       <if test="entity.value5 != null">
+		 		 		AND value5 = #{entity.value5, jdbcType=DECIMAL}
+			</if>
+	       <if test="entity.value6 != null">
+		 		 		AND value6 = #{entity.value6, jdbcType=DECIMAL}
+			</if>
+	       <if test="entity.value7 != null">
+		 		 		AND value7 = #{entity.value7, jdbcType=DECIMAL}
+			</if>
+	       <if test="entity.value8 != null">
+		 		 		AND value8 = #{entity.value8, jdbcType=DECIMAL}
+			</if>
+	       <if test="entity.value9 != null">
+		 		 		AND value9 = #{entity.value9, jdbcType=DECIMAL}
+			</if>
+	       <if test="entity.value10 != null">
+		 		 		AND value10 = #{entity.value10, jdbcType=DECIMAL}
+			</if>
+	       <if test="entity.createUser != null">
+		 		 		AND create_user = #{entity.createUser, jdbcType=INTEGER}
+			</if>
+	       <if test="entity.createTimeBegin != null">
+				AND create_time >= #{entity.createTimeBegin }
+		   </if>
+		   <if test="entity.createTimeEnd != null">
+				AND create_time &lt;= #{entity.createTimeEnd }
+		   </if>
+	       <if test="entity.updateUser != null">
+		 		 		AND update_user = #{entity.updateUser, jdbcType=INTEGER}
+			</if>
+	       <if test="entity.updateTimeBegin != null">
+				AND update_time >= #{entity.updateTimeBegin }
+		   </if>
+		   <if test="entity.updateTimeEnd != null">
+				AND update_time &lt;= #{entity.updateTimeEnd }
+		   </if>
+		</where>
+	</sql>
+		
+    <select id="selectListCount" resultType="long">
+        SELECT count(*) FROM jcfx_data 
+		<include refid="selectList_where"/>    
+    </select>
+    
+   
+    <select id="selectList" resultMap="JcfxDataResultMap">
+    	SELECT <include refid="columns" />
+	    FROM jcfx_data 
+		<include refid="selectList_where"/>
+		
+		
+    </select>
+    
+    <resultMap type="java.util.HashMap" id="JcfxDataResultToMap">
+    	
+    </resultMap>
+    <select id="getVertical" resultMap="JcfxDataResultToMap">
+    	SELECT <include refid="columns" />
+	    FROM jcfx_data 
+		<include refid="selectList_where"/>
+    </select>
+
+	
+	
+</mapper>
+

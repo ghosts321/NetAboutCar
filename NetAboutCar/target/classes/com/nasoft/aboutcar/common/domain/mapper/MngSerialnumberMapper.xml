@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.nasoft.aboutcar.MngSerialnumberMapper">
+
+	<resultMap id="MngSerialnumberResultMap" type="com.nasoft.aboutcar.common.domain.MngSerialnumber">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="currNo" column="curr_no" jdbcType="DECIMAL"/>
+        <result property="maxNo" column="max_no" jdbcType="DECIMAL"/>
+        <result property="minNo" column="min_no" jdbcType="DECIMAL"/>
+        <result property="step" column="step" jdbcType="INTEGER"/>
+        <result property="seqLen" column="seq_len" jdbcType="INTEGER"/>
+        <result property="isCircle" column="is_circle" jdbcType="INTEGER"/>
+        <result property="circleParam" column="circle_param" jdbcType="VARCHAR"/>
+        <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	   
+		id,curr_no,max_no,min_no,step,seq_len,is_circle,circle_param,update_date
+	   
+	</sql>
+
+	<insert id="insertIfNotnull"   parameterType="com.nasoft.aboutcar.common.domain.MngSerialnumber">
+		<selectKey   keyProperty="id"  resultType="java.lang.String">  
+		SELECT LAST_INSERT_ID()  
+	  </selectKey>
+        INSERT INTO mng_serialnumber 
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="currNo != null">
+        		curr_no ,
+			</if>
+			<if test="maxNo != null">
+        		max_no ,
+			</if>
+			<if test="minNo != null">
+        		min_no ,
+			</if>
+			<if test="step != null">
+        		step ,
+			</if>
+			<if test="seqLen != null">
+        		seq_len ,
+			</if>
+			<if test="isCircle != null">
+        		is_circle ,
+			</if>
+			<if test="circleParam != null">
+        		circle_param ,
+			</if>
+			<if test="updateDate != null">
+        		update_date ,
+			</if>
+		</trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="currNo != null">
+        		#{currNo, jdbcType=DECIMAL} ,
+			</if>
+			<if test="maxNo != null">
+        		#{maxNo, jdbcType=DECIMAL} ,
+			</if>
+			<if test="minNo != null">
+        		#{minNo, jdbcType=DECIMAL} ,
+			</if>
+			<if test="step != null">
+        		#{step, jdbcType=INTEGER} ,
+			</if>
+			<if test="seqLen != null">
+        		#{seqLen, jdbcType=INTEGER} ,
+			</if>
+			<if test="isCircle != null">
+        		#{isCircle, jdbcType=INTEGER} ,
+			</if>
+			<if test="circleParam != null">
+        		#{circleParam, jdbcType=VARCHAR} ,
+			</if>
+			<if test="updateDate != null">
+        		#{updateDate, jdbcType=TIMESTAMP} ,
+			</if>
+		</trim>
+    
+		
+	</insert>
+    
+	<update id="updateIfNotnull"  parameterType="com.nasoft.aboutcar.common.domain.MngSerialnumber">
+    
+        UPDATE mng_serialnumber
+			<set>
+				<if test="currNo != null">
+					curr_no = #{currNo, jdbcType=DECIMAL} ,
+				</if>
+				<if test="maxNo != null">
+					max_no = #{maxNo, jdbcType=DECIMAL} ,
+				</if>
+				<if test="minNo != null">
+					min_no = #{minNo, jdbcType=DECIMAL} ,
+				</if>
+				<if test="step != null">
+					step = #{step, jdbcType=INTEGER} ,
+				</if>
+				<if test="seqLen != null">
+					seq_len = #{seqLen, jdbcType=INTEGER} ,
+				</if>
+				<if test="isCircle != null">
+					is_circle = #{isCircle, jdbcType=INTEGER} ,
+				</if>
+				<if test="circleParam != null">
+					circle_param = #{circleParam, jdbcType=VARCHAR} ,
+				</if>
+				<if test="updateDate != null">
+					update_date = #{updateDate, jdbcType=TIMESTAMP} ,
+				</if>
+			</set>
+        WHERE 
+	        id = #{id, jdbcType=VARCHAR} 
+    
+	</update>
+
+    <delete id="deleteById">
+    
+        DELETE FROM mng_serialnumber WHERE
+        id = #{id } 
+    
+    </delete>
+    
+    
+    <delete id="delete">
+    
+        DELETE FROM mng_serialnumber WHERE
+        
+    </delete>
+    
+		<select id="selectById" resultMap="MngSerialnumberResultMap">
+			SELECT <include refid="columns" />
+		   
+				FROM mng_serialnumber 
+				WHERE 
+					id = #{id, jdbcType=VARCHAR} 
+			
+		</select>
+	
+	<sql id="selectList_where">
+		<where>	      				
+	       <if test="entity.id != null">
+		 	   <choose>
+		 	   	  <when test="@Ognl@startWith(entity.id,'like')">
+		 	   	  	   AND id ${entity.id }
+		 	   	  </when>
+		 	   	  <otherwise>
+		 	   	  	   AND id = #{entity.id, jdbcType=VARCHAR}
+		 	   	  </otherwise>
+		 	   </choose>
+			</if>
+	       <if test="entity.currNo != null">
+		 		 		AND curr_no = #{entity.currNo, jdbcType=DECIMAL}
+			</if>
+	       <if test="entity.maxNo != null">
+		 		 		AND max_no = #{entity.maxNo, jdbcType=DECIMAL}
+			</if>
+	       <if test="entity.minNo != null">
+		 		 		AND min_no = #{entity.minNo, jdbcType=DECIMAL}
+			</if>
+	       <if test="entity.step != null">
+		 		 		AND step = #{entity.step, jdbcType=INTEGER}
+			</if>
+	       <if test="entity.seqLen != null">
+		 		 		AND seq_len = #{entity.seqLen, jdbcType=INTEGER}
+			</if>
+	       <if test="entity.isCircle != null">
+		 		 		AND is_circle = #{entity.isCircle, jdbcType=INTEGER}
+			</if>
+	       <if test="entity.circleParam != null">
+		 	   <choose>
+		 	   	  <when test="@Ognl@startWith(entity.circleParam,'like')">
+		 	   	  	   AND circle_param ${entity.circleParam }
+		 	   	  </when>
+		 	   	  <otherwise>
+		 	   	  	   AND circle_param = #{entity.circleParam, jdbcType=VARCHAR}
+		 	   	  </otherwise>
+		 	   </choose>
+			</if>
+	       <if test="entity.updateDateBegin != null">
+				AND update_date >= #{entity.updateDateBegin }
+		   </if>
+		   <if test="entity.updateDateEnd != null">
+				AND update_date &lt;= #{entity.updateDateEnd }
+		   </if>
+		</where>
+	</sql>
+		
+    <select id="selectListCount" resultType="long">
+        SELECT count(*) FROM mng_serialnumber 
+		<include refid="selectList_where"/>    
+    </select>
+    
+   
+    <select id="selectList" resultMap="MngSerialnumberResultMap">
+    	SELECT <include refid="columns" />
+	    FROM mng_serialnumber 
+		<include refid="selectList_where"/>
+		
+		
+    </select>
+    
+    <resultMap type="java.util.HashMap" id="MngSerialnumberResultToMap">
+    	
+    </resultMap>
+    <select id="getVertical" resultMap="MngSerialnumberResultToMap">
+    	SELECT <include refid="columns" />
+	    FROM mng_serialnumber 
+		<include refid="selectList_where"/>
+    </select>
+
+	
+	
+</mapper>
+

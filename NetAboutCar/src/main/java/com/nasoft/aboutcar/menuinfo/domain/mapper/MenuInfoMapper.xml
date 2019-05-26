@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.nasoft.aboutcar.menuInfoMapper">
+
+	<insert id="menuInfoInsert" parameterType="com.nasoft.aboutcar.menuinfo.domain.MenuInfo">
+	    insert into mng_Menuinfo (menuId,menuname ,menuurl ,parentid ,menulevel ,
+	    isleaf ,disporder ,description ,createuserid ,createinstid ,createdatetime) 
+	    values (#{menuId},#{menuName},#{menuUrl},#{parentId},#{menuLevel},#{isLeaf},#{dispOrder},
+	    #{description},#{createUserId},#{createInstId},#{createDateTime})
+    </insert>
+	
+	<delete id="deleteMenuInfo" parameterType="String">
+      delete from mng_Menuinfo where  menuid = #{menuId}
+    </delete>
+    
+    <update id="updateMenuInfo" parameterType="com.nasoft.aboutcar.menuinfo.domain.MenuInfo" >
+   	 update mng_Menuinfo set menuname = #{menuName},menuurl = #{menuUrl},
+   	 parentid = #{parentId},menulevel = #{menuLevel},isleaf = #{isLeaf},
+   	 disporder = #{dispOrder},description = #{description},
+   	 upduserid = #{updUserId},updinstid = #{updInstId},upddatetime = #{updDateTime} 
+   	 where  menuid = #{menuId}
+  	</update>
+  	
+  	<update id="updateMenuStatus" parameterType="String" >
+   	 update mng_Menuinfo set status = #{status}
+   	 where  menuid = #{menuId}
+  	</update>
+  
+    <select id="findMenuInfo" resultType="com.nasoft.aboutcar.menuinfo.domain.MenuInfo" parameterType="String">
+      select menuid ,menuname ,menuurl ,parentid ,menulevel ,isleaf ,disporder ,
+      description ,createuserid ,createinstid ,createdatetime ,upduserid ,
+      updinstid ,upddatetime  from mng_Menuinfo where 1 = 1
+      <if test="menuId != null and menuId != '' ">
+        and menuid = #{menuId}
+      </if>
+       <if test="parentId != null and parentId != '' ">
+        and parentid like CONCAT(#{parentId},'%' )
+      </if>
+    </select>
+    
+    <select id="findMenuInfo2" resultType="com.nasoft.aboutcar.menuinfo.domain.MenuInfo" parameterType="String">
+        SELECT distinct m.* FROM mng_menuinfo m ,
+		(SELECT rm.menuid FROM mng_rolemenu rm,
+		(SELECT r.roleid FROM mng_roleinfo r,mng_userrole ur WHERE ur.roleid=r.roleid AND ur.userid=#{userId}) tab1
+		 WHERE rm.roleid = tab1.roleid) tab2 WHERE m.menuid=tab2.menuid 
+	      <if test="menuId != null and menuId != '' ">
+	        and menuid = #{menuId}
+	      </if>
+	       <if test="parentId != null and parentId != ''">
+	       	<if test="parentId == 2">
+	       		and m.menulevel != 6 and m.isleaf = 1 
+	       	</if>
+	       	<if test="parentId != 2">
+	       		and m.status = 1 and m.menuLevel != 6  and parentid like CONCAT(#{parentId},'%' ) 
+	       	</if>
+	      </if>
+	      <if test="menuName != null and menuName != '' ">
+		      and menuName like CONCAT('%','${menuName}','%' )
+	      </if>
+    </select>
+	
+	<select id="selectMenuName" parameterType="Map" resultType="com.nasoft.aboutcar.menuinfo.domain.MenuInfo">
+	SELECT m.menuname, m.menuid FROM mng_menuinfo m WHERE m.menuurl = #{path}
+	</select>
+	
+	<select id="selectParentMenu" parameterType="Map" resultType="com.nasoft.aboutcar.menuinfo.domain.MenuInfo">
+	SELECT n.menuname,n.parentid,n.menuid FROM mng_menuinfo n WHERE n.menuid = (SELECT m.parentid FROM mng_menuinfo m WHERE m.menuid = #{menuid})
+	</select>
+</mapper>
+

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.MsgNoticeMapper" >
+
+  <insert id="addMsgNotice" parameterType="com.nasoft.aboutcar.msgnotice.domain.MsgNotice" >
+    insert into msg_notice (msgid, certno, msgcontent, 
+      isread, userid, createtime
+      )
+    values (#{msgid,jdbcType=INTEGER}, #{certno,jdbcType=VARCHAR}, #{msgcontent,jdbcType=VARCHAR}, 
+      #{isread,jdbcType=CHAR}, #{userid,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  
+</mapper>

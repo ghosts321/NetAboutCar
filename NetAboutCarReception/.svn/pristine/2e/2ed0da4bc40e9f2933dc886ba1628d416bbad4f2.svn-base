@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.SSM.BnsComplain" >
+	<resultMap id="BaseResultMap" type="com.nasoft.SSM.domain.BnsComplain" >
+	    <id column="complain_id" property="complainId" jdbcType="INTEGER" />
+	    <result column="car_number" property="carNumber" jdbcType="VARCHAR" />
+	    <result column="ride_time" property="rideTime" jdbcType="VARCHAR" />
+	    <result column="car_licence" property="carLicence" jdbcType="VARCHAR" />
+	    <result column="driver_licence" property="driverLicence" jdbcType="VARCHAR" />
+	    <result column="car_company" property="carCompany" jdbcType="VARCHAR" />
+	    <result column="complain_name" property="complainName" jdbcType="VARCHAR" />
+	    <result column="phone_number" property="phoneNumber" jdbcType="VARCHAR" />
+	    <result column="complain_reason" property="complainReason" jdbcType="VARCHAR" />
+	    <result column="create_user" property="createUser" jdbcType="INTEGER" />
+	    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	    <result column="update_user" property="updateUser" jdbcType="INTEGER" />
+	    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	  </resultMap>
+	  
+	<select id="selectAllComplain" parameterType="java.util.HashMap"  resultType="java.util.HashMap"   >  
+        select a.*,b.* from tsfw_drv_complain_info a join tsfw_drv_complain_distribute b 
+          ON a.drv_complain_info_id=b.drv_complain_info_id
+          <where>
+           (a.compn_state="3" or a.compn_state="6") and b.allot_depme="运营平台" and a.car_company=#{comnName}
+          </where>
+          order by b.distri_time desc LIMIT #{pageInt},12
+    </select>
+    
+    <select id="selectDrvComplain" parameterType="int"  resultType="java.util.HashMap"   >  
+         select a.*,b.* from tsfw_drv_complain_info a join tsfw_drv_complain_dispose b 
+          ON a.drv_complain_info_id=b.drv_complain_info_id
+          <where>
+            a.compn_state="8"
+          </where>
+          order by b.idea_time desc LIMIT #{pageInt},12
+    </select>
+    
+    <select id="selectAllAppeal" parameterType="int"  resultType="java.util.HashMap"   >  
+        select a.*,b.* from tsfw_com_complain_info a join tsfw_com_complain_dispose b 
+          ON a.complain_info_id=b.complain_info_id
+          <where>
+           a.compn_state="8"
+          </where>
+           order by b.idea_time desc LIMIT #{pageInt},12
+    </select>
+    
+     <select id="findAppealbyId" parameterType="java.lang.String"  resultType="java.util.HashMap"   >  
+        select a.*,b.* from tsfw_com_complain_info a join tsfw_com_complain_dispose b 
+          ON a.complain_info_id=b.complain_info_id
+          <where>
+           a.complain_code=#{complain_code}
+          </where>
+    </select>
+    
+    <select id="findDrvAppealbyId" parameterType="java.lang.String"  resultType="java.util.HashMap"   >  
+        select a.*,b.* from tsfw_drv_complain_info a join tsfw_drv_complain_dispose b 
+          ON a.drv_complain_info_id=b.drv_complain_info_id
+          <where>
+           a.complain_code=#{complain_code}
+          </where>
+    </select>
+    
+    <select id="finddisposetbyId" parameterType="int"   resultType="com.nasoft.SSM.domain.drvComplainDispose">
+      select * from tsfw_drv_complain_dispose where drv_complain_info_id =#{drv_complain_info_id}
+   </select>
+    
+    <select id="findcompcodebyId" parameterType="java.lang.String"   resultType="com.nasoft.SSM.domain.drvComplainInfo">
+      select * from tsfw_drv_complain_info where complain_code=#{complain_code}
+   </select>
+   
+    <select id="findcompbyId" parameterType="java.lang.String"   resultType="com.nasoft.SSM.domain.comComplainInfo">
+      select * from tsfw_com_complain_info where complain_code=#{complain_code}
+   </select>
+   
+    <select id="selectblack" parameterType="java.lang.String" resultType="java.util.HashMap" >
+   select * from cxkh_drv_blacklist where drv_id=#{drv_license}
+   </select>
+    
+   <select id="findComname" parameterType="java.lang.String" resultType="java.lang.String">
+    select comname from xzsp_com_companyinfo where creditcode = #{userName}
+    </select>
+    
+    <select id="pageCount" resultType="java.util.HashMap">
+        select count(*) ZS from tsfw_com_complain_info a join tsfw_com_complain_dispose b 
+          ON a.complain_info_id=b.complain_info_id  where a.compn_state="8"
+    </select>
+    
+    <select id="drvPageCount" resultType="java.util.HashMap">
+       select count(*) ZS from tsfw_drv_complain_info a join tsfw_drv_complain_dispose b 
+          ON a.drv_complain_info_id=b.drv_complain_info_id  where  a.compn_state="8"    
+    </select>
+    
+    <select id="findcomZS" parameterType="java.lang.String" resultType="java.util.HashMap">
+     select count(*) ZS from tsfw_drv_complain_info a join tsfw_drv_complain_distribute b 
+         ON a.drv_complain_info_id=b.drv_complain_info_id
+      <where>
+      (a.compn_state="3" or a.compn_state="6") and b.allot_depme="运营平台" and a.car_company=#{comnName}
+      </where>
+    </select>
+    
+    <update id="deleteblack" parameterType="com.nasoft.SSM.domain.drvBlackList" >    
+     update cxkh_drv_blacklist set status=#{status} where drv_license=#{drv_license}
+     </update>
+
+    <update id="updateplant" parameterType="com.nasoft.SSM.domain.PlantCaseInfo">
+     update xzcf_plantcase_info set 
+     isappeal=#{isAppeal},
+     updatetime=#{updateTime}
+     where caseId=#{caseId}
+     </update>
+
+  <insert id="addBnsComplain" parameterType="com.nasoft.SSM.domain.BnsComplain" >
+    insert into bns_complain (complain_id, car_number, ride_time, 
+      car_licence, driver_licence, car_company, 
+      complain_name, phone_number, complain_reason, 
+      create_user, create_time, update_user, 
+      update_time)
+    values (#{complainId,jdbcType=INTEGER}, #{carNumber,jdbcType=VARCHAR}, #{rideTime,jdbcType=VARCHAR}, 
+      #{carLicence,jdbcType=VARCHAR}, #{driverLicence,jdbcType=VARCHAR}, #{carCompany,jdbcType=VARCHAR}, 
+      #{complainName,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}, #{complainReason,jdbcType=VARCHAR}, 
+      #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  
+      <insert id="insertblack" parameterType="com.nasoft.SSM.domain.drvBlackList">
+        insert into cxkh_drv_blacklist (drv_license,drv_id,drv_name,storage_date,status,storager,create_time)
+        values(
+        #{drv_license},
+        #{drv_id},
+        #{drv_name},
+        #{storage_date},
+        #{status},
+        #{storager},
+        #{create_time}
+        )      
+     </insert>
+     
+     <insert id="insertdrvplant" parameterType="com.nasoft.SSM.domain.DrvPlantCaseInfo">
+      insert into xzcf_dricase_info (plateName,punishid,caseid,carid,casereason,drivcarno,casetime,isappeal,
+                   createinstid,dealstatus,drivename,caseType,updatetime,casesource,caseuserid)
+            values(
+                    #{plateName},
+                    #{punishid},
+                    #{caseid},
+                    #{carid},
+                    #{casereason},
+                    #{drivcarno},
+                    #{casetime},
+                    #{isappeal},
+                    #{createinstid},
+                    #{dealstatus},
+                    #{drivename},
+                    #{caseType},
+                    #{updatetime},
+                    #{casesource},
+                    #{caseuserid}
+                 )
+     </insert>
+     
+     <update id="updateDrvPlant" parameterType="com.nasoft.SSM.domain.DrvPlantCaseInfo">
+     update xzcf_dricase_info set 
+     isappeal=#{isappeal},
+     updatetime=#{updatetime}
+     where caseid=#{caseid}
+     </update>
+     
+         <update id="drvDisposeUpdate" parameterType="com.nasoft.SSM.domain.drvComplainDispose">
+       update tsfw_drv_complain_dispose set
+       dis_type=#{dis_type}, 
+       appl_idea_peo=#{appl_idea_peo},
+       appl_idea_time=#{appl_idea_time},
+       survey_idea=#{survey_idea},
+       dis_idea=#{dis_idea},
+       is_integrity=#{is_integrity},
+       is_blacklist=#{is_blacklist},
+       survey_file=#{survey_file} 
+       where drv_complain_info_id=#{drv_complain_info_id}
+     </update>
+  
+  <update id="updatetblack" parameterType="com.nasoft.SSM.domain.drvBlackList" >
+     update cxkh_drv_blacklist set
+      drv_license= #{drv_license},
+      drv_id= #{drv_id},
+      drv_name= #{drv_name},
+      storage_date= #{storage_date},
+      status= #{status},
+      storager =#{storager}
+     where drv_license=#{drv_license}
+     </update>
+  
+  <update id="drvcomit" parameterType="com.nasoft.SSM.domain.drvComplainInfo">
+      update tsfw_drv_complain_info set 
+           compn_state=#{compn_state}
+        where complain_code=#{complain_code}
+   </update>
+   
+    <update id="comUpdate" parameterType="com.nasoft.SSM.domain.comComplainInfo">
+      update tsfw_com_complain_info set 
+           compn_state=#{compn_state}
+        where complain_code=#{complain_code}
+   </update>
+   
+   <insert id="toHandleComit" parameterType="com.nasoft.SSM.domain.drvComplainDispose">
+        insert into tsfw_drv_complain_dispose (id,drv_complain_info_id,dis_type,is_integrity,is_blacklist,survey_file,
+             survey_idea,dis_idea,idea_peo,idea_time)
+             values(#{id,jdbcType=INTEGER},#{drv_complain_info_id,jdbcType=INTEGER},#{dis_type,jdbcType=VARCHAR},
+              #{is_integrity,jdbcType=CHAR},#{is_blacklist,jdbcType=CHAR},#{survey_file,jdbcType=VARCHAR},#{survey_idea,jdbcType=VARCHAR},
+               #{dis_idea,jdbcType=VARCHAR}, #{idea_peo,jdbcType=VARCHAR},#{idea_time,jdbcType=VARCHAR})
+     
+     </insert>
+     
+        <insert id="appealComit" parameterType="com.nasoft.SSM.domain.comComplainAppeal">
+     insert into tsfw_com_complain_appeal (complain_appeal_id,complain_info_id,appeal_file,appl_content,appl_peo,appl_time
+       )
+          values(
+            #{complain_appeal_id,jdbcType=INTEGER},
+            #{complain_info_id,jdbcType=INTEGER},
+            #{appeal_file,jdbcType=VARCHAR},
+            #{appl_content,jdbcType=VARCHAR},
+            #{appl_peo,jdbcType=VARCHAR},
+            #{appl_time,jdbcType=VARCHAR}
+          )
+  
+     </insert>
+     
+          <insert id="drvAppealComit" parameterType="com.nasoft.SSM.domain.drvComplainAppeal">
+     insert into tsfw_drv_complain_appeal (id,drv_complain_info_id,appeal_file,appl_content,appl_peo,appl_time
+       )
+          values(
+            #{id,jdbcType=INTEGER},
+            #{drv_complain_info_id,jdbcType=INTEGER},
+            #{appeal_file,jdbcType=VARCHAR},
+            #{appl_content,jdbcType=VARCHAR},
+            #{appl_peo,jdbcType=VARCHAR},
+            #{appl_time,jdbcType=VARCHAR}
+          )
+  
+     </insert>
+     
+     <insert id="saveDisAppeal" parameterType="com.nasoft.SSM.domain.drvDisAppeal">
+     insert into tsfw_drv_disappeal (id,drv_complain_info_id,disappeal_idea)
+     values(
+     #{id},
+     #{drv_complain_info_id},
+     #{disappeal_idea}
+     ) 
+     </insert>
+  
+</mapper>

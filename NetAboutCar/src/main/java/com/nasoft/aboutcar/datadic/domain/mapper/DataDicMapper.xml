@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nasoft.aboutcar.dataDic">
+    <select id="findAllDataDic" resultType="com.nasoft.aboutcar.datadic.domain.DataDic" >  
+        select * from mng_datadic where pdatacode='0' 
+         <if test="dataName != null and dataName!=''">
+				and dataName like CONCAT('%','${dataName}','%' ) 
+			</if>
+    </select>
+    <select id="findAllDataDicByDataCode" resultType="com.nasoft.aboutcar.datadic.domain.DataDic" >  
+        select * from mng_datadic where pdatacode=#{dataCode}
+    </select>
+    
+    <select id="findLastDataCode" resultType="java.lang.String">
+    	select datacode from mng_datadic where pdatacode='0' order by datacode desc limit 1
+    </select>
+    
+      <update id="insertDic" parameterType="com.nasoft.aboutcar.datadic.domain.DataDic">
+    	insert into mng_datadic values(#{dataCode,jdbcType=VARCHAR},
+    	       #{dataName,jdbcType=VARCHAR}, 
+    	       #{pdataCode,jdbcType=VARCHAR}, 
+    	       #{remark,jdbcType=VARCHAR}, 
+    	       #{createUserId,jdbcType=INTEGER}, 
+    	       #{createInstId,jdbcType=INTEGER}, 
+    	       #{createDateTime,jdbcType=VARCHAR},
+    	       #{updUserId,jdbcType=INTEGER}, 
+    	       #{updInstId,jdbcType=INTEGER}, 
+    	       #{updDateTime,jdbcType=VARCHAR}
+    	       )
+    </update>
+    
+    <update id="updateDic" parameterType="com.nasoft.aboutcar.datadic.domain.DataDic">
+    	update mng_datadic set 
+    	dataname=#{dataName,jdbcType=VARCHAR},
+    	remark=#{remark,jdbcType=VARCHAR},
+    	upduserid=#{updUserId,jdbcType=INTEGER}, 
+    	updinstid=#{updInstId,jdbcType=INTEGER}, 
+    	upddatetime=#{updDateTime,jdbcType=VARCHAR}    
+    	 where  
+    	datacode=#{dataCode,jdbcType=VARCHAR} and pdatacode=#{pdataCode,jdbcType=VARCHAR}
+    </update>
+    
+    <delete id="deleteChildDic" parameterType="com.nasoft.aboutcar.datadic.domain.DataDic"> 
+    	delete from mng_datadic where datacode=#{dataCode,jdbcType=VARCHAR} and pdatacode=#{pdataCode,jdbcType=VARCHAR}
+    </delete>
+    
+</mapper>

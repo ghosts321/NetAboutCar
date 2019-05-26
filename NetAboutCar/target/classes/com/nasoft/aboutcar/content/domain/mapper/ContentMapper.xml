@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nasoft.aboutcar.content">
+    <select id="findAllContent" resultType="com.nasoft.aboutcar.content.domain.Content" >  
+        select * from mng_content where 1=1 
+        <if test="title != null and title!=''">
+			and title like CONCAT('%','${title}','%' ) 
+		</if>
+		 order by id desc
+    </select>
+    
+    <select id="findAllPicContent" resultType="com.nasoft.aboutcar.content.domain.Content" >  
+        select * from mng_content where type='0' order by id desc
+    </select>
+    
+    <select id="findAllLbContent" resultType="com.nasoft.aboutcar.content.domain.LbContent" >  
+        select * from mng_Lbcontent order by id desc
+    </select>
+    
+    
+    <select id="findContentById" parameterType="java.lang.String" resultType="com.nasoft.aboutcar.content.domain.Content" >
+       select * from mng_content where id=#{id}
+    </select>
+    
+    <insert id="insertContent" parameterType="com.nasoft.aboutcar.content.domain.Content">
+    	 insert into mng_content values(
+    	 #{id,jdbcType=INTEGER},
+    	 #{title,jdbcType=VARCHAR},
+    	 #{type,jdbcType=VARCHAR},
+    	 #{imgPath,jdbcType=VARCHAR},
+    	 #{url,jdbcType=VARCHAR},
+    	 #{createMan,jdbcType=VARCHAR},
+    	 #{createInstId,jdbcType=VARCHAR},
+    	 #{createDate,jdbcType=VARCHAR},
+    	 #{updateUserId,jdbcType=VARCHAR},
+    	 #{updateInstId,jdbcType=VARCHAR},
+    	 #{updateDateTime,jdbcType=VARCHAR}
+    	 )
+    </insert>
+    
+    <insert id="insertLbContent" parameterType="com.nasoft.aboutcar.content.domain.LbContent">
+    	 insert into mng_lbcontent values(
+    	 #{id,jdbcType=INTEGER},
+    	 #{title,jdbcType=VARCHAR},
+    	 #{imgPath,jdbcType=VARCHAR},
+    	 #{url,jdbcType=VARCHAR},
+    	 #{createMan,jdbcType=VARCHAR},
+    	 #{createInstId,jdbcType=VARCHAR},
+    	 #{createDate,jdbcType=VARCHAR},
+    	 #{updateUserId,jdbcType=VARCHAR},
+    	 #{updateInstId,jdbcType=VARCHAR},
+    	 #{updateDateTime,jdbcType=VARCHAR}
+    	 )
+    </insert>
+    
+    <update id="updateContent" parameterType="com.nasoft.aboutcar.content.domain.Content">
+    	update mng_content set 
+    	  title=#{title,jdbcType=VARCHAR},
+    	  type= #{type,jdbcType=VARCHAR},
+    	  imgpath=#{imgPath,jdbcType=VARCHAR},
+    	  url= #{url,jdbcType=VARCHAR}, 
+    	  upduserid= #{updateUserId,jdbcType=VARCHAR},
+    	  updinstid=#{updateInstId,jdbcType=VARCHAR},
+    	  upddatetime=#{updateDateTime,jdbcType=VARCHAR},
+    	  where id= #{id,jdbcType=VARCHAR}
+    </update>
+    <delete id="deleteContent" parameterType="java.lang.String">
+    	delete from mng_content where id=#{id}
+    </delete>
+    
+    <delete id="deleteContentAndLunBo" parameterType="java.lang.String">
+    	delete from mng_lbcontent where url=(select url from mng_content where id=#{id})
+    </delete>
+    
+     <delete id="deleteLbContent" parameterType="java.lang.String">
+    	delete from mng_lbcontent where id=#{id}
+    </delete>
+</mapper>

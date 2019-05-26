@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.nasoft.aboutcar.CxkhIndicMapper">
+
+	<resultMap id="CxkhIndicResultMap" type="com.nasoft.aboutcar.credit.domain.CxkhIndic">
+        <result property="typeCode" column="type_code" jdbcType="CHAR"/>
+        <result property="indicCode" column="indic_code" jdbcType="CHAR"/>
+        <result property="indicText" column="indic_text" jdbcType="VARCHAR"/>
+        <result property="indicDesc" column="indic_desc" jdbcType="VARCHAR"/>
+        <result property="score" column="score" jdbcType="INTEGER"/>
+        <result property="level" column="level" jdbcType="INTEGER"/>
+        <result property="shared" column="shared" jdbcType="CHAR"/>
+        <result property="indicStatus" column="indic_status" jdbcType="CHAR"/>
+        <result property="createUser" column="create_user" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="INTEGER"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="typeName" column="type_name" jdbcType="VARCHAR"/>
+        <result property="category" column="category" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	   
+		c.type_code,indic_code,indic_text,indic_desc,score,level,shared,indic_status,c.category,
+		c.create_user,c.create_time,c.update_user,c.update_time,t.type_name
+	   
+	</sql>
+
+	<insert id="insertIfNotnull"   parameterType="com.nasoft.aboutcar.credit.domain.CxkhIndic">
+		<selectKey   keyProperty="indicCode"  resultType="java.lang.String">  
+		SELECT LAST_INSERT_ID()  
+	  </selectKey>
+        INSERT INTO cxkh_indic 
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="typeCode != null">
+        		type_code ,
+			</if>
+			<if test="indicText != null">
+        		indic_text ,
+			</if>
+			<if test="indicDesc != null">
+        		indic_desc ,
+			</if>
+			<if test="score != null">
+        		score ,
+			</if>
+			<if test="level != null">
+        		level ,
+			</if>
+			<if test="shared != null">
+        		shared ,
+			</if>
+			<if test="indicStatus != null">
+        		indic_status ,
+			</if>
+			<if test="createUser != null">
+        		create_user ,
+			</if>
+			<if test="createTime != null">
+        		create_time ,
+			</if>
+			<if test="updateUser != null">
+        		update_user ,
+			</if>
+			<if test="updateTime != null">
+        		update_time ,
+			</if>
+			<if test="typeName != null">
+        		type_name ,
+			</if>
+		</trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="typeCode != null">
+        		#{typeCode, jdbcType=CHAR} ,
+			</if>
+			<if test="indicText != null">
+        		#{indicText, jdbcType=VARCHAR} ,
+			</if>
+			<if test="indicDesc != null">
+        		#{indicDesc, jdbcType=VARCHAR} ,
+			</if>
+			<if test="score != null">
+        		#{score, jdbcType=INTEGER} ,
+			</if>
+			<if test="level != null">
+        		#{level, jdbcType=INTEGER} ,
+			</if>
+			<if test="shared != null">
+        		#{shared, jdbcType=CHAR} ,
+			</if>
+			<if test="indicStatus != null">
+        		#{indicStatus, jdbcType=CHAR} ,
+			</if>
+			<if test="createUser != null">
+        		#{createUser, jdbcType=INTEGER} ,
+			</if>
+			<if test="createTime != null">
+        		#{createTime, jdbcType=TIMESTAMP} ,
+			</if>
+			<if test="updateUser != null">
+        		#{updateUser, jdbcType=INTEGER} ,
+			</if>
+			<if test="updateTime != null">
+        		#{updateTime, jdbcType=TIMESTAMP} ,
+			</if>
+			<if test="typeName != null">
+        		#{typeName, jdbcType=VARCHAR} ,
+			</if>
+		</trim>
+    
+		
+	</insert>
+    
+	<update id="updateIfNotnull"  parameterType="com.nasoft.aboutcar.credit.domain.CxkhIndic">
+    
+        UPDATE cxkh_indic
+			<set>
+				<if test="typeCode != null">
+					type_code = #{typeCode, jdbcType=CHAR} ,
+				</if>
+				<if test="indicText != null">
+					indic_text = #{indicText, jdbcType=VARCHAR} ,
+				</if>
+				<if test="indicDesc != null">
+					indic_desc = #{indicDesc, jdbcType=VARCHAR} ,
+				</if>
+				<if test="score != null">
+					score = #{score, jdbcType=INTEGER} ,
+				</if>
+				<if test="level != null">
+					level = #{level, jdbcType=INTEGER} ,
+				</if>
+				<if test="shared != null">
+					shared = #{shared, jdbcType=CHAR} ,
+				</if>
+				<if test="indicStatus != null">
+					indic_status = #{indicStatus, jdbcType=CHAR} ,
+				</if>
+				<if test="createUser != null">
+					create_user = #{createUser, jdbcType=INTEGER} ,
+				</if>
+				<if test="createTime != null">
+					create_time = #{createTime, jdbcType=TIMESTAMP} ,
+				</if>
+				<if test="updateUser != null">
+					update_user = #{updateUser, jdbcType=INTEGER} ,
+				</if>
+				<if test="updateTime != null">
+					update_time = #{updateTime, jdbcType=TIMESTAMP} ,
+				</if>
+				<if test="typeName != null">
+					type_name = #{typeName, jdbcType=VARCHAR} ,
+				</if>
+			</set>
+        WHERE 
+	        indic_code = #{indicCode, jdbcType=CHAR} 
+    
+	</update>
+
+    <delete id="deleteById">
+    
+        DELETE FROM cxkh_indic WHERE
+        indic_code = #{indicCode } 
+    
+    </delete>
+    
+    
+    <delete id="delete">
+    
+        DELETE FROM cxkh_indic WHERE
+        
+    </delete>
+    
+		<select id="selectById" resultMap="CxkhIndicResultMap">
+			SELECT <include refid="columns" />
+		   
+				FROM cxkh_indic 
+				WHERE 
+					indic_code = #{indicCode, jdbcType=CHAR} 
+			
+		</select>
+	
+	<sql id="selectList_where">
+		<where>	      				
+	       <if test="typeCode != null">
+		 	   	 	AND c.type_code = #{typeCode, jdbcType=CHAR}
+			</if>
+	       <if test="indicCode != null">
+		 	   	 	AND indic_code = #{indicCode, jdbcType=CHAR}
+			</if>
+	       <if test="indicText != null">
+		 	   	 	AND indic_text = #{indicText, jdbcType=VARCHAR}
+			</if>
+	       <if test="indicDesc != null">
+		 	   	 	AND indic_desc = #{indicDesc, jdbcType=VARCHAR}
+			</if>
+	       <if test="score != null">
+		 		 		AND score = #{score, jdbcType=INTEGER}
+			</if>
+	       <if test="level != null">
+		 		 		AND level = #{level, jdbcType=INTEGER}
+			</if>
+	       <if test="shared != null">
+		 	   	 	AND shared = #{shared, jdbcType=CHAR}
+			</if>
+	       <if test="indicStatus != null">
+		 	   	 	AND indic_status = #{indicStatus, jdbcType=CHAR}
+			</if>
+	       <if test="createUser != null">
+		 		 		AND create_user = #{createUser, jdbcType=INTEGER}
+			</if>
+	       <if test="createTimeBegin != null">
+				AND create_time >= #{createTimeBegin }
+		   </if>
+		   <if test="createTimeEnd != null">
+				AND create_time &lt;= #{createTimeEnd }
+		   </if>
+	       <if test="updateUser != null">
+		 		 		AND update_user = #{updateUser, jdbcType=INTEGER}
+			</if>
+	       <if test="updateTimeBegin != null">
+				AND update_time >= #{updateTimeBegin }
+		   </if>
+		   <if test="updateTimeEnd != null">
+				AND update_time &lt;= #{updateTimeEnd }
+		   </if>
+	       <if test="typeName != null">
+		 	   	 	AND t.type_name = #{typeName, jdbcType=VARCHAR}
+			</if>
+			
+	       <if test="category != null">
+		 	   	 	AND c.category = #{category, jdbcType=VARCHAR}
+			</if>
+		</where>
+	</sql>
+		
+    <select id="selectListCount" resultType="long">
+        SELECT count(*) FROM cxkh_indic 
+		<include refid="selectList_where"/>    
+    </select>
+    
+   
+    <select id="selectList" resultMap="CxkhIndicResultMap">
+    	SELECT <include refid="columns" />
+	    FROM cxkh_indic c
+	    left join cxkh_indic_type t on c.type_code=t.type_code
+		<include refid="selectList_where"/>
+		
+		
+    </select>
+    
+    <resultMap type="java.util.HashMap" id="CxkhIndicResultToMap">
+    	
+    </resultMap>
+    <select id="getVertical" resultMap="CxkhIndicResultToMap">
+    	SELECT <include refid="columns" />
+	    FROM cxkh_indic 
+		<include refid="selectList_where"/>
+    </select>
+
+	
+	
+</mapper>
+

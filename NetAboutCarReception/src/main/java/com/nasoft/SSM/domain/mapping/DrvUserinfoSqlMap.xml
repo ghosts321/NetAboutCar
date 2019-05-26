@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.SSM.DrvUserinfo" >
+	
+  <select id="selectByCertno" parameterType="String" resultType="com.nasoft.SSM.domain.DrvUserinfo">
+    select 
+    *
+    from xzsp_drv_userinfo
+    where certno = #{certno,jdbcType=VARCHAR}
+  </select>
+  
+  <insert id="addDrvUserinfo" parameterType="com.nasoft.SSM.domain.DrvUserinfo" >
+    insert into xzsp_drv_userinfo (certno, username, sex, 
+      areacode, censusaddr, nation, 
+      political, birthday, drivecardno, 
+      carddate, carissuingagency, cardrivingtype, 
+      address, telno, contactname, 
+      contactemployer, contacttelno, familybg, 
+      education, filenumber, residencepermit, createuserid, createinstid, 
+      createdatetime, upduserid, updinstid, 
+      upddatetime)
+    values (#{certno,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{sex,jdbcType=CHAR}, 
+      #{areacode,jdbcType=CHAR}, #{censusaddr,jdbcType=VARCHAR}, #{nation,jdbcType=CHAR}, 
+      #{political,jdbcType=CHAR}, #{birthday,jdbcType=DATE}, #{drivecardno,jdbcType=VARCHAR}, 
+      #{carddate,jdbcType=DATE}, #{carissuingagency,jdbcType=VARCHAR}, #{cardrivingtype,jdbcType=CHAR}, 
+      #{address,jdbcType=VARCHAR}, #{telno,jdbcType=VARCHAR}, #{contactname,jdbcType=VARCHAR}, 
+      #{contactemployer,jdbcType=VARCHAR}, #{contacttelno,jdbcType=VARCHAR}, #{familybg,jdbcType=CHAR}, 
+      #{education,jdbcType=CHAR},#{filenumber,jdbcType=VARCHAR},#{residencepermit,jdbcType=VARCHAR}, #{createuserid,jdbcType=INTEGER}, #{createinstid,jdbcType=INTEGER}, 
+      #{createdatetime,jdbcType=TIMESTAMP}, #{upduserid,jdbcType=INTEGER}, #{updinstid,jdbcType=INTEGER}, 
+      #{upddatetime,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <update id="updateDrvUserinfo" parameterType="com.nasoft.SSM.domain.DrvUserinfo" >
+    update xzsp_drv_userinfo
+    set username = #{username,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=CHAR},
+      areacode = #{areacode,jdbcType=CHAR},
+      censusaddr = #{censusaddr,jdbcType=VARCHAR},
+      nation = #{nation,jdbcType=CHAR},
+      political = #{political,jdbcType=CHAR},
+      birthday = #{birthday,jdbcType=DATE},
+      drivecardno = #{drivecardno,jdbcType=VARCHAR},
+      carddate = #{carddate,jdbcType=DATE},
+      carissuingagency = #{carissuingagency,jdbcType=VARCHAR},
+      cardrivingtype = #{cardrivingtype,jdbcType=CHAR},
+      address = #{address,jdbcType=VARCHAR},
+      telno = #{telno,jdbcType=VARCHAR},
+      contactname = #{contactname,jdbcType=VARCHAR},
+      contactemployer = #{contactemployer,jdbcType=VARCHAR},
+      contacttelno = #{contacttelno,jdbcType=VARCHAR},
+      familybg = #{familybg,jdbcType=CHAR},
+      education = #{education,jdbcType=CHAR},
+      filenumber = #{filenumber,jdbcType=VARCHAR},
+      residencepermit = #{residencepermit,jdbcType=VARCHAR},
+      createuserid = #{createuserid,jdbcType=INTEGER},
+      createinstid = #{createinstid,jdbcType=INTEGER},
+      createdatetime = #{createdatetime,jdbcType=TIMESTAMP},
+      upduserid = #{upduserid,jdbcType=INTEGER},
+      updinstid = #{updinstid,jdbcType=INTEGER},
+      upddatetime = #{upddatetime,jdbcType=TIMESTAMP}
+    where certno = #{certno,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>

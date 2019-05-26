@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.BnsNotOperateCarMapper" >
+<select id="findAllNotOperCar" parameterType="java.util.HashMap" resultType="com.nasoft.aboutcar.supervise.domain.BnsNotOperateCar">
+	select * from mng_unoperating_car
+	<where>
+		<if test="region_code != null and region_code !=''">
+		region_code = #{region_code}
+		</if>
+		<if test="company_id != null and company_id !=''">
+		company_id = #{company_id}
+		</if>
+	</where>
+</select>
+<select id="execOperateCarPro" parameterType="String" statementType="CALLABLE">
+		CALL unoperating_car_proce()
+</select>
+</mapper>

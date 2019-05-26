@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.CtlCarPositionInfoMapper" >
+<select id="findAllCarPositionInfo" parameterType="java.util.HashMap" resultType="com.nasoft.aboutcar.supervise.domain.CtlCarPositionInfo">
+	select * from yyjg_car_position_info
+	<where>
+		<if test="vehicle_no != null and vehicle_no !=''">
+		vehicle_no = #{vehicle_no}
+		</if>
+		<if test="position_time != null and position_time !=''">
+		position_time = #{position_time}
+		</if>
+		<if test="nowDate != null and nowDate !='' and nowTenDate != null and nowTenDate !=''">
+		create_time = between #{nowTenDate} and #{nowDate}
+		</if>
+	</where>
+</select>
+<select id="findAllCarPositionInfoH" parameterType="java.util.HashMap" resultType="com.nasoft.aboutcar.supervise.domain.CtlCarPositionInfo">
+	select ctl.longitude,ctl.latitude,ctl.vehicle_no,info.mancompany from yyjg_car_position_info_h ctl,xzsp_car_carinfo info <!-- 查询经纬度 -->
+	<where>
+		ctl.vehicle_no = info.carnum
+		<if test="vehicle_no != null and vehicle_no !=''">
+		AND ctl.vehicle_no = #{vehicle_no}
+		</if>
+		<if test="begintime != null and begintime !=''">
+		AND ctl.position_time BETWEEN #{begintime}
+		AND #{endtime}
+		</if>
+		ORDER BY DATE_FORMAT(ctl.position_time,'%y%m%d%H%i%s') ASC
+	</where>
+</select>
+
+<select id="findAllCarNewPosition" resultType="com.nasoft.aboutcar.supervise.domain.CtlCarPositionInfo">
+	select c.comname,a.areaname,i.* from yyjg_car_position_info i 
+	LEFT JOIN xzsp_com_companyinfo c ON i.company_id = c.creditcode 
+	LEFT JOIN mng_areainfo a ON a.areacode = i.vehicle_region_code
+	<!-- where i.create_time = (select max(create_time) from yyjg_car_position_info where vehicle_no=i.vehicle_no) -->
+</select>
+	
+	<insert id="addCarPosition" parameterType="com.nasoft.aboutcar.supervise.domain.CtlCarPositionInfo" >
+	    insert into yyjg_car_position_info (company_id, vehicle_no, 
+	      vehicle_region_code, position_time, longitude, 
+	      latitude, speed, direction, 
+	      elevation, mileage, warnStatus, 
+	      veh_status, biz_status, order_id, 
+	      encrypt, create_user, create_time, 
+	      update_user, update_time)
+	    values (#{company_id,jdbcType=VARCHAR}, #{vehicle_no,jdbcType=VARCHAR}, 
+	      #{vehicle_region_code,jdbcType=INTEGER}, #{position_time,jdbcType=DECIMAL}, #{longitude,jdbcType=DECIMAL}, 
+	      #{latitude,jdbcType=DECIMAL}, #{speed,jdbcType=DECIMAL}, #{direction,jdbcType=DECIMAL}, 
+	      #{elevation,jdbcType=DECIMAL}, #{mileage,jdbcType=DECIMAL}, #{warnStatus,jdbcType=INTEGER}, 
+	      #{veh_status,jdbcType=INTEGER}, #{biz_status,jdbcType=INTEGER}, #{order_id,jdbcType=VARCHAR}, 
+	      #{encrypt,jdbcType=CHAR}, #{create_user,jdbcType=INTEGER}, #{create_time,jdbcType=TIMESTAMP}, 
+	      #{update_user,jdbcType=INTEGER}, #{update_time,jdbcType=TIMESTAMP})
+	 </insert>
+	<select id="findAlarmCar" parameterType="java.util.HashMap" resultType="com.nasoft.aboutcar.supervise.domain.CtlCarPositionInfo">
+		select c.comname comname, a.* from yyjg_car_position_info a LEFT JOIN xzsp_com_companyinfo c ON c.creditcode = a.company_id 
+	<where>
+		a.warnStatus = '1'
+		<if test="vehicle_no != null and vehicle_no !=''">
+		and a.vehicle_no like concat(concat('%', #{vehicle_no}), '%')
+		</if>
+	</where>
+	</select>
+	
+	<!-- 特定车辆追踪 -->
+	<select id="getSpecificCar" parameterType="java.lang.String" resultType="com.nasoft.aboutcar.supervise.domain.CtlCarPositionInfo">
+		select c.comname comname, a.* from yyjg_car_position_info a LEFT JOIN xzsp_com_companyinfo c ON c.creditcode = a.company_id where a.vehicle_no = #{vehicleNo}
+	</select>
+	
+	<select id="alarmCarMonitor" statementType="CALLABLE">
+			CALL alarmCar_monitor()
+	</select>
+	<select id="execGetCarPro" parameterType="String" statementType="CALLABLE">
+		CALL P_GET_CAR_GPS()
+    </select>
+    
+    <select id="getPositionInfoList" parameterType="java.lang.String" resultType="com.nasoft.aboutcar.supervise.domain.CtlCarPositionInfo">
+		select * from yyjg_car_position_info
+    </select>
+    <select id="getPositionInfoHList" parameterType="java.lang.String" resultType="com.nasoft.aboutcar.supervise.domain.YyjgCarPositionInfoH">
+		select * from yyjg_car_position_info_h
+    </select>
+    <select id="getPositionInfoTemp2List" parameterType="java.lang.String" resultType="com.nasoft.aboutcar.supervise.domain.YyjgCarPositionInfoTemp2">
+		select * from yyjg_car_position_info_temp2
+    </select>
+    <select id="getIllegalCarList" parameterType="java.lang.String" resultType="com.nasoft.aboutcar.supervise.domain.CtlIllegalCarMonitor">
+		select * from yyjg_illegal_car_monitor
+    </select>
+    
+    <delete id="deletePositionInfoH" parameterType="java.lang.String">
+		delete from yyjg_car_position_info_h
+	</delete>
+	<delete id="deletePositionInfoTemp2" parameterType="java.lang.String">
+		delete from yyjg_car_position_info_temp2
+	</delete>
+	<delete id="deleteIllegalCar" parameterType="java.lang.String">
+		delete from yyjg_illegal_car_monitor
+	</delete>
+	
+    <!-- 根据id获取车辆信息 -->
+	<select id="getCarInfoToid" parameterType="java.lang.String" resultType="com.nasoft.aboutcar.supervise.domain.CtlCarPositionInfo">
+		select * from yyjg_car_position_info where id = #{id}
+	</select>
+</mapper>

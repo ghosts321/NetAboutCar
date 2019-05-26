@@ -1,0 +1,258 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="../../../common.jsp"%>
+<!DOCTYPE>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript">
+$(function() {
+    //1.初始化Table
+    var oTable = new TableInit();
+    oTable.Init();
+    $('#search').click(function () {  
+    	$('#tradeList').bootstrapTable('refresh');
+    });
+});
+
+var TableInit = function () {
+	var oTableInit = new Object();
+    //初始化Table
+    oTableInit.Init = function () {
+        $('#tradeList').bootstrapTable({
+            url: 'findhandle.action',         //请求后台的URL（*）
+            method: 'post',                      //请求方式（*）
+            dataType: "json",
+            contentType: 'application/x-www-form-urlencoded',
+            striped: true,                      //是否显示行间隔色
+            cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true,                   //是否显示分页（*）
+            sortable: false,                     //是否启用排序
+            buttonsAlign:'right',
+            toolbarAlign:'right',
+            sortOrder: "asc",                   //排序方式
+            queryParams: function queryParams(params) {   //设置查询参数  
+            	var param = {
+            			complain_code:$("#complain_code").val(),
+            			compn_compy:$("#compn_compy").val(),
+            			begin_time:$("#begin_time").val(),
+            			end_time:$("#end_time").val()
+              	};
+              	return param;
+            },
+            toolbar: '#toolbar',
+            clickToSelect: true,                //是否启用点击选中行
+           // height: 420,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "complain_code",                     //每一行的唯一标识，一般为主键列
+            columns: [{
+                checkbox:true
+            },{
+                field: 'index',
+                align: 'center',
+                width:'3%',
+                title: '序号',
+                formatter:function(value, row, index){
+                	return index+1;
+                }
+            },{
+                field: 'complain_code',
+                align: 'center',
+                title: '投诉编号'
+            },{
+                field: 'compn_compy',
+                align: 'center',
+                title: '平台名称',
+            },{
+                field: 'compn_name',
+                align: 'center',
+                title: '投诉人姓名'
+            },{
+                field: 'compn_tel',
+                align: 'center',
+                title: '投诉人手机号'
+            }/* ,{
+                field: 'compn_email',
+                align: 'center',
+                title: '投诉人电子邮件'
+            } */,{
+                field: 'compn_time',
+                align: 'center',
+                title: '投诉时间'
+            },{
+                field: 'distri_time',
+                align: 'center',
+                title: '最后受理时间'
+            },{
+                field: 'compn_state',
+                align: 'center',
+                title: '投诉状态',
+                formatter:function(value, row, index){
+                	if(row.compn_state==3){
+                	   return "待处理";
+                	}else if (row.compn_state==4){
+                	     return "待反馈";
+                	}else if (row.compn_state==5){
+                	     return "申诉中";
+                	}else if (row.compn_state==6){
+                	     return "申诉待处理";
+                	}else{
+                	     return "申诉待反馈";
+                	}
+                }
+            } ,{
+                field: 'handle',
+                align: 'center',
+                title: '操作',
+                formatter:function(value, row, index){
+                          if(row.compn_state==4){
+	                	 var html = "<button type='button' disabled='true' class='btn btn-default' onclick='tohandle(\""+row.complain_code+"\")'><span class='glyphicon glyphicon-pencil' aria-hidden='true' >处理</button>&nbsp;";
+                          }else{
+                       var html = "<button type='button'  class='btn btn-default' onclick='tohandle(\""+row.complain_code+"\")'><span class='glyphicon glyphicon-pencil' aria-hidden='true' >处理</button>&nbsp;";  
+                          }
+	                	//html += "<button type='button' class='btn btn-default' onclick='showhandlehistory(\""+row.complain_code+"\")'><span class='glyphicon glyphicon-pencil' aria-hidden='true' >处理历史</button>";
+						return html;
+                }
+            }]
+        });
+    };
+    //得到查询的参数
+	return oTableInit;
+};
+$(function(){
+	//日期控件
+   	$('.date-picker').datepicker();
+	 //1.初始化Table
+    var oTable = new TableInit();
+    oTable.Init();
+    $('#search').click(function () {
+    	//日期条件非空校验
+    	var result = true;
+    	if(verification() == false){
+    		result = false;
+    	}
+    	if(result){
+	    	$('#tradeList').bootstrapTable('refresh');    		
+    	}
+    });
+});
+
+function showhandlehistory(complain_code){
+	var diag = new top.Dialog();
+	 diag.Drag=true;
+	 diag.Title ="处理历史";
+	 diag.URL = '<%=basePath%>complaint/showhandlehistory.action?complain_code='+complain_code;
+	 diag.Width = 850;
+	 diag.Height = 450;
+	 diag.CancelEvent = function(){ //关闭事件
+		/* if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+			setTimeout("location.reload()",100);
+		} */
+		location.reload();
+		diag.close();
+	 };
+	 diag.show();
+}
+function tohandle(complain_code){
+	var diag = new top.Dialog();
+	 diag.Drag=true;
+	 diag.Title ="投诉处理";
+	 diag.URL = '<%=basePath%>complaint/showhandle.action?complain_code='+complain_code;
+	 diag.Width =800;
+	 diag.Height =650;
+	 diag.CancelEvent = function(){ //关闭事件
+		/* if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+			setTimeout("location.reload()",100);
+		} */
+		location.reload();
+		diag.close();
+	 };
+	 diag.show();
+  }
+function todel(){
+	var selections =  $('#tradeList').bootstrapTable('getSelections');
+	if(selections.length<1){
+		alert("请至少选择一行数据！");
+		return false;
+	}
+	var compids = [];
+	var flag=false
+	$.each(selections,function(i,d){
+	   if(d.compn_state==4){
+		compids.push(d.complain_code);
+		flag=true;	 
+	   }else{
+	    alert("您选择的投诉状态不正确");
+	    flag=false
+	    return false;
+	   }
+	});
+	
+	var flag1=false;
+     if(flag){
+     if(confirm("确定反馈么")){
+		flag1 = true;
+	   }
+     }
+		
+	if(flag1){
+		var url = "<%=basePath%>complaint/feedback.action";
+		$.post(url,{compids:compids.join(',')},function(result){
+			if(result=="success"){
+				alert("反馈成功！");
+			}else{
+				alert("反馈失败！");
+			}
+			document.location.reload();
+		});
+	}
+}
+</script>
+</head>
+<body>
+	<div class="panel-body">
+		<div class="page-header" >
+			<h1 style="font-size: 15px;">
+				投诉管理<small style="font-size: 15px">
+				<i class="icon-double-angle-right"></i>平台投诉处理
+				</small>
+				<small style="font-size: 15px">
+				<i class="icon-double-angle-right"></i>投诉处理
+				</small>
+			</h1>
+		</div>
+		<div class="panel panel-default">
+            <div class="panel-body">
+            	<span class="title">查询条件</span>
+                <form id="formSearch" class="form-horizontal">
+                    <div class="form-group" style="margin-top:15px">
+                        <label class="control-label col-sm-1" style="font-weight: normal;" for="region_code">投诉编号</label>
+                        <div class="col-sm-3" style="padding-right: 5px;padding-left: 0px">
+							<input type="text" class="form-control" id="complain_code"/>
+                        </div>
+                        <label class="control-label col-sm-1" style="font-weight: normal;" for="fare_type">平台名称</label>
+                        <div class="col-sm-3" style="padding-right: 5px;padding-left: 0px">
+							<input type="text" class="form-control" id="compn_compy"/>
+                        </div>
+                        <label class="control-label col-sm-1" style="font-weight: normal;" for="company_id">投诉时间</label>
+                        <div class="col-sm-3" style="padding-right: 5px;padding-left: 0px; width:352px">
+							从<input type="text" class="date-picker" id="begin_time" data-date-format="yyyy-mm-dd" onchange="changeDateValue();"/>
+							至<input type="text" class="date-picker" id="end_time" data-date-format="yyyy-mm-dd" onchange="changeDateValue1();"/>
+                        </div>
+                        <div class="col-sm-4" style="text-align:left; padding-left:0px">
+                            <button type="button" style="margin-left:10px" id="search" class="btn btn-primary">查询</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+		  <div id="toolbar" class="btn-group">
+			<div>
+				<button id="btn_add" type="button" class="btn btn-default" onclick="todel();">
+	                <span class="glyphicon glyphicon-plus" aria-hidden="true" ></span>反馈
+	            </button>
+			</div>
+   	    </div>
+		<table id="tradeList">
+		</table>
+	</div>
+</body>
+</html>

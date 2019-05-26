@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nasoft.aboutcar.CxkhComPunList">
+<insert id="addCxkhPlatPunRecord" parameterType="com.nasoft.aboutcar.credit.domain.CxkhComPunRecord">
+INSERT cxkh_com_pun_record (
+  list_no,
+  com_license,
+  pun_code,
+  pun_text,
+  pun_status,
+  pun_date,
+  cancel_date
+) 
+VALUES
+  (#{listNo},#{comLicense}, #{punCode}, #{punText},#{punStatus},#{punDate},#{cancelDate});
+
+</insert>
+
+<select id="selectList" resultType="com.nasoft.aboutcar.credit.domain.CxkhComPunRecord">
+	select list_no listNo,
+  com_license comLicense from cxkh_com_pun_record c where c.list_no=#{listNo}
+</select>
+</mapper>

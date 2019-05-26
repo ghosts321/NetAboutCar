@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.DrvPermitapplyMapper" >
+	
+  <!-- <select id="selectAll" resultType="java.util.HashMap">
+    select 
+    u.areacode,u.username,u.sex,u.telno,u.certno,p.applyid,p.source,p.applytype,p.appstatus,p.instid
+    from xzsp_drv_permitapply p,xzsp_drv_userinfo u
+    where p.certno = u.certno
+    and p.appstatus != '1'
+    and p.appstatus != '7'
+    <if test="roleid != null and roleid != '' ">
+		<if test="roleid == '1001' ">
+			and u.areacode = #{areacode}
+		</if>
+		<if test="roleid == '1002' ">
+			and p.instid = #{instid}
+		</if>
+	</if>
+    <if test="userName != null and userName != '' ">
+		and u.username like CONCAT('%',#{userName},'%' ) 
+	</if>
+	<if test="certNo != null and certNo != ''">
+		and u.certno like CONCAT('%',#{certNo},'%' )
+	</if>
+  </select> -->
+  <select id="selectAll" resultType="java.util.HashMap">
+  	select * from (
+	   SELECT u.areacode, u.username, u.sex, u.telno, u.certno, p.applyid, p.source, p.applytype, p.appstatus, p.instid,p.applydate
+		FROM xzsp_drv_permitapply p LEFT JOIN xzsp_drv_userinfo u ON p.certno = u.certno
+		WHERE (p.appstatus = '10'
+	    <if test="drvValidate != null and drvValidate != '' ">
+			or p.appstatus = '0' 
+		</if>
+	    <if test="drvExam != null and drvExam != '' ">
+			or p.appstatus = '2' or p.appstatus = '3'
+		</if>
+	    <if test="drvWindow != null and drvWindow != '' ">
+			or p.appstatus = '4' or p.appstatus = '5'
+		</if>
+	    <if test="drvCert != null and drvCert != '' ">
+			or p.appstatus = '6'
+		</if>)
+	    <if test="roleid != null and roleid != '' ">
+			<if test="roleid != '1000' ">
+				and p.instid = #{instid}
+			</if>
+		</if>
+	    <if test="userName != null and userName != '' ">
+			and u.username like CONCAT('%',#{userName},'%' ) 
+		</if>
+		<if test="certNo != null and certNo != ''">
+			and u.certno like CONCAT('%',#{certNo},'%' )
+		</if>
+		<if test="applyType != null and applyType != ''">
+			and p.applytype = #{applyType}
+		</if>
+	    union all
+	    SELECT u.areacode, u.username, u.sex, u.telno, u.certno, p.applyid, p.source, p.applytype, p.appstatus, p.instid,p.applydate
+		FROM xzsp_drv_changeapply p LEFT JOIN xzsp_drv_userinfo u ON p.certno = u.certno
+		WHERE p.appstatus != '1'
+	    <if test="roleid != null and roleid != '' ">
+			<if test="roleid != '1000' ">
+				and p.instid = #{instid}
+			</if>
+		</if>
+	    <if test="userName != null and userName != '' ">
+			and u.username like CONCAT('%',#{userName},'%' ) 
+		</if>
+		<if test="certNo != null and certNo != ''">
+			and u.certno like CONCAT('%',#{certNo},'%' )
+		</if>
+		<if test="applyType != null and applyType != ''">
+			and p.applytype = #{applyType}
+		</if>
+	    union all
+	    select
+	    u.areacode,u.username,u.sex,u.telno,u.certno,m.applyid,p.source,m.applytype,m.appstatus,p.instid,m.applydate
+	    from xzsp_drv_permitapply p,xzsp_drv_userinfo u,xzsp_drv_makeupapp m
+	    where p.certno = u.certno
+	    and m.certno = u.certno
+	    and m.appstatus != '1'
+	    <if test="roleid != null and roleid != '' ">
+			<if test="roleid == '1001' ">
+				and u.areacode = #{areacode}
+			</if>
+			<if test="roleid == '1002' ">
+				and p.instid = #{instid}
+			</if>
+		</if>
+	    <if test="userName != null and userName != '' ">
+			and u.username like CONCAT('%',#{userName},'%' ) 
+		</if>
+		<if test="certNo != null and certNo != ''">
+			and u.certno like CONCAT('%',#{certNo},'%' )
+		</if>
+		<if test="applyType != null and applyType != ''">
+			and p.applytype = #{applyType}
+		</if>
+	)tab order by tab.applyid desc
+  </select>
+  
+  <select id="selectDetail" parameterType="String" resultType="java.util.HashMap">
+    select 
+    *
+    from xzsp_drv_permitapply p,xzsp_drv_userinfo u
+    where p.certno = u.certno
+    and u.certno = #{certno}
+  </select>
+  
+   <select id="selectByApplyid" parameterType="java.lang.Integer" resultType="com.nasoft.aboutcar.pilotapply.domain.DrvPermitapply">
+    select 
+    *
+    from xzsp_drv_permitapply
+    where applyid = #{applyid,jdbcType=INTEGER}
+  </select>
+  <!-- <select id="selectByApplyid" parameterType="java.lang.Integer" resultType="com.nasoft.aboutcar.pilotapply.domain.DrvPermitapply">
+  SELECT
+	e.certno,e.examname,e.examdate,e.examresult,e.examtype
+	FROM
+			xzsp_drv_permitapply a,
+			xzsp_drv_examresult e
+	WHERE
+			a.applyid =#{applyid}
+	AND 
+	a.certno = e.certno
+  </select>  -->
+  
+  <delete id="deleteByApplyid" parameterType="java.lang.Integer" >
+    delete from xzsp_drv_permitapply
+    where applyid = #{applyid,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="addDrvPermitapply" parameterType="com.nasoft.aboutcar.pilotapply.domain.DrvPermitapply" >
+    insert into xzsp_drv_permitapply (applyid, certno,instid, driveyears, 
+      company, contractid, workstatus, 
+      photo, certphoto, drivecardphoto, 
+      applydate, crimemark, recordcont, 
+      appstatus, remark, upduserid, 
+      updinstid, upddatetime, source, 
+      applytype)
+    values (#{applyid,jdbcType=INTEGER}, #{certno,jdbcType=VARCHAR},#{instid,jdbcType=VARCHAR}, #{driveyears,jdbcType=INTEGER}, 
+      #{company,jdbcType=VARCHAR}, #{contractid,jdbcType=VARCHAR}, #{workstatus,jdbcType=CHAR}, 
+      #{photo,jdbcType=VARCHAR}, #{certphoto,jdbcType=VARCHAR}, #{drivecardphoto,jdbcType=VARCHAR}, 
+      #{applydate,jdbcType=TIMESTAMP}, #{crimemark,jdbcType=CHAR}, #{recordcont,jdbcType=VARCHAR}, 
+      #{appstatus,jdbcType=CHAR}, #{remark,jdbcType=VARCHAR}, #{upduserid,jdbcType=INTEGER}, 
+      #{updinstid,jdbcType=INTEGER}, #{upddatetime,jdbcType=TIMESTAMP}, #{source,jdbcType=CHAR}, 
+      #{applytype,jdbcType=CHAR})
+  </insert>
+  
+  <update id="updateDrvPermitapply" parameterType="com.nasoft.aboutcar.pilotapply.domain.DrvPermitapply" >
+    update xzsp_drv_permitapply
+    <set>
+      <if test="checkstatus != null">
+        checkstatus = #{checkstatus,jdbcType=CHAR},
+      </if>
+      <if test="appstatus != null">
+        appstatus = #{appstatus,jdbcType=CHAR},
+      </if>
+      <if test="applytype != null">
+        applytype = #{applytype,jdbcType=CHAR},
+      </if>
+    </set>
+    where applyid = #{applyid,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

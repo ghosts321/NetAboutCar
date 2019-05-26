@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.ComAppeals" >
+  
+  <update id="updateComAppeals" parameterType="com.nasoft.aboutcar.credit.domain.ComAppeals" >
+    update cxkh_com_appeals
+    <set>
+      <if test="appeal_status != null" >
+        appeal_status = #{appeal_status},
+      </if>
+      <if test="deal_result != null" >
+        deal_result = #{deal_result},
+      </if>
+      <if test="dealer != null" >
+        dealer = #{dealer},
+      </if>
+      <if test="review_result != null" >
+        review_result = #{review_result},
+      </if>
+      <if test="reviewer != null" >
+        reviewer = #{reviewer},
+      </if>
+      <if test="appeal_result != null" >
+        appeal_result = #{appeal_result},
+      </if>
+      <if test="result_file != null" >
+        result_file = #{result_file},
+      </if>
+      <if test="update_user != null" >
+        update_user = #{update_user},
+      </if>
+      <if test="update_time != null" >
+        update_time = #{update_time},
+      </if>
+    </set>
+    where appeal_no = #{appeal_no}
+  </update>
+  
+  <select id="findByAppealNo" resultType="com.nasoft.aboutcar.credit.domain.ComAppeals">
+    SELECT * FROM cxkh_com_appeals where appeal_no = #{appeal_no}
+  </select>
+  
+</mapper>

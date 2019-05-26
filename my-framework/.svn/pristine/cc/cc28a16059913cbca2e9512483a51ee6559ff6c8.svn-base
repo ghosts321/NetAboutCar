@@ -1,0 +1,63 @@
+<beans xmlns="http://www.springframework.org/schema/beans"   
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	" default-autowire="byName">
+    
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">  
+        <property name="maxTotal" value="32"></property>  
+        <property name="maxIdle" value="6"></property>  
+        <property name="minEvictableIdleTimeMillis" value="300000"></property>  
+        <property name="numTestsPerEvictionRun" value="3"></property>  
+        <property name="timeBetweenEvictionRunsMillis" value="60000"></property>  
+    </bean>  
+    <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" destroy-method="destroy">  
+        <property name="poolConfig" ref="jedisPoolConfig"></property>  
+        <property name="hostName" value="${redis.ip}"></property>  
+        <property name="port" value="${redis.port}"></property>  
+        <property name="password" value="${redis.password}"></property>  
+        <property name="timeout" value="15000"></property>  
+        <property name="usePool" value="true"></property>  
+    </bean>  
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">  
+        <property name="connectionFactory" ref="jedisConnectionFactory"></property>  
+        <property name="keySerializer">  
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>  
+        </property>  
+        <property name="valueSerializer">  
+            <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>  
+        </property>  
+    </bean>  
+    
+   
+    
+    <!--  <bean id="redisContainer" class="org.springframework.data.redis.listener.RedisMessageListenerContainer">
+    	<property name="connectionFactory" ref="jedisConnectionFactory"/>
+        <property name="messageListeners">
+            <map>
+                <entry key-ref="messageQueueListener">  
+                    <bean class="org.springframework.data.redis.listener.ChannelTopic">  
+                        <constructor-arg value="send_message" />  
+                    </bean>  
+                </entry>  
+            </map>
+        </property>
+    </bean>  
+    
+    <bean id="queueContainer" class="com.framework.runtime.application.redis.RedisQueueListenerContainer">
+    	 <property name="redisTemplate" ref="redisTemplate"></property>  
+    	 <property name="messageListeners">
+    	 	<map>
+                <entry key="send_message">  
+                     <bean id="messageQueueListener" class="com.framework.member.core.webservice.queue.MessageQueueListener">
+				    	<property name="redisTemplate" ref="redisTemplate"></property>  
+				    </bean>  
+                </entry>  
+            </map>
+    	 </property>
+    </bean> -->
+    
+     <bean id="redisService" class="com.nasoft.util.redis.SpringRedisService" >
+    	<property name="redisTemplate" ref="redisTemplate"></property>  
+    </bean>
+</beans>  

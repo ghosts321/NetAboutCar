@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.MngAbnormityPriceSet">
+	<select id="selectPriceSetById" parameterType="java.lang.String" resultType="com.nasoft.aboutcar.monitor.domain.MngAbnormityPriceSet">
+	select * from mng_abnormity_price_set where abnormity_id = #{abnormity_id}
+	</select>
+	<select id="findAllPriceSet" resultType="com.nasoft.aboutcar.monitor.domain.MngAbnormityPriceSet">
+		select * from mng_abnormity_price_set
+		<where>
+			<if test="region_code != null and region_code !=''">
+			region_code = #{region_code}
+			</if>
+			<if test="fare_type != null and fare_type !=''">
+			fare_type = #{fare_type}
+			</if>
+			<if test="company_id != null and company_id !=''">
+			company_id = #{company_id}
+			</if>
+		</where>
+	</select>
+	<insert id="AddPriceSet" parameterType="com.nasoft.aboutcar.monitor.domain.MngAbnormityPriceSet">
+	insert into mng_abnormity_price_set values (
+	#{abnormity_id},#{region_code},#{fare_type},#{company_id},#{company_name},#{price_standard},
+	#{create_user},#{create_time},#{update_user},#{update_time}
+	)
+	</insert>
+	<select id="selectPriceSetIsExist" parameterType="java.util.HashMap" resultType="com.nasoft.aboutcar.monitor.domain.MngAbnormityPriceSet">
+	select * from mng_abnormity_price_set where region_code = #{region_code} and fare_type = #{fare_type} and
+	company_id = #{company_id}
+	</select>
+	<update id="updatePriceSet" parameterType="com.nasoft.aboutcar.monitor.domain.MngAbnormityPriceSet">
+	update mng_abnormity_price_set
+		<set>
+		region_code=#{region_code},
+		fare_type=#{fare_type},
+		company_id=#{company_id},
+		company_name=#{company_name},
+		price_standard=#{price_standard},
+		create_user=#{create_user},
+		create_time=#{create_time},
+		update_user=#{update_user},
+		update_time=#{update_time}
+		</set>
+		<where>
+		abnormity_id=#{abnormity_id}
+		</where>
+	</update>
+	<delete id="delPriceSetById" parameterType="java.lang.String">
+	DELETE mng_abnormity_price_set FROM mng_abnormity_price_set
+		<where>
+		abnormity_id=#{abnormity_id}
+		</where>
+	</delete>
+	<select id="BnsViolationPriceMonitor" parameterType="String" statementType="CALLABLE"  >  
+			  {call abnormity_price(  #{orderMatchTime,mode=IN} )}  
+	</select>
+</mapper>

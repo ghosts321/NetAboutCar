@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nasoft.aboutcar.platFormMapper">
+    <select id="selectPlatFormUserById" parameterType="java.lang.String"  resultType="com.nasoft.SSM.domain.PlatformUserReg" >  
+        select * from xzsp_com_userreg where creditcode=#{creditCode} and status='1'
+    </select>
+    
+    <select id="selectPlatFormUserByIdAndPwd" parameterType="com.nasoft.SSM.domain.PlatformUserReg"  resultType="com.nasoft.SSM.domain.PlatformUserReg" >  
+        select * from xzsp_com_userreg where creditcode=#{creditCode} and password=#{passWord} and status='1'
+    </select>
+    
+    <insert id="addPlatFormUser" parameterType="com.nasoft.SSM.domain.PlatformUserReg">
+    	insert into xzsp_com_userreg values(
+    	    #{creditCode,jdbcType=VARCHAR}, 
+    	    #{passWord,jdbcType=VARCHAR}, 
+    	    #{areaName,jdbcType=VARCHAR}, 
+    	    #{phoneNo,jdbcType=VARCHAR}, 
+    	    #{regDateTime,jdbcType=VARCHAR}, 
+    	    #{updTime,jdbcType=VARCHAR}, 
+    	    #{status,jdbcType=VARCHAR}, 
+    	    #{pwdErrTimes,jdbcType=INTEGER}, 
+    	    #{lockDateTime,jdbcType=VARCHAR}, 
+    	    #{smsSendTime,jdbcType=VARCHAR}, 
+    	    #{smsSendCount,jdbcType=INTEGER}, 
+    	    #{smsFirstTime,jdbcType=VARCHAR}, 
+    	    #{smsErrCount,jdbcType=INTEGER}, 
+    		#{smsLockTime,jdbcType=VARCHAR}
+    	)
+    </insert>
+    <update id="changePassword" parameterType="com.nasoft.SSM.domain.PlatformUserReg">
+    update xzsp_com_userreg
+    <set>
+    password = #{passWord}
+    </set>
+    <where>
+    creditcode = #{creditCode}
+    </where>
+    </update>
+</mapper>

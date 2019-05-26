@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nasoft.aboutcar.administrativePenalty">
+    
+    
+    <select id="findAllPlantcaseinfo" resultType="com.nasoft.aboutcar.administrativePenalty.domain.PlantCaseInfo" >  
+        select * from xzcf_plantcase_info 
+        <where>
+          1 = 1
+         
+         
+         <if test="id == 1 ">
+             and caseType='00'
+             
+             <if test="caseId != null and caseId != '' ">
+             and caseId = #{caseId}
+         	 </if> 
+         	 <if test="beginTime != null and beginTime != '' and endTime != null and endTime != '' ">      
+                      and caseTime between #{beginTime} and #{endTime}          
+         	 </if>
+         </if>
+         
+         <if test="id == 2 ">
+             and caseType='01'
+             
+             <if test="iding == 0 ">
+             and dealStatus='00'
+              
+             <if test="caseId != null and caseId != '' ">
+             and caseId = #{caseId}
+         	 </if> 
+         	 <if test="beginTime != null and beginTime != '' and endTime != null and endTime != '' ">      
+                      and caseTime between #{beginTime} and #{endTime}          
+         	 </if>
+             </if>
+             
+             <if test="iding == 1 ">
+             and dealStatus='01'
+              
+             <if test="caseId != null and caseId != '' ">
+             and caseId = #{caseId}
+         	 </if> 
+         	 <if test="beginTime != null and beginTime != '' and endTime != null and endTime != '' ">      
+                      and caseTime between #{beginTime} and #{endTime}          
+         	 </if>
+             </if>
+             
+             <if test="iding == 2 ">
+             and dealStatus='02'
+              
+             <if test="caseId != null and caseId != '' ">
+             and caseId = #{caseId}
+         	 </if> 
+         	 <if test="beginTime != null and beginTime != '' and endTime != null and endTime != '' ">      
+                      and caseTime between #{beginTime} and #{endTime}          
+         	 </if>
+             </if>
+             
+             <if test="iding == 3 ">
+             and dealStatus='04'
+              
+             <if test="caseId != null and caseId != '' ">
+             and caseId = #{caseId}
+         	 </if> 
+         	 <if test="beginTime != null and beginTime != '' and endTime != null and endTime != '' ">      
+                      and caseTime between #{beginTime} and #{endTime}          
+         	 </if>
+             </if>
+         </if>
+         
+     </where>
+    </select>
+    
+   <!--  <select id="findAllPlantcaseinfoSL" resultType="com.nasoft.aboutcar.administrativePenalty.domain.PlantCaseInfo" >  
+        select * from xzcf_plantcase_info where caseType='01' and dealStatus='01'
+    </select> -->
+    
+  
+    
+    <insert id="insertCarPermitcert" parameterType="com.nasoft.aboutcar.car.domain.CarPermitcert">
+    	insert into car_permitcert values(
+    	   #{pcertId,jdbcType=VARCHAR},
+    	   #{applyId,jdbcType=VARCHAR},
+    	   #{pcertNo,jdbcType=VARCHAR},
+    	   #{certNo,jdbcType=VARCHAR},
+    	   #{appId,jdbcType=VARCHAR},
+    	   #{sendDate,jdbcType=VARCHAR},
+    	   #{endDate,jdbcType=VARCHAR},
+    	   #{instId,jdbcType=VARCHAR},
+    	   #{status,jdbcType=INTEGER},
+    	   #{createMan,jdbcType=INTEGER},
+    	   #{createInstId,jdbcType=INTEGER},
+    	   #{createDate,jdbcType=VARCHAR},
+    	   #{updUserId,jdbcType=INTEGER},
+    	   #{updInstId,jdbcType=INTEGER},
+    	   #{updDateTime,jdbcType=VARCHAR}
+    	)
+    	
+    </insert>
+    <!-- 新增平台案件 -->
+    <insert id="plantCaseInfoInsert" parameterType="com.nasoft.aboutcar.administrativePenalty.domain.PlantCaseInfo">
+	    insert into xzcf_plantcase_info (punishId,caseId ,plateName ,source ,areaCode ,
+	    instId ,caseTime ,caseUserId ,caseReason  ,punishType ,punishContent ,dealStatus ,caseType ,
+	    punishStatus ,appealPunishType ,appealPunishCon ,isAppeal ,isRegister ,evidenceUrl ,
+	    createUserId ,createInstId ,createTime ,updUserId ,updInstId ,updateTime ,delFlag) 
+	    values (#{punishId},#{caseId},#{plateName},#{source},#{areaCode},
+	    #{instId},#{caseTime},#{caseUserId},#{caseReason},#{punishType},#{punishContent},#{dealStatus},#{caseType},
+	    #{punishStatus},#{appealPunishType},#{appealPunishCon},#{isAppeal},#{isRegister},#{evidenceUrl},
+	     #{createUserId},#{createInstId},#{createTime},#{updUserId},#{updInstId},#{updateTime},#{delFlag})
+    </insert>
+    
+    <!-- 删除平台案件 -->
+    <delete id="deleteCaseInfoByCaseId" parameterType="java.lang.String">
+	DELETE xzcf_plantcase_info FROM xzcf_plantcase_info WHERE caseId = #{caseId}
+	</delete>
+	
+	<!-- 删除案件 -->
+    <delete id="deleteCaseDealByCaseId" parameterType="java.lang.String">
+	DELETE xzcf_casedeal_info FROM xzcf_casedeal_info WHERE caseId = #{caseId}
+	</delete>
+	
+	<select id="findPlantCaseInfoByCaseId" parameterType="java.lang.String" resultType="com.nasoft.aboutcar.administrativePenalty.domain.PlantCaseInfo">
+	SELECT * FROM xzcf_plantcase_info WHERE caseId  =#{caseId}
+	</select>
+	
+	<select id="findPlatFormByCaseId" parameterType="java.lang.String" resultType="com.nasoft.aboutcar.platform.domain.Platform">
+	SELECT * FROM xzsp_com_companyinfo WHERE platformName=(SELECT plateName FROM xzcf_plantcase_info WHERE caseId=#{caseId} )
+	</select>
+	
+	<update id="updateplantCaseInfo" parameterType="com.nasoft.aboutcar.administrativePenalty.domain.PlantCaseInfo">
+    	update xzcf_plantcase_info set 
+    	plateName = #{plateName},
+    	source = #{source},
+    	areaCode = #{areaCode},
+    	instId = #{instId},
+    	isRegister = #{isRegister},
+    	caseReason = #{caseReason},
+    	punishType = #{punishType},
+    	punishContent = #{punishContent},
+    	dealview = #{dealView},
+    	evidenceview = #{evidenceView},
+    	punishType = #{punishType},
+    	punishContent = #{punishContent},
+    	dealStatus = #{dealStatus}
+    	where caseId = #{caseId}
+    </update>
+    
+    <!-- 新增平台案件 -->
+    <insert id="caseDealInfoInsert" parameterType="com.nasoft.aboutcar.administrativePenalty.domain.CaseDealInfo">
+	    insert into xzcf_casedeal_info (caseId,dealUserId ,lastDealUserId ,nextDealUserId ,dealStatus ,
+	    punishType ,dealView ,evidenceView ,createUserId ,createInstId ,createTime ,updUserId ,updInstId ,updateTime ,delFlag) 
+	    values (#{caseId},#{dealUserId},#{lastDealUserId},#{nextDealUserId},#{dealStatus},
+	    #{punishType},#{dealView},#{evidenceView},#{createUserId},#{createInstId},#{createTime},#{updUserId},#{updInstId},#{updateTime},#{delFlag})
+    </insert>
+    
+    <!-- 新增平台案件历史 -->
+    <insert id="insertPlantCaseDealHis" parameterType="com.nasoft.aboutcar.administrativePenalty.domain.PlantCaseDealHis">
+	    insert into xzcf_plantcasedeal_his (caseId,dealStatus ,dealUserId ,dealRoleId ,dealContent ,
+	    dealView ,dealDateTime ,createUserId ,createInstId ,createTime ,updUserId ,updInstId ,updateTime ,delFlag ) 
+	    values (#{caseId},#{dealStatus},#{dealUserId},#{dealRoleId},#{dealContent},
+	    #{dealView},#{dealDateTime},#{createUserId},#{createInstId},#{createTime},#{updUserId},#{updInstId},#{updateTime},#{delFlag})
+    </insert> 
+    
+    <select id="findAllPlantCaseHis" resultType="com.nasoft.aboutcar.administrativePenalty.domain.PlantCaseDealHis" >  
+        select * from xzcf_plantcasedeal_his where  caseId = #{caseId}
+        
+    </select>
+    
+    
+    <!-- <select id="findPlantCaseInfoByCaseId" parameterType="java.lang.String" resultType="com.nasoft.aboutcar.administrativePenalty.domain.CaseDealInfo">
+	SELECT * FROM xzcf_casedeal_info WHERE caseId  =#{caseId}
+	</select> -->
+	
+	
+	<select id="selectAllPlatForm"  resultType="com.nasoft.aboutcar.platform.domain.Platform" >  
+        select * from xzsp_com_companyinfo
+    </select>
+    
+    <!-- 查找平台名称 -->
+   <select id="selectComName" resultType="java.util.HashMap">
+    select comname from xzsp_com_companyinfo
+   </select>
+   
+   <!-- 查找处罚内容 -->
+   <select id="selectAllTerm" resultType="com.nasoft.aboutcar.administrativePenalty.domain.StandardTermInfo">
+    select * from xzcf_standard_terms
+   </select>
+   
+   <select id="drvfindall"  parameterType="java.util.HashMap" resultType="java.util.HashMap" >
+     select b.pcertno pcertno,b.status status,c.username name,c.sex sex,c.telno tel,c.certno certno
+     from xzsp_drv_permitapply a join xzsp_drv_permitcert b on a.applyid = b.applyid join xzsp_drv_userinfo c on a.certno = c.certno 
+      <where>
+         <if test="name != null and name != '' ">
+             and c.username = #{name}
+         </if> 
+         <if test="pcertno != null and pcertno != '' ">
+             and b.pcertno = #{pcertno}
+         </if>
+     </where>
+   </select>
+   
+     <select id="findAllCar" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+   SELECT a.carnum,a.chassisnum,a.certno,a.telno,a.mancompany,a.status FROM 
+   xzsp_car_carinfo a JOIN xzsp_car_permitcert b ON a.certno=b.certno 
+   <where>
+   <if test="carnum!=null and carnum!=''">
+      a.carnum =#{carnum}
+   </if>
+   <if test="certno!=null and certno!=''">
+     and a.certno =#{certno}
+   </if>
+   </where>
+   </select>
+   
+   <!-- 查找 -->
+   <select id="findComplainByCaseId" resultType="com.nasoft.aboutcar.complaint.domain.comComplainInfo">
+    SELECT * FROM tsfw_com_complain_info WHERE RIGHT(complain_code,6) = #{name}
+   </select>
+   
+   
+   <!-- 查找 -->
+   <select id="findDrvIllegalByCaseId" resultType="com.nasoft.aboutcar.supervise.domain.DrvIllegalInfo">
+    SELECT * FROM zfjc_drv_illegalinfo WHERE drv_illegal_id = #{name}
+   </select> 
+   
+</mapper>

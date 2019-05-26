@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.nasoft.aboutcar.DrvUserinfoMapper">
+	<select id="findDrvUserList" parameterType="map" resultType="map">
+	SELECT certno,username,sex,birthday,drivecardno,address,telno FROM xzsp_drv_userinfo u
+	<where>
+	<if test="username != null and username != ''">
+	u.username like CONCAT('%','${username}','%' )
+	</if>
+	<if test="certno != null and certno != ''">
+	 and u.certno like CONCAT('%','${certno}','%' )
+	</if>
+	 <if test="roleid != null and roleid != '' ">
+			<if test="roleid == '1001' ">
+				AND u.areacode = #{areacode}
+			</if>
+			</if>
+	</where>
+	</select>
+	<select id="findUserInfoByCertno" parameterType="string" resultType="com.nasoft.aboutcar.drvuserinfo.domain.DrvUserreg">
+	select * from xzsp_drv_userreg where certno = #{certno}
+	</select>
+	<update id="updateUserInfoByCertno" parameterType="map" >
+	update xzsp_drv_userreg 
+	set password =#{newPwd}
+	where certno =#{certno}
+	</update>
+</mapper>
+

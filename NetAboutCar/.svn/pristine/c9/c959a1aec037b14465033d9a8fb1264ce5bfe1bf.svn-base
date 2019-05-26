@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.nasoft.aboutcar.RoleInfoMapper">
+	
+	<select id="findRoleInfo" resultType="com.nasoft.aboutcar.roleinfo.domain.RoleInfo" parameterType="java.util.Map">
+    		SELECT
+				  r.*,
+				  GROUP_CONCAT(tab.menuid)    menuIds,
+				  GROUP_CONCAT(tab.menuname)    menuNames
+				FROM mng_roleinfo r
+				  LEFT JOIN (SELECT
+				               rm.roleid,
+				               m.menuid,
+				               m.menuname
+				             FROM mng_rolemenu rm
+				               LEFT JOIN mng_menuinfo m
+				                 ON rm.menuid = m.menuid) tab
+				    ON r.roleid = tab.roleid where 1=1
+				    <if test="flag == 1">
+						and r.roleid > 1000
+					</if>
+				    <if test="roleId != null">
+						and r.roleid = #{roleId}
+					</if>
+					<if test="roleName != null and roleName != ''">
+						and r.rolename like CONCAT('%','${roleName}','%')
+					</if>
+				GROUP BY r.roleid,r.rolename
+    	
+    	<!-- select *  from mng_roleinfo where 1 = 1 
+    	<if test="roleId != null">
+			and roleid = #{roleId}
+		</if> -->
+    </select>
+    
+    <select id="findRoleForValid" resultType="com.nasoft.aboutcar.roleinfo.domain.RoleInfo" parameterType="java.util.Map">
+    	SELECT DISTINCT r.* FROM mng_roleinfo r,mng_userinfo u,mng_userrole ur
+		WHERE r.roleid=ur.roleid AND ur.userid=u.userid
+		AND u.username = #{userName}
+    </select>
+	
+	<insert id="insertRoleInfo" parameterType="com.nasoft.aboutcar.roleinfo.domain.RoleInfo">
+		insert into mng_roleinfo (roleid,rolename ,remark ,createuserid ,createinstid ,createdatetime) 
+		values (#{roleId},#{roleName},#{remark},#{createUserId},#{createInstId},#{createDateTime})
+    </insert>
+
+	<update id="updateRoleInfo" parameterType="com.nasoft.aboutcar.roleinfo.domain.RoleInfo" >
+	    update mng_roleinfo set rolename = #{roleName},remark = #{remark},upduserid = #{updUserId},
+	    updinstid = #{updInstId},updDateTime = #{updDateTime} 
+	    where  roleid = #{roleId}
+	</update>
+	
+	<update id="setRolePermis" parameterType="java.util.Map" >
+	    update mng_roleinfo set permission = #{permis}
+	    where  roleid = #{roleId}
+	</update>
+	
+	<delete id="deleteRoleInfo" parameterType="java.util.Map">
+	    delete from mng_roleinfo where  roleid = #{roleId}
+	</delete>
+	
+	<!-- 根据当前用户名 查询对应角色列表 -->
+	<select id="findRoleListByUserName" resultType="com.nasoft.aboutcar.roleinfo.domain.RoleInfo" parameterType="java.util.Map">
+    	SELECT
+		  r.roleid,
+		  r.rolename
+		FROM mng_roleinfo r,
+		  (SELECT
+		     ur.roleid
+		   FROM mng_userinfo u
+		     RIGHT JOIN mng_userrole ur
+		       ON u.userid = ur.userid
+		   WHERE u.username = #{userName}) tab
+		WHERE r.roleid = tab.roleid ORDER BY r.roleid
+    </select>
+	
+</mapper>
+

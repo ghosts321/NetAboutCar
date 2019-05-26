@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.nasoft.aboutcar.JcfxDataDeminsionMapper">
+
+	<resultMap id="JcfxDataDeminsionResultMap" type="com.nasoft.aboutcar.report.domain.JcfxDataDeminsion">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="dataCode" column="data_code" jdbcType="VARCHAR"/>
+        <result property="fieldType" column="field_type" jdbcType="VARCHAR"/>
+        <result property="dimName" column="dim_name" jdbcType="VARCHAR"/>
+        <result property="dimCode" column="dim_code" jdbcType="VARCHAR"/>
+        <result property="dimType" column="dim_type" jdbcType="VARCHAR"/>
+        <result property="dimFieldname" column="dim_fieldname" jdbcType="VARCHAR"/>
+        <result property="dimPics" column="dim_pics" jdbcType="VARCHAR"/>
+        <result property="createUser" column="create_user" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="INTEGER"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="dataUrl" column="data_url" jdbcType="VARCHAR"/>
+        <result property="dataCodeField" column="data_code_field" jdbcType="VARCHAR"/>
+        <result property="dataNameField" column="data_name_field" jdbcType="VARCHAR"/>
+        <result property="dimNamefield" column="dim_namefield" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	   
+		id,data_code,field_type,dim_name,dim_code,dim_type,dim_fieldname,dim_pics,create_user,create_time,update_user,update_time,data_url,data_code_field,data_name_field,dim_namefield
+	   
+	</sql>
+
+	<insert id="insertIfNotnull"   parameterType="com.nasoft.aboutcar.report.domain.JcfxDataDeminsion">
+		<selectKey   keyProperty="id"  resultType="java.lang.Integer">  
+		SELECT LAST_INSERT_ID()  
+	  </selectKey>
+        INSERT INTO jcfx_data_deminsion 
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="dataCode != null">
+        		data_code ,
+			</if>
+			<if test="fieldType != null">
+        		field_type ,
+			</if>
+			<if test="dimName != null">
+        		dim_name ,
+			</if>
+			<if test="dimCode != null">
+        		dim_code ,
+			</if>
+			<if test="dimType != null">
+        		dim_type ,
+			</if>
+			<if test="dimFieldname != null">
+        		dim_fieldname ,
+			</if>
+			<if test="dimPics != null">
+        		dim_pics ,
+			</if>
+			<if test="createUser != null">
+        		create_user ,
+			</if>
+			<if test="createTime != null">
+        		create_time ,
+			</if>
+			<if test="updateUser != null">
+        		update_user ,
+			</if>
+			<if test="updateTime != null">
+        		update_time ,
+			</if>
+			<if test="dataUrl != null">
+        		data_url ,
+			</if>
+			<if test="dataCodeField != null">
+        		data_code_field ,
+			</if>
+			<if test="dataNameField != null">
+        		data_name_field ,
+			</if>
+			<if test="dimNamefield != null">
+        		dim_namefield ,
+			</if>
+		</trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="dataCode != null">
+        		#{dataCode, jdbcType=VARCHAR} ,
+			</if>
+			<if test="fieldType != null">
+        		#{fieldType, jdbcType=VARCHAR} ,
+			</if>
+			<if test="dimName != null">
+        		#{dimName, jdbcType=VARCHAR} ,
+			</if>
+			<if test="dimCode != null">
+        		#{dimCode, jdbcType=VARCHAR} ,
+			</if>
+			<if test="dimType != null">
+        		#{dimType, jdbcType=VARCHAR} ,
+			</if>
+			<if test="dimFieldname != null">
+        		#{dimFieldname, jdbcType=VARCHAR} ,
+			</if>
+			<if test="dimPics != null">
+        		#{dimPics, jdbcType=VARCHAR} ,
+			</if>
+			<if test="createUser != null">
+        		#{createUser, jdbcType=INTEGER} ,
+			</if>
+			<if test="createTime != null">
+        		#{createTime, jdbcType=TIMESTAMP} ,
+			</if>
+			<if test="updateUser != null">
+        		#{updateUser, jdbcType=INTEGER} ,
+			</if>
+			<if test="updateTime != null">
+        		#{updateTime, jdbcType=TIMESTAMP} ,
+			</if>
+			<if test="dataUrl != null">
+        		#{dataUrl, jdbcType=VARCHAR} ,
+			</if>
+			<if test="dataCodeField != null">
+        		#{dataCodeField, jdbcType=VARCHAR} ,
+			</if>
+			<if test="dataNameField != null">
+        		#{dataNameField, jdbcType=VARCHAR} ,
+			</if>
+			<if test="dimNamefield != null">
+        		#{dimNamefield, jdbcType=VARCHAR} ,
+			</if>
+		</trim>
+    
+		
+	</insert>
+    
+	<update id="updateIfNotnull"  parameterType="com.nasoft.aboutcar.report.domain.JcfxDataDeminsion">
+    
+        UPDATE jcfx_data_deminsion
+			<set>
+				<if test="dataCode != null">
+					data_code = #{dataCode, jdbcType=VARCHAR} ,
+				</if>
+				<if test="fieldType != null">
+					field_type = #{fieldType, jdbcType=VARCHAR} ,
+				</if>
+				<if test="dimName != null">
+					dim_name = #{dimName, jdbcType=VARCHAR} ,
+				</if>
+				<if test="dimCode != null">
+					dim_code = #{dimCode, jdbcType=VARCHAR} ,
+				</if>
+				<if test="dimType != null">
+					dim_type = #{dimType, jdbcType=VARCHAR} ,
+				</if>
+				<if test="dimFieldname != null">
+					dim_fieldname = #{dimFieldname, jdbcType=VARCHAR} ,
+				</if>
+				<if test="dimPics != null">
+					dim_pics = #{dimPics, jdbcType=VARCHAR} ,
+				</if>
+				<if test="createUser != null">
+					create_user = #{createUser, jdbcType=INTEGER} ,
+				</if>
+				<if test="createTime != null">
+					create_time = #{createTime, jdbcType=TIMESTAMP} ,
+				</if>
+				<if test="updateUser != null">
+					update_user = #{updateUser, jdbcType=INTEGER} ,
+				</if>
+				<if test="updateTime != null">
+					update_time = #{updateTime, jdbcType=TIMESTAMP} ,
+				</if>
+				<if test="dataUrl != null">
+					data_url = #{dataUrl, jdbcType=VARCHAR} ,
+				</if>
+				<if test="dataCodeField != null">
+					data_code_field = #{dataCodeField, jdbcType=VARCHAR} ,
+				</if>
+				<if test="dataNameField != null">
+					data_name_field = #{dataNameField, jdbcType=VARCHAR} ,
+				</if>
+				<if test="dimNamefield != null">
+					dim_namefield = #{dimNamefield, jdbcType=VARCHAR} ,
+				</if>
+			</set>
+        WHERE 
+	        id = #{id, jdbcType=INTEGER} 
+    
+	</update>
+
+    <delete id="deleteById">
+    
+        DELETE FROM jcfx_data_deminsion WHERE
+        id = #{id } 
+    
+    </delete>
+    
+    
+    <delete id="delete">
+    
+        DELETE FROM jcfx_data_deminsion WHERE
+        
+    </delete>
+    
+		<select id="selectById" resultMap="JcfxDataDeminsionResultMap">
+			SELECT <include refid="columns" />
+		   
+				FROM jcfx_data_deminsion 
+				WHERE 
+					id = #{id, jdbcType=INTEGER} 
+			
+		</select>
+	
+	<sql id="selectList_where">
+		<where>	      				
+	       <if test="id != null">
+		 		 		AND id = #{id, jdbcType=INTEGER}
+			</if>
+	       <if test="dataCode != null">
+		 	   	 	AND data_code = #{dataCode, jdbcType=VARCHAR}
+			</if>
+	       <if test="fieldType != null">
+		 	   	 	AND field_type = #{fieldType, jdbcType=VARCHAR}
+			</if>
+	       <if test="dimName != null">
+		 	   	 	AND dim_name = #{dimName, jdbcType=VARCHAR}
+			</if>
+	       <if test="dimCode != null">
+		 	   	 	AND dim_code = #{dimCode, jdbcType=VARCHAR}
+			</if>
+	       <if test="dimType != null">
+		 	   	 	AND dim_type = #{dimType, jdbcType=VARCHAR}
+			</if>
+	       <if test="dimFieldname != null">
+		 	   	 	AND dim_fieldname = #{dimFieldname, jdbcType=VARCHAR}
+			</if>
+	       <if test="dimPics != null">
+		 	   	 	AND dim_pics = #{dimPics, jdbcType=VARCHAR}
+			</if>
+	       <if test="createUser != null">
+		 		 		AND create_user = #{createUser, jdbcType=INTEGER}
+			</if>
+	       <if test="createTimeBegin != null">
+				AND create_time >= #{createTimeBegin }
+		   </if>
+		   <if test="createTimeEnd != null">
+				AND create_time &lt;= #{createTimeEnd }
+		   </if>
+	       <if test="updateUser != null">
+		 		 		AND update_user = #{updateUser, jdbcType=INTEGER}
+			</if>
+	       <if test="updateTimeBegin != null">
+				AND update_time >= #{updateTimeBegin }
+		   </if>
+		   <if test="updateTimeEnd != null">
+				AND update_time &lt;= #{updateTimeEnd }
+		   </if>
+	       <if test="dataUrl != null">
+		 	   	 	AND data_url = #{dataUrl, jdbcType=VARCHAR}
+			</if>
+	       <if test="dataCodeField != null">
+		 	   	 	AND data_code_field = #{dataCodeField, jdbcType=VARCHAR}
+			</if>
+	       <if test="dataNameField != null">
+		 	   	 	AND data_name_field = #{dataNameField, jdbcType=VARCHAR}
+			</if>
+	       <if test="dimNamefield != null">
+		 	   	 	AND dim_namefield = #{dimNamefield, jdbcType=VARCHAR}
+			</if>
+		</where>
+	</sql>
+		
+    <select id="selectListCount" resultType="long">
+        SELECT count(*) FROM jcfx_data_deminsion 
+		<include refid="selectList_where"/>    
+    </select>
+    
+   
+    <select id="selectList" resultMap="JcfxDataDeminsionResultMap">
+    	SELECT <include refid="columns" />
+	    FROM jcfx_data_deminsion 
+		<include refid="selectList_where"/>
+		
+		
+    </select>
+    
+    <resultMap type="java.util.HashMap" id="JcfxDataDeminsionResultToMap">
+    	
+    </resultMap>
+    <select id="getVertical" resultMap="JcfxDataDeminsionResultToMap">
+    	SELECT <include refid="columns" />
+	    FROM jcfx_data_deminsion 
+		<include refid="selectList_where"/>
+    </select>
+
+	
+	
+</mapper>
+

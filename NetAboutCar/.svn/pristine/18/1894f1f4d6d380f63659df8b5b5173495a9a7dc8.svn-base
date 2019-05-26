@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.nasoft.aboutcar.PlatformMapper">
+	
+	<select id="searchAllPlatform" parameterType="String" resultType="com.nasoft.aboutcar.platform.domain.Platform">
+    	select *  from xzsp_com_companyinfo 
+    </select>
+	
+	<select id="searchAllPlatformApply" parameterType="com.nasoft.aboutcar.platform.domain.PlatformApply" resultType="com.nasoft.aboutcar.platform.domain.PlatformApply">
+    	select cp.* from xzsp_com_permitapply cp,xzsp_com_companyinfo ci
+    	 <where>
+    	 	cp.creditcode=ci.creditcode and cp.appstatus !='2'
+			<if test="roleid != null and roleid != '' ">
+				<!-- <if test="roleid == '1001' ">
+					and ci.areacode = #{areacode}
+				</if>
+				<if test="roleid == '1002' ">
+					and cp.instid = #{instid}
+				</if> -->
+				<if test="roleid != '1000' ">
+					and cp.instid = #{instid}
+				</if>
+			</if>
+	    	<if test="creditCode != null and creditCode!=''">
+				and cp.creditcode like CONCAT('%','${creditCode}','%' ) 
+			</if>
+    	 </where>
+    	 UNION ALL 
+		 SELECT * FROM xzsp_com_changeapply ch WHERE ch.appstatus != '1' AND ch.appstatus != '2'
+    </select>
+	
+	<select id="searchPlatformById" parameterType="String" resultType="com.nasoft.aboutcar.platform.domain.Platform">
+    	select *  from xzsp_com_companyinfo  where creditcode = #{creditCode}
+    </select>
+    
+    <select id="searchPlatformApplyById" parameterType="String" resultType="com.nasoft.aboutcar.platform.domain.PlatformApply">
+    	select *  from xzsp_com_permitapply  where creditcode = #{creditCode}
+    </select>
+    
+    <select id="searchPlatformApplyByMap" parameterType="java.util.Map" resultType="com.nasoft.aboutcar.platform.domain.PlatformApply">
+    select * from
+    <if test="applyType == 1">
+	    xzsp_com_permitapply
+    </if>
+    <if test="applyType == 2">
+    	xzsp_com_changeapply
+    </if>
+    <where>
+    	creditcode = #{creditCode}
+    </where>
+    </select>
+    
+    <insert id="insertPlatformPermitcert" parameterType="com.nasoft.aboutcar.platform.domain.PlatformPermitcert">
+    	insert into xzsp_com_permitcert values(
+    	   #{pcertId,jdbcType=VARCHAR},
+    	   #{pcertNo,jdbcType=VARCHAR},
+    	   #{creditCode,jdbcType=VARCHAR},
+    	   #{appId,jdbcType=VARCHAR},
+    	   #{sendDate,jdbcType=VARCHAR},
+    	   #{endDate,jdbcType=VARCHAR},
+    	   #{instId,jdbcType=VARCHAR},
+    	   #{status,jdbcType=INTEGER},
+    	   #{createMan,jdbcType=INTEGER},
+    	   #{createInstId,jdbcType=INTEGER},
+    	   #{createDate,jdbcType=VARCHAR},
+    	   #{updUserId,jdbcType=INTEGER},
+    	   #{updInstId,jdbcType=INTEGER},
+    	   #{updDateTime,jdbcType=VARCHAR}
+    	)
+    	
+    </insert>
+    <insert id="insertPlatformApprove" parameterType="com.nasoft.aboutcar.platform.domain.PlatformApprove">
+        insert into xzsp_com_approve values(
+    	   #{appRid,jdbcType=VARCHAR},
+    	   #{creditCode,jdbcType=VARCHAR},
+    	   #{apprType,jdbcType=VARCHAR},
+    	   #{applyId,jdbcType=VARCHAR},
+    	   #{opinions,jdbcType=VARCHAR},
+    	   #{description,jdbcType=VARCHAR},
+    	   #{apprUserId,jdbcType=INTEGER},
+    	   #{apprInstId,jdbcType=INTEGER},
+    	   #{apprDateTime,jdbcType=VARCHAR}
+    	)
+    </insert>
+    
+    <update id="updateApplyStatus" parameterType="com.nasoft.aboutcar.platform.domain.PlatformApply" >
+    	update 
+    	<if test='applytype == 1'>
+    	xzsp_com_permitapply     	
+    	</if>
+    	<if test='applytype == 2'>
+    	xzsp_com_changeapply
+    	</if>
+    	 set
+    	   appstatus=#{appStatus,jdbcType=VARCHAR} 
+    	   where applyid=#{applyId} 
+    </update>
+    
+    <select id="selectAllCertInfo" resultType="java.util.HashMap">
+	    select 
+	    f.creditcode,f.comname,f.corpname,f.corpcertno,f.corptelno,c.senddate,c.enddate,c.pcertno,c.status
+	    from xzsp_com_permitapply p,xzsp_com_companyinfo f,xzsp_com_permitcert c
+	    where c.creditcode = f.creditcode and p.creditcode = c.creditcode
+	    and p.appstatus = '2'
+	    <if test="roleid != null and roleid != '' ">
+			<!-- <if test="roleid == '1001' ">
+				and f.areacode = #{areacode}
+			</if>
+			<if test="roleid == '1002' ">
+				and p.instid = #{instid}
+			</if> -->
+			<if test="roleid != '1000' ">
+				and p.instid = #{instid}
+			</if>
+		</if>
+	    <if test="comName != null and comName != '' ">
+			and f.comname like CONCAT('%',#{comName},'%' ) 
+		</if>
+		<if test="creditCode != null and creditCode != ''">
+			and f.creditcode like CONCAT('%',#{creditCode},'%' )
+		</if>
+	</select>
+	
+	<update id="updateCertByApplyid" parameterType="com.nasoft.aboutcar.platform.domain.PlatformPermitcert" >
+     update xzsp_com_permitcert
+     set status = #{status}
+     where creditcode = #{creditCode}
+    </update>
+    <!-- 打印汽车经营许可证 -->
+    <select id="queryPermitcertByCreditcode" parameterType="String" resultType="com.nasoft.aboutcar.platform.domain.PlatformPermitcert">
+    SELECT
+	p.senddate,
+	p.enddate
+	FROM
+	xzsp_com_permitcert p
+	where
+	 p.creditcode=#{creditcode}
+    </select>
+    <select id="queryInstByCreditcode" parameterType="String" resultType="java.util.Map">
+    SELECT i.instname,c.comname,c.regaddress,c.businessarea,c.businessrange,c.economic,c.businesstime
+	FROM xzsp_com_permitcert p,
+	mng_instinfo i,
+	xzsp_com_companyinfo c
+	WHERE
+ 	p.instid=i.instid and p.creditcode=#{creditcode} and  p.creditcode=c.creditcode
+    </select>
+    <select id="findCarApproveByApplyId" parameterType="String" resultType="java.util.Map">
+    SELECT
+  	ins.instname,
+  	u.realname,
+  	com.apprdatetime,
+  	com.apprtype,
+  	com.opinions,
+	com.description
+	FROM xzsp_com_approve com,
+  	mng_instinfo ins,
+  	mng_userinfo u
+	WHERE com.apprinstid = ins.instid
+    AND com.appruserid = u.userid
+    AND com.applyid = #{applyid}
+    </select>
+</mapper>
+

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.nasoft.aboutcar.userRoleMapper">
+
+	<insert id="userRoleInsert" parameterType="com.nasoft.aboutcar.userrole.domain.UserRole" useGeneratedKeys="true" keyProperty="urid">
+	    insert into mng_Userrole (userid ,roleid ,createuserid ,createinstid ,createdatetime) 
+	    values (#{userId},#{roleId},#{createUserId},#{createInstId},#{createDateTime})
+    </insert>
+    
+    <delete id="deleteUserRole" parameterType="String">
+      delete from mng_Userrole where  userid = #{userId}
+    </delete>
+	
+</mapper>
+

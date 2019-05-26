@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.bnsAbnPriceAnal">
+	<select id="findAllBnsAbnPriceAnal" resultType="com.nasoft.aboutcar.bnsAbnPriceAnal.vo.BnsAbnPriceAnalVo">
+		SELECT c.comname comname, op.company_id companyId, op.total orderTotal, vop.exception_desc exceptionDesc,
+		(CASE
+		 WHEN vop.exceptionTotal IS NULL THEN 0
+		ELSE
+			vop.exceptionTotal
+		END) exceptionTotal,
+		round(
+			(CASE
+			 WHEN vop.exceptionTotal IS NULL THEN 0
+			ELSE
+				vop.exceptionTotal
+			END) / op.total * 100, 2) abnormalRate
+			
+		FROM
+		(
+			SELECT bop1.company_id,	count(bop1.order_id) total
+			FROM yyjg_operation_pay bop1
+			<where>
+				<if test="beginTime != null and beginTime !='' and endTime != null and endTime !=''">
+					and (bop1.order_match_time between #{beginTime} and date_add(#{endTime},interval 1 day))
+				</if>
+				<if test="onArea != null and onArea !=''">
+					and	 bop1.on_area = #{onArea}
+				</if>
+			</where>
+			GROUP BY bop1.company_id
+			) op
+			
+		LEFT JOIN (
+			SELECT bop.company_id, bvpm.exception_desc, COUNT(bvpm.order_id) exceptionTotal
+			FROM bns_violation_price_monitor bvpm
+			INNER JOIN yyjg_operation_pay bop ON bop.order_id = bvpm.order_id
+			<where>
+				<if test="beginTime != null and beginTime !='' and endTime != null and endTime !=''">
+					and (bvpm.order_match_time between #{beginTime} and date_add(#{endTime},interval 1 day))
+				</if>
+				<if test="onArea != null and onArea !=''">
+					and	 bvpm.region_code = #{onArea}
+				</if>
+			</where>
+			GROUP BY bop.company_id, bvpm.exception_desc
+			) vop ON op.company_id = vop.company_id
+			
+		LEFT JOIN xzsp_com_companyinfo c ON c.creditcode = op.company_id
+		
+		<where>
+			<if test="comname != null and comname != ''">
+				and c.comname like concat(concat('%', #{comname}), '%')
+			</if>
+		</where>
+	</select>
+</mapper>

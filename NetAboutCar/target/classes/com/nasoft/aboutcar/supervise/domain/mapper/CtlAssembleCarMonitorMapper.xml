@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.CtlAssembleCarMonitorMapper" >
+<select id="findCarNewPosition" resultType="com.nasoft.aboutcar.supervise.domain.CtlCarPositionInfo">
+SELECT DISTINCT * FROM yyjg_car_position_info GROUP BY vehicle_no ORDER BY DATE_FORMAT(position_time,'%y%m%d%H%i%s') DESC 
+</select>
+<insert id="addAssembleCar" parameterType="String" >
+INSERT INTO yyjg_assemble_car_monitor SELECT * FROM yyjg_car_position_info WHERE id = #{id}
+</insert>
+</mapper>

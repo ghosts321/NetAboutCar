@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.DrvMakeupappMapper">
+<select id="findById" parameterType="Integer" resultType="com.nasoft.aboutcar.pilotapply.domain.DrvMakeupapp">
+SELECT * FROM xzsp_drv_makeupapp WHERE applyid = #{applyid}
+</select>
+<update id="updateDrvapp" parameterType="com.nasoft.aboutcar.pilotapply.domain.DrvMakeupapp">
+update xzsp_drv_makeupapp 
+<set>
+	<if test="appstatus != null">
+        appstatus = #{appstatus,jdbcType=CHAR},
+	</if>
+</set>
+<where>
+applyid = #{applyid,jdbcType=INTEGER}
+</where>
+</update>
+</mapper>

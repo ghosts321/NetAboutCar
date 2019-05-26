@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nasoft.aboutcar.orderInfo">
+ <select id="findDrvBespeakList"  resultType="com.nasoft.aboutcar.orderset.domain.DrvBesList">  
+        select * from xzsp_drv_userinfo  u , xzsp_drv_window_bespeak b  where  u.certno=b.certno
+        <if test="applyid != null and applyid !='' ">
+	        and b.applyid=#{applyid}
+        </if>
+        
+    </select>
+<select id="findDrvBespeakDate"  resultType="java.lang.String">  
+        SELECT DISTINCT SUBSTRING(bespeak_date, 1 ,7) 
+        from xzsp_mng_window_bespeak 
+        where bespeak_date LIKE #{s} and order_type ='0'
+    </select>
+    <select id="findCarBespeakDate"  resultType="java.lang.String">  
+        SELECT DISTINCT SUBSTRING(bespeak_date, 1 ,7) 
+        from xzsp_mng_window_bespeak 
+        where bespeak_date LIKE #{s} and order_type ='1'
+        	
+    </select>
+	<select id="findAllDrvBespeak"  resultType="com.nasoft.aboutcar.orderset.domain.DrvBespeak">  
+        select * from xzsp_drv_window_bespeak where 1=1
+                <if test="applyid != null and applyid != '' ">
+        	and applyid like CONCAT('%','${applyid}','%')         </if>
+        	
+    </select>
+    <select id="findAllCarBespeak"  resultType="com.nasoft.aboutcar.orderset.domain.CarBespeak">  
+        select * from xzsp_car_window_bespeak  where 1=1
+         <if test="applyid != null and applyid != '' ">
+        	and applyid like CONCAT('%','${applyid}','%')         </if>
+        	
+    </select>
+ 	<select id="findAllOrderInfo"  resultMap="OrderInfoResultMap">  
+        select * from xzsp_mng_window_bespeak where order_type = "0" and 1=1
+        <if test="bespeakDate != null and bespeakDate != '' ">
+        	and bespeak_date =#{bespeakDate} 
+        </if>
+                	order by bespeak_date desc
+    </select>
+    <select id="findAllDrvOrderInfo"  resultMap="OrderInfoResultMap">  
+        select * from xzsp_mng_window_bespeak where  order_type = "1"  and 1=1
+        <if test="bespeakDate != null and bespeakDate != '' ">
+        	and bespeak_date =#{bespeakDate}  
+        </if>
+                	order by bespeak_date desc
+        
+    </select>
+    
+     <select id="findOrderInfoByOrderId" resultType="com.nasoft.aboutcar.orderset.domain.OrderInfo" resultMap="OrderInfoResultMap">  
+        select * from xzsp_mng_window_bespeak where bespeak_id=#{bespeakId}
+    </select>
+    
+    <insert id="insertOrderInfo" parameterType="java.util.List">
+    	<selectKey resultType="long" keyProperty="id" order="AFTER">  
+       	 	SELECT  
+        	LAST_INSERT_ID()  
+    	</selectKey>  
+    	insert into xzsp_mng_window_bespeak (address,year,month,bespeak_date,morning_count,afternoon_count,
+    									create_user,create_time,update_user,update_time,order_type) values
+    	<foreach collection="list" item="item" index="index" separator=",">
+    	   (
+			#{item.address,jdbcType=VARCHAR},   
+			#{item.year,jdbcType=VARCHAR},   
+			#{item.month ,jdbcType=VARCHAR},     
+			#{item.bespeakDate ,jdbcType=VARCHAR},     
+			#{item.morningCount,jdbcType=INTEGER},    
+			#{item.afternoonCount,jdbcType=INTEGER},  
+			#{item.createUser,jdbcType=INTEGER},    
+			#{item.createTime ,jdbcType=VARCHAR} ,   
+ 			#{item.updateUser ,jdbcType=INTEGER} ,   
+ 			#{item.updateTime,jdbcType=VARCHAR}   ,
+ 			#{item.orderType,jdbcType=VARCHAR}    
+ 			 
+    		)
+    	</foreach>
+    </insert>
+    
+    <update id="updateOrderInfo" parameterType="com.nasoft.aboutcar.orderset.domain.OrderInfo" >
+    update xzsp_mng_window_bespeak set 
+      address= #{address},
+      year= #{year},
+      month= #{month},
+      bespeak_date=#{bespeakDate},
+      morning_count= #{morningCount},
+      afternoon_count= #{afternoonCount},
+      create_user= #{createUser},
+      create_time= #{createTime},
+      update_user= #{updateUser},
+      update_time= #{updateTime},
+      order_type= #{orderType}
+      
+      where bespeak_id= #{bespeakId}
+    </update>
+
+
+    
+  <resultMap type="com.nasoft.aboutcar.orderset.domain.OrderInfo" id="OrderInfoResultMap">  
+    <id column="bespeak_id" property="bespeakId" />  
+    <result column="address" property="address" />
+	<result column="year" property="year" />
+	<result column="month" property="month" />
+	<result column="bespeak_date" property="bespeakDate" />
+	<result column="morning_count" property="morningCount" />
+	<result column="afternoon_count" property="afternoonCount" />
+	<result column="create_user" property="createUser" />
+	<result column="create_time" property="createTime" />
+	<result column="update_user" property="updateUser" />
+	<result column="update_time" property="updateTime" /> 
+	<result column="order_type" property="orderType" /> 
+	
+</resultMap>  
+</mapper>

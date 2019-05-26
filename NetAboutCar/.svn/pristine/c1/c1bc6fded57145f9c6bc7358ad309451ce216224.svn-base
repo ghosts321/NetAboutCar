@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.MngExamBespeak">
+	<insert id="addMngExamBespeak" parameterType="com.nasoft.aboutcar.exam.domain.MngExamBespeak">
+		insert into mng_exam_bespeak values (
+		#{bespeak_id},#{address},#{exam_name},#{exam_type},#{exam_content},
+		#{year},#{month},#{bespeak_date},#{morning_count},#{afternoon_count},
+		#{create_user},#{create_time},#{update_user},#{update_time}
+		)
+	</insert>
+	<select id="selectByBespeakDate" parameterType="java.util.HashMap" resultType="com.nasoft.aboutcar.exam.domain.MngExamBespeak">
+    select 
+    *
+    from mng_exam_bespeak m
+    where m.bespeak_date = #{bespeak_date} and m.address = #{address} and m.exam_type= #{exam_type}
+    <!-- <if test="morning_count == 0">
+        and m.morning_count = 0
+    </if>
+    <if test="afternoon_count == 0">
+        and m.afternoon_count = 0
+    </if> -->
+	</select>
+	<select id="findAllExamBespeak" resultType="com.nasoft.aboutcar.exam.domain.MngExamBespeak" >
+		select * from mng_exam_bespeak where 1 = 1
+        <if test="bespeak_date != null and bespeak_date != '' ">
+        	and bespeak_date like CONCAT('%','${bespeak_date}','%') 
+        </if>
+        ORDER BY bespeak_id DESC
+	</select>
+    <update id="updateExamBespeak" parameterType="com.nasoft.aboutcar.exam.domain.MngExamBespeak">
+    	update mng_exam_bespeak set 
+    	address = #{address},
+    	exam_name = #{exam_name},
+    	exam_type = #{exam_type},
+    	exam_content = #{exam_content},
+    	year = #{year},
+    	month = #{month},
+    	bespeak_date = #{bespeak_date},
+    	morning_count = #{morning_count},
+    	afternoon_count = #{afternoon_count},
+    	update_user = #{update_user},
+    	update_time = #{update_time}
+    	where bespeak_id = #{bespeak_id}
+    </update>
+    <select id="findAllExamPerson" parameterType="java.util.HashMap" resultType="com.nasoft.aboutcar.exam.domain.MngExamBespeak" >
+	select * from (SELECT
+	deb.driver_bespeak_id,
+	du.username,du.certno,
+	meb.exam_name,meb.bespeak_date,
+	deb.bespeak_time,deb.exam_type,
+	meb.address,
+	de.score,de.examresult,DATE_FORMAT(de.createdatetime,'%Y-%m-%d') AS 'createdatetime'
+	FROM xzsp_drv_exam_bespeak deb
+	LEFT JOIN mng_exam_bespeak meb
+	ON deb.bespeak_id = meb.bespeak_id
+	LEFT JOIN xzsp_drv_userinfo du
+	ON deb.certno = du.certno
+	LEFT JOIN xzsp_drv_examresult de
+	ON deb.certno = de.certno
+	AND meb.bespeak_date = DATE_FORMAT(de.examdate,'%Y-%m-%d')
+	AND deb.exam_type = de.examtype ) tab where 1=1
+        
+    <if test="bespeak_date != null and bespeak_date != '' ">
+    	AND tab.bespeak_date = #{bespeak_date}
+    </if>
+    <if test="address != null and address != '' ">
+    	AND tab.address like CONCAT('%','${address}','%') 
+    </if>
+    <if test="bespeak_time != null and bespeak_time != '' ">
+    	AND tab.bespeak_time = #{bespeak_time} 
+    </if>
+	</select>
+	<select id="finMngExamBespeakById"  parameterType="java.lang.String" resultType="com.nasoft.aboutcar.exam.domain.MngExamBespeak" >
+	SELECT * FROM mng_exam_bespeak m WHERE m.bespeak_id=(SELECT
+	d.bespeak_id FROM xzsp_drv_exam_bespeak d WHERE d.driver_bespeak_id = #{driver_bespeak_id})
+	</select>
+	<select id="finMngExamBespeakByBespeakId" parameterType="java.lang.String" resultType="com.nasoft.aboutcar.exam.domain.MngExamBespeak">
+	SELECT * FROM mng_exam_bespeak WHERE bespeak_id  =#{bespeak_id}
+	</select>
+	<delete id="delMngExamBespeakById" parameterType="java.lang.String">
+	DELETE mng_exam_bespeak FROM mng_exam_bespeak WHERE bespeak_id = #{bespeak_id}
+	</delete>
+	
+	
+	
+</mapper>

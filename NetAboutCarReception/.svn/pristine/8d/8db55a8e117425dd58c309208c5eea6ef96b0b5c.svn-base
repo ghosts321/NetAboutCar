@@ -1,0 +1,62 @@
+@charset "utf-8";
+/* CSS Document */
+
+.buss_area .helpmenu {
+	width: 240px;
+	min-width: 240px;
+	height: auto;
+	min-height: 500px;
+	background-color: #ffffff;
+	padding: 0px;
+	margin: 0px auto;
+	float: left;
+}
+
+.buss_area .helparea {
+	float: right;
+	width: 745px;
+	padding: 0px;
+	margin-left: 15px;
+}
+
+.buss_area .helparea .help-title {
+	color: #555555;
+	background: #f5f5f5  none repeat scroll 0 0;
+	border-radius: 0;
+	border-top: 2px solid #002ec0;
+	line-height: 40px;
+	margin-bottom: 20px;
+	padding: 0px 15px;
+}
+
+.buss_area .helparea .help-title h3 {
+	font-size: 18px;
+	font-weight: 700;
+}
+
+.buss_area .helparea .help-content {
+	-moz-border-bottom-colors: none;
+	-moz-border-left-colors: none;
+	-moz-border-right-colors: none;
+	-moz-border-top-colors: none;
+	background-color: #fff;
+	border-color: #b5e7ff;
+	border-image: none;
+	border-style: solid;
+	border-width: 1px;
+	border-top: 2px solid #2e863e;
+	margin-bottom: 20px;
+	padding: 0px 15px 10px;
+}
+
+.buss_area .helparea .help-content .title-bar {
+	font-size: 16px;
+	height: 40px;
+	line-height: 40px;
+}
+
+.buss_area .helparea .help-content p {
+	line-height: 1.7;
+	color: #555555;
+	text-indent: 2em;
+}

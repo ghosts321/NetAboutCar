@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.nasoft.aboutcar.roleMenuMapper">
+
+	<insert id="roleMenuInsert" parameterType="com.nasoft.aboutcar.rolemenu.domain.RoleMenu" useGeneratedKeys="true" keyProperty="urid">
+	    insert into mng_Rolemenu (roleid ,menuid ,createuserid ,createinstid ,createdatetime ) 
+	    values (#{roleId},#{menuId},#{createUserId},#{createInstId},#{createDateTime})
+    </insert>
+	
+	<delete id="deleteRoleMenu" parameterType="String">
+      delete from mng_Rolemenu where  roleid = #{roleId}
+    </delete>
+	
+</mapper>
+

@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.nasoft.aboutcar.carMapper">
+
+    <update id="updateCarPermitApply" parameterType="com.nasoft.SSM.domain.CarPermitApply" >
+     update xzsp_car_permitapply set
+     positioninfo = #{positionInfo},
+     alarminfo = #{alarmInfo},
+     inspectioninfo = #{inspectionInfo},
+     maintaininfo = #{maintainInfo},
+     gradeinfo = #{gradeInfo},
+     dutyinfo = #{dutyInfo}, 
+     applytype= #{applyType}    
+     where applyid = #{applyId}
+    </update>
+    <update id="updateCarPermitApplyByStatus" parameterType="com.nasoft.SSM.domain.CarPermitApply">
+    update xzsp_car_permitapply set
+    appstatus = #{appStatus}
+    where applyid = #{applyId}
+    </update>
+     <update id="updateCarInfo" parameterType="com.nasoft.SSM.domain.CarInfo" >
+     update xzsp_car_carinfo set
+     carnum = #{carNum},
+     carcolor = #{carColor},
+     bodycolor = #{bodyColor},
+     mancompany = #{manCompany},
+     address = #{address},
+     telno = #{telNo},
+     category = #{category},
+     cartype = #{carType},
+     enginenum = #{engineNum},
+     chassisnum = #{chassisNum},
+     labels = #{labels},
+     model = #{model},
+     length = #{length},
+     width = #{width},
+     height = #{height},
+     wheelbase = #{wheelBase},
+     totalquality = #{totalQuality},
+     outdate = #{outDate},
+     buydate = #{buyDate},
+     economytype = #{economyType},
+     belongs = #{belongs},
+     seatnum = #{seatNum},
+     allowseat = #{allowSeat},
+     purchaseprice = #{purchasePrice},
+     enddept = #{endDept},
+     regcode = #{regCode},
+     regdate = #{regDate},
+     receivedate = #{receiveDate} 
+     where carid = #{carId}
+    </update>
+    
+	<select id="selectByCondition" parameterType="hashmap" resultType="com.nasoft.SSM.domain.CarPermitcert">
+	    select *
+	    from xzsp_car_permitcert p ,xzsp_car_carinfo i
+	    where carnum=#{carnum} 
+   </select>
+   
+ 	<select id="findAllCarPermitApplyByCertNo" parameterType="java.lang.String" resultType="com.nasoft.SSM.domain.CarPermitApply" >  
+       SELECT
+  *
+FROM xzsp_car_permitapply p
+WHERE p.carid=(SELECT carid FROM xzsp_car_carinfo WHERE certNo=#{certNo})
+UNION ALL SELECT
+ *
+FROM xzsp_car_changeapply c
+WHERE c.carid=(SELECT carid FROM xzsp_car_carinfo WHERE certNo=#{certNo})
+    </select>
+    
+ 	<select id="findAllCarChangeApplyByCertNo" parameterType="java.lang.String" resultType="com.nasoft.SSM.domain.CarChangeApply" >  
+        select * from xzsp_car_changeapply where carid=(select carid from xzsp_car_carinfo where certNo=#{certNo})
+		order by createdate desc
+    </select>
+    
+    <select id="findAllCancelApplyByPcertNo" parameterType="java.lang.String" resultType="com.nasoft.SSM.domain.CancelApply" >  
+        SELECT * FROM cancelapply WHERE pcertno=(SELECT pcertno FROM xzsp_car_permitcert WHERE certNo=#{certNo})
+        <if test="applyType != null and applyType != '' ">
+			 and applytype=#{applyType}
+		</if>
+		order by createdate desc
+    </select>
+     
+ 	<select id="findCarApplyByApplyId" parameterType="java.lang.String" resultType="com.nasoft.SSM.domain.CarPermitApply" >  
+        select * from xzsp_car_permitapply where applyid = #{applyid}
+    </select>
+    
+     <select id="findCarApplyByCarId" parameterType="java.lang.String" resultType="com.nasoft.SSM.domain.CarPermitApply" >  
+        select * from xzsp_car_permitapply where carid = #{carid}
+    </select>
+    
+    
+    <select id="findCancelApplyByCancelPcertno" parameterType="java.lang.String" resultType="com.nasoft.SSM.domain.CancelApply" >  
+        select * from cancelapply where pcertno = #{pcertno}
+    </select>
+    
+    <select id="findCarByCertNo" parameterType="java.lang.String" resultType="com.nasoft.SSM.domain.CarInfo" >  
+        select * from xzsp_car_carinfo where certno=#{certNo}
+    </select>
+    
+    
+    <select id="findCarCertByCertNo" parameterType="java.lang.String" resultType="com.nasoft.SSM.domain.CarPermitcert" >  
+        select * from xzsp_car_permitcert where certno=#{certNo} order by createdatetime desc
+    </select>
+    
+    <select id="findCarCertByuserName" parameterType="java.lang.String" resultType="com.nasoft.SSM.domain.CarPermitcert" >  
+        select * from xzsp_car_permitcert where certno=#{certNo}
+    </select>
+    
+    <delete id="deleteCarInfoByCarId" parameterType="java.lang.String">
+    	delete from xzsp_car_carinfo where carid=#{carId}
+    </delete>
+    
+    <delete id="deleteCancelApplyByCancelId" parameterType="java.lang.String">
+    	delete from cancelapply where cancelid=#{cancelId}
+    </delete>
+    
+    <delete id="deleteCarPilotApplyByCarId" parameterType="java.lang.String">
+    	delete from xzsp_car_permitapply where carid=#{carId}
+    </delete>
+    
+    <update id="updateExternalExploration" parameterType="com.nasoft.SSM.domain.CarPermitApply" >
+     update xzsp_car_permitapply
+     set externalexploration = #{externalExploration},appstatus=#{appStatus}
+     where applyid = #{applyId}
+    </update>
+    
+    <update id="updateChangeProperty" parameterType="com.nasoft.SSM.domain.CarPermitApply" >
+     update xzsp_car_permitapply
+     set changeproperty = #{changeProperty},appstatus=#{appStatus}
+     where applyid = #{applyId}
+    </update>
+
+    <!--添加车辆基本信息 -->
+    <insert id="insertCarInfo" parameterType="com.nasoft.SSM.domain.CarInfo">
+    	insert into xzsp_car_carinfo values(
+	    	 #{carId,jdbcType=VARCHAR},
+	    	 #{carNum,jdbcType=VARCHAR},
+	    	 #{certNo,jdbcType=VARCHAR},
+	    	 #{carColor,jdbcType=VARCHAR},
+	    	 #{bodyColor,jdbcType=VARCHAR},
+	    	 #{manCompany,jdbcType=VARCHAR},
+	    	 #{address,jdbcType=VARCHAR},
+	    	 #{telNo,jdbcType=VARCHAR},
+	    	 #{category,jdbcType=VARCHAR},
+	    	 #{carType,jdbcType=VARCHAR},
+	    	 #{engineNum,jdbcType=VARCHAR},
+	    	 #{chassisNum,jdbcType=VARCHAR},
+	    	 #{labels,jdbcType=VARCHAR},
+	    	 #{model,jdbcType=VARCHAR},
+	    	 #{length,jdbcType=NUMERIC},
+	    	 #{width,jdbcType=NUMERIC},
+	    	 #{height,jdbcType=NUMERIC},
+	    	 #{wheelBase,jdbcType=INTEGER},
+	    	 #{totalQuality,jdbcType=INTEGER},
+	    	 #{outDate,jdbcType=VARCHAR},
+	    	 #{buyDate,jdbcType=VARCHAR},
+	    	 #{economyType,jdbcType=INTEGER},
+	    	 #{belongs,jdbcType=VARCHAR},
+	    	 #{seatNum,jdbcType=INTEGER},
+	    	 #{allowSeat,jdbcType=INTEGER},
+	    	 #{purchasePrice,jdbcType=INTEGER},
+	    	 #{areaCode,jdbcType=VARCHAR},
+	    	 #{endDept,jdbcType=VARCHAR},
+	         #{regCode,jdbcType=VARCHAR},
+	    	 #{regDate,jdbcType=VARCHAR},
+	    	 #{receiveDate,jdbcType=VARCHAR},
+	    	 #{status,jdbcType=VARCHAR},
+	         #{createMan,jdbcType=INTEGER},
+	    	 #{createInstId,jdbcType=INTEGER},
+	    	 #{createDate,jdbcType=VARCHAR},
+	    	 #{updUserId,jdbcType=INTEGER},
+	    	 #{updInstId,jdbcType=INTEGER},
+	    	 #{updDateTime,jdbcType=VARCHAR}
+    	 )
+    </insert>
+    
+    <!--添加车辆申请信息 -->
+    <insert id="insertCarPermitApply" parameterType="com.nasoft.SSM.domain.CarPermitApply">
+         insert into xzsp_car_permitapply values(
+              #{applyId,jdbcType=VARCHAR},
+              #{carId,jdbcType=VARCHAR},
+              #{instId,jdbcType=VARCHAR},
+              #{applyDate,jdbcType=VARCHAR},
+              #{positionInfo,jdbcType=VARCHAR},
+              #{alarmInfo,jdbcType=VARCHAR},
+              #{inspectionInfo,jdbcType=VARCHAR},
+              #{maintainInfo,jdbcType=VARCHAR},
+              #{gradeInfo,jdbcType=VARCHAR},
+              #{dutyInfo,jdbcType=VARCHAR},
+              #{carPhoto,jdbcType=VARCHAR},
+              #{drivePhoto,jdbcType=VARCHAR},
+              #{externalExploration,jdbcType=VARCHAR},
+              #{changeProperty,jdbcType=VARCHAR},
+              #{applyType,jdbcType=VARCHAR},
+              #{appStatus,jdbcType=VARCHAR},
+              #{remark,jdbcType=VARCHAR},
+              #{createMan,jdbcType=INTEGER},
+              #{createInstId,jdbcType=INTEGER},
+              #{createDate,jdbcType=VARCHAR},
+              #{updUserId,jdbcType=INTEGER},
+              #{updInstId,jdbcType=INTEGER},
+              #{updDateTime,jdbcType=VARCHAR}
+              
+         )
+    </insert>
+    
+    <insert id="addCarChangeApply" parameterType="com.nasoft.SSM.domain.CarPermitApply">
+         insert into xzsp_car_changeapply values(
+              #{applyId,jdbcType=VARCHAR},
+              #{carId,jdbcType=VARCHAR},
+              #{instId,jdbcType=VARCHAR},
+              #{applyDate,jdbcType=VARCHAR},
+              #{positionInfo,jdbcType=VARCHAR},
+              #{alarmInfo,jdbcType=VARCHAR},
+              #{inspectionInfo,jdbcType=VARCHAR},
+              #{maintainInfo,jdbcType=VARCHAR},
+              #{gradeInfo,jdbcType=VARCHAR},
+              #{dutyInfo,jdbcType=VARCHAR},
+              #{carPhoto,jdbcType=VARCHAR},
+              #{drivePhoto,jdbcType=VARCHAR},
+              #{externalExploration,jdbcType=VARCHAR},
+              #{changeProperty,jdbcType=VARCHAR},
+              #{applyType,jdbcType=VARCHAR},
+              #{appStatus,jdbcType=VARCHAR},
+              #{remark,jdbcType=VARCHAR},
+              #{createMan,jdbcType=INTEGER},
+              #{createInstId,jdbcType=INTEGER},
+              #{createDate,jdbcType=VARCHAR},
+              #{updUserId,jdbcType=INTEGER},
+              #{updInstId,jdbcType=INTEGER},
+              #{updDateTime,jdbcType=VARCHAR}
+              
+         )
+    </insert>
+    
+    
+    
+    <!--添加车辆基本信息 -->
+    <insert id="insertCancelApply" parameterType="com.nasoft.SSM.domain.CancelApply">
+    	insert into cancelapply(cancelid,pcertNo,manCompany,createMan,createDate) values(
+    		  #{cancelId,jdbcType=VARCHAR},
+    		  #{pcertNo,jdbcType=VARCHAR},
+              #{manCompany,jdbcType=VARCHAR},
+              #{createMan,jdbcType=INTEGER},
+              #{createDate,jdbcType=VARCHAR}
+         )
+    </insert>
+    <select id="findAllCarChangeApplyByApplyId" parameterType="String" resultType="com.nasoft.SSM.domain.CarChangeApply" >
+    select * from xzsp_car_changeapply where applyid=#{applyId}
+    </select>
+    <update id="updateCarChangeApply" parameterType="com.nasoft.SSM.domain.CarChangeApply">
+    update xzsp_car_changeapply set 
+    appstatus = #{appStatus}
+    where applyid = #{applyId}
+    </update>
+</mapper>
+

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.CarCountMapper" >
+	<!-- 统计平台下所有申请通过的车辆 -->
+	<select id="countAuditCar" resultType="com.nasoft.aboutcar.totalMap.domain.vo.CountAuditCarVo">
+		SELECT c.creditcode creditcode, c.platformname comname, count(*) auditPassCount FROM xzsp_car_permitapply a, xzsp_car_carinfo b, xzsp_com_companyinfo c
+		WHERE a.carid = b.carid and b.certno = c.creditcode and a.appstatus = 5 and b.belongs = 2
+		GROUP BY c.creditcode, c.platformname
+	</select>
+	
+	<!-- 统计平台下当天正在运营的车辆 -->
+	<select id="countOnlineCar" resultType="com.nasoft.aboutcar.totalMap.domain.vo.CountOnlineCarVo">
+		SELECT company_id companyId, company_name companyName, count(*) onlineCount FROM mng_car_operating_online
+		WHERE login_time >= date(now()) and login_time &lt; DATE_ADD(date(now()),INTERVAL 1 DAY)
+		GROUP BY company_id, company_name
+	</select>
+	
+	<!-- 统计平台下有多少审批通过的驾驶员 -->
+	<select id="countPeople" resultType="com.nasoft.aboutcar.totalMap.domain.vo.CountPeopleVo">
+		SELECT b.platformname comname, count(*) peopleCount FROM xzsp_drv_record a, xzsp_com_companyinfo b 
+		WHERE a.creditcode = b.creditcode AND a. STATUS = 2
+		GROUP BY b.creditcode, b.platformname
+	</select>
+</mapper>

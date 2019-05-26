@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.SSM.DrvExamBespeak">
+	<insert id="addDrvExamBespeak" parameterType="com.nasoft.SSM.domain.DrvExamBespeak">
+		insert into xzsp_drv_exam_bespeak(
+		certno, bespeak_id, exam_type,
+		bespeak_time, applyid, <!-- m.create_user, -->
+		create_time, <!-- m.update_user, --> update_time
+		) values (
+		#{certno},#{bespeak_id},#{exam_type},#{bespeak_time},
+		#{applyid},<!-- #{create_user}, -->#{create_time},<!-- #{update_user}, -->#{update_time}
+		)
+	</insert>
+	<select id="selectByCertno" parameterType="String" resultType="com.nasoft.SSM.domain.DrvExamBespeak">
+    select 
+    *
+    from xzsp_drv_exam_bespeak m
+    where m.certno = #{certno}
+  </select>
+  <select id="getBespeakYear" resultType="com.nasoft.SSM.domain.DrvExamBespeak">
+  	select distinct m.year,m.month from mng_exam_bespeak m
+  </select>
+  <select id="getBespeakData" parameterType="com.nasoft.SSM.domain.DrvExamBespeak" resultType="com.nasoft.SSM.domain.DrvExamBespeak">
+  	SELECT m.bespeak_id,m.address,m.morning_count,m.afternoon_count,d.applyid FROM mng_exam_bespeak m,xzsp_drv_permitapply d
+  	WHERE m.bespeak_date=#{bespeak_date} AND d.certno=#{certno}
+  </select>
+  <update id="updateBespeakData" parameterType="com.nasoft.SSM.domain.DrvExamBespeak">
+  	UPDATE mng_exam_bespeak m
+  	<set>
+  		m.morning_count=#{morning_count},
+  		m.afternoon_count=${afternoon_count}
+  	</set>
+  	WHERE m.bespeak_id=#{bespeak_id} AND m.exam_type=#{exam_type}
+  </update>
+  <select id="getDrvBespeakSum" parameterType="java.util.HashMap" resultType="com.nasoft.SSM.domain.DrvExamBespeak">
+  	SELECT m.bespeak_id,m.bespeak_date,m.morning_count,m.afternoon_count,
+  	m.morning_count+m.afternoon_count AS bespeaksum,m.address,m.exam_type,d.applyid
+	FROM mng_exam_bespeak m,xzsp_drv_permitapply d
+	WHERE bespeak_date LIKE CONCAT('%',#{date},'%') AND d.certno=#{certno}
+  </select>
+  <select id="findDrvExamBespeakById" parameterType="Integer" resultType="com.nasoft.SSM.domain.DrvExamBespeak">
+  SELECT * FROM xzsp_drv_exam_bespeak d WHERE d.bespeak_id = #{bespeak_id}
+  </select>
+</mapper>

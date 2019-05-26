@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<!-- 使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.nasoft.aboutcar.DrvCancelapplyMapper" >
+<!-- 通过身份证号查询注销记录 -->
+<select id="selectByCertno" parameterType="String" resultType="com.nasoft.aboutcar.pilotapply.domain.DrvCancelapply">
+ select * 
+ 	from xzsp_drv_cancelapply 
+ 		where 
+ 			certno=#{certno,jdbcType=VARCHAR}
+ </select>
+ <update id="updateDrvCancelapplyByCertno" parameterType="com.nasoft.aboutcar.pilotapply.domain.DrvCancelapply">
+  update xzsp_drv_cancelapply 
+  <set>
+  	<if test="appstatus != null">
+  		appstatus=#{appstatus},
+  	</if>
+  	<if test="upddatetime != null">
+  		upddatetime=#{upddatetime},
+  	</if>
+  	<if test="upduserid != null">
+  		upduserid=#{upduserid},
+  	</if>
+  	<if test="updinstid != null">
+  		updinstid=#{updinstid}
+  	</if>
+  </set>
+  <where>
+  	<if test="certno != null">
+  	certno=#{certno,jdbcType= VARCHAR}
+  	</if>
+  </where>
+ </update>
+ 
+</mapper>
+

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.SSM.MsgNotice" >
+
+	<select id="selectAll" parameterType="String" resultType="com.nasoft.SSM.domain.MsgNotice">
+		select * 
+		from msg_notice 
+		where certno = #{certno,jdbcType=VARCHAR}
+		order by isread asc,msgid desc
+	</select>
+	
+	<select id="selectMsgCount" parameterType="String" resultType="java.lang.Integer">
+		select count(*) 
+		from msg_notice 
+		where isread = '0'
+		and certno = #{certno,jdbcType=VARCHAR}
+	</select>
+
+  <insert id="addMsgNotice" parameterType="com.nasoft.SSM.domain.MsgNotice" >
+    insert into msg_notice (msgid, certno, msgcontent, 
+      isread, userid, createtime
+      )
+    values (#{msgid,jdbcType=INTEGER}, #{certno,jdbcType=VARCHAR}, #{msgcontent,jdbcType=VARCHAR}, 
+      #{isread,jdbcType=CHAR}, #{userid,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  
+  <update id="readMsg" parameterType="String">
+	update msg_notice set 
+	isread = '1'
+	where certno = #{certno,jdbcType=VARCHAR}
+   </update>
+  
+</mapper>

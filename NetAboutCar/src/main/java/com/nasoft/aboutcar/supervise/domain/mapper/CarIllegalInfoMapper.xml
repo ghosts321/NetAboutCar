@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.CarIllegalInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.nasoft.aboutcar.supervise.domain.CarIllegalInfo" >
+    <id column="car_illegal_id" property="car_illegal_id" jdbcType="CHAR" />
+    <result column="driver_name" property="driver_name" jdbcType="VARCHAR" />
+    <result column="driver_certno" property="driver_certno" jdbcType="VARCHAR" />
+    <result column="company_id" property="company_id" jdbcType="VARCHAR" />
+    <result column="company_name" property="company_name" jdbcType="VARCHAR" />
+    <result column="car_num" property="car_num" jdbcType="VARCHAR" />
+    <result column="areacode" property="areacode" jdbcType="VARCHAR" />
+    <result column="phone_number" property="phone_number" jdbcType="VARCHAR" />
+    <result column="order_id" property="order_id" jdbcType="VARCHAR" />
+    <result column="illegal_source" property="illegal_source" jdbcType="VARCHAR" />
+    <result column="illegal_content" property="illegal_content" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="illegal_time" property="illegal_time" jdbcType="DATE" />
+    <result column="decision_result" property="decision_result" jdbcType="VARCHAR" />
+    <result column="notice_status" property="notice_status" jdbcType="CHAR" />
+    <result column="check_result" property="check_result" jdbcType="VARCHAR" />
+    <result column="illegal_address" property="illegal_address" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="carCanalysisInfo" resultType="java.util.HashMap" >
+	select <![CDATA[ COUNT( DISTINCT driver_certno) as certno,
+		   COUNT(DISTINCT car_num) as car_num,
+		   COUNT(illegal_content) as illegal_content]]>
+		    from zfjc_car_illegalinfo
+	 <where>
+	    <if test="certno != null and certno !=''">
+		and driver_certno = #{certno}
+		</if>
+		<if test="car_num != null and car_num !=''">
+		and car_num = #{car_num}
+		</if>
+		<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+                      and illegal_time between #{beginTime} and #{endTime}
+                 </if>
+	</where>
+</select>
+  
+</mapper>

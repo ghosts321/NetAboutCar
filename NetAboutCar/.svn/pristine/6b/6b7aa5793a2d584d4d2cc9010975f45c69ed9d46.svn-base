@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.BnsCompanyViolationMapper" >
+  <resultMap id="BaseResultMap" type="com.nasoft.aboutcar.supervise.domain.BnsCompanyViolation" >
+    <id column="violation_id" property="violationId" jdbcType="INTEGER" />
+    <result column="company_id" property="companyId" jdbcType="VARCHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="license_id" property="licenseId" jdbcType="VARCHAR" />
+    <result column="driver_name" property="driverName" jdbcType="VARCHAR" />
+    <result column="vehicle_no" property="vehicleNo" jdbcType="VARCHAR" />
+    <result column="violation_description" property="violationDescription" jdbcType="VARCHAR" />
+    <result column="region_code" property="regionCode" jdbcType="INTEGER" />
+    <result column="create_user" property="createUser" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <select id="selectAll" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select * from bns_company_violation
+    <where>
+   	    <if test="driverName != null and driverName != '' ">
+			and driver_name = #{driverName}
+		</if>
+		<if test="vehicleNo != null and vehicleNo != ''">
+			and vehicle_no = #{vehicleNo}
+		</if>
+    </where>
+   </select>
+   
+  <insert id="insert" parameterType="com.nasoft.aboutcar.supervise.domain.BnsCompanyViolation" >
+    insert into bns_company_violation (violation_id, company_id, company_name, 
+      order_id, license_id, driver_name, 
+      vehicle_no, violation_description, region_code, 
+      create_user, create_time, update_user, 
+      update_time)
+    values (#{violationId,jdbcType=INTEGER}, #{companyId,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
+      #{orderId,jdbcType=VARCHAR}, #{licenseId,jdbcType=VARCHAR}, #{driverName,jdbcType=VARCHAR}, 
+      #{vehicleNo,jdbcType=VARCHAR}, #{violationDescription,jdbcType=VARCHAR}, #{regionCode,jdbcType=INTEGER}, 
+      #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <select id="execComViolationPro" parameterType="String" statementType="CALLABLE">
+		CALL comViolation_pro()
+  </select>
+	
+</mapper>

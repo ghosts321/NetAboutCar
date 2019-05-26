@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nasoft.aboutcar.instInfo">
+    <select id="findAllInstInfo" resultType="com.nasoft.aboutcar.instInfo.domain.InstInfo" >  
+        select * from mng_instinfo where 1 = 1
+        <if test="instName != null and instName != '' ">
+        	and instName like CONCAT('%','${instName}','%') 
+        </if>
+    </select>
+    <select id="findAllInstInfoByAreaCode" resultType="com.nasoft.aboutcar.instInfo.domain.InstInfo" >  
+        select * from mng_instinfo where areaCode=#{areaCode}
+    </select>
+    
+    <select id="findInstInfoByInstId" parameterType="java.lang.String" resultType="com.nasoft.aboutcar.instInfo.domain.InstInfo" >
+       select * from mng_instinfo where instid=#{instId}
+    </select>
+    
+    <insert id="insertInstInfo" parameterType="com.nasoft.aboutcar.instInfo.domain.InstInfo">
+    	 insert into mng_instinfo values(
+    	 #{instId,jdbcType=VARCHAR},
+    	 #{instName,jdbcType=VARCHAR},
+    	 #{sinstName,jdbcType=VARCHAR},
+    	 #{pinstCode,jdbcType=VARCHAR},
+    	 #{telNo,jdbcType=VARCHAR},
+    	 #{address,jdbcType=VARCHAR},
+    	 #{contractName,jdbcType=VARCHAR},
+    	 #{contractTelNo,jdbcType=VARCHAR},
+    	 #{areaCode,jdbcType=VARCHAR},
+    	 #{description,jdbcType=VARCHAR},
+    	 #{createMan,jdbcType=INTEGER},
+    	 #{createInstId,jdbcType=INTEGER},
+    	 #{createDate,jdbcType=VARCHAR},
+    	 #{updUserId,jdbcType=INTEGER},
+    	 #{updInstId,jdbcType=INTEGER},
+    	 #{updDateTime,jdbcType=VARCHAR}
+    	 )
+    </insert>
+    <update id="updateInstInfo" parameterType="com.nasoft.aboutcar.instInfo.domain.InstInfo">
+    	update mng_instinfo set 
+    	  instname=#{instName,jdbcType=VARCHAR},
+    	  sinstname= #{sinstName,jdbcType=VARCHAR},
+    	  pinstcode= #{pinstCode,jdbcType=VARCHAR},
+    	  telno= #{telNo,jdbcType=VARCHAR},
+    	  address=#{address,jdbcType=VARCHAR},
+    	  contractname= #{contractName,jdbcType=VARCHAR},
+    	  contracttelno= #{contractTelNo,jdbcType=VARCHAR},
+    	  areacode= #{areaCode,jdbcType=VARCHAR},
+    	  description= #{description,jdbcType=VARCHAR},
+    	  upduserid= #{updUserId,jdbcType=INTEGER},
+    	  updinstid=#{updInstId,jdbcType=INTEGER},
+    	  upddatetime=#{updDateTime,jdbcType=VARCHAR}
+    	   where instid= #{instId,jdbcType=VARCHAR}
+    </update>
+    <delete id="deleteInstInfo" parameterType="java.lang.String">
+    	delete from mng_instinfo where instid=#{instId}
+    </delete>
+</mapper>

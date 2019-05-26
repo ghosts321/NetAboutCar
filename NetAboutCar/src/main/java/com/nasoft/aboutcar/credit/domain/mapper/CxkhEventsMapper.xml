@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.nasoft.aboutcar.CxkhEventsMapper">
+
+	<resultMap id="CxkhEventsResultMap" type="com.nasoft.aboutcar.credit.domain.CxkhEvents">
+        <result property="eventNo" column="event_no" jdbcType="CHAR"/>
+        <result property="eventDesc" column="event_desc" jdbcType="VARCHAR"/>
+        <result property="eventDetail" column="event_detail" jdbcType="VARCHAR"/>
+        <result property="attachment" column="attachment" jdbcType="VARCHAR"/>
+        <result property="arFact" column="ar_fact" jdbcType="VARCHAR"/>
+        <result property="occurDate" column="occur_date" jdbcType="TIMESTAMP"/>
+        <result property="occurAddress" column="occur_address" jdbcType="VARCHAR"/>
+        <result property="comCreditcode" column="com_creditcode" jdbcType="VARCHAR"/>
+        <result property="driverCertno" column="driver_certno" jdbcType="VARCHAR"/>
+        <result property="dataSource" column="data_source" jdbcType="VARCHAR"/>
+        <result property="storageDate" column="storage_date" jdbcType="TIMESTAMP"/>
+        <result property="eventStatus" column="event_status" jdbcType="VARCHAR"/>
+        <result property="createUser" column="create_user" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="INTEGER"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	   
+		event_no,event_desc,event_detail,attachment,ar_fact,occur_date,occur_address,com_creditcode,driver_certno,data_source,storage_date,event_status,create_user,create_time,update_user,update_time
+	   
+	</sql>
+
+	<insert id="insertIfNotnull"   parameterType="com.nasoft.aboutcar.credit.domain.CxkhEvents">
+		<selectKey   keyProperty="eventNo"  resultType="java.lang.String">  
+		SELECT LAST_INSERT_ID()  
+	  </selectKey>
+        INSERT INTO cxkh_events 
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="eventDesc != null">
+        		event_desc ,
+			</if>
+			<if test="eventDetail != null">
+        		event_detail ,
+			</if>
+			<if test="attachment != null">
+        		attachment ,
+			</if>
+			<if test="arFact != null">
+        		ar_fact ,
+			</if>
+			<if test="occurDate != null">
+        		occur_date ,
+			</if>
+			<if test="occurAddress != null">
+        		occur_address ,
+			</if>
+			<if test="comCreditcode != null">
+        		com_creditcode ,
+			</if>
+			<if test="driverCertno != null">
+        		driver_certno ,
+			</if>
+			<if test="dataSource != null">
+        		data_source ,
+			</if>
+			<if test="storageDate != null">
+        		storage_date ,
+			</if>
+			<if test="eventStatus != null">
+        		event_status ,
+			</if>
+			<if test="createUser != null">
+        		create_user ,
+			</if>
+			<if test="createTime != null">
+        		create_time ,
+			</if>
+			<if test="updateUser != null">
+        		update_user ,
+			</if>
+			<if test="updateTime != null">
+        		update_time ,
+			</if>
+		</trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="eventDesc != null">
+        		#{eventDesc, jdbcType=VARCHAR} ,
+			</if>
+			<if test="eventDetail != null">
+        		#{eventDetail, jdbcType=VARCHAR} ,
+			</if>
+			<if test="attachment != null">
+        		#{attachment, jdbcType=VARCHAR} ,
+			</if>
+			<if test="arFact != null">
+        		#{arFact, jdbcType=VARCHAR} ,
+			</if>
+			<if test="occurDate != null">
+        		#{occurDate, jdbcType=TIMESTAMP} ,
+			</if>
+			<if test="occurAddress != null">
+        		#{occurAddress, jdbcType=VARCHAR} ,
+			</if>
+			<if test="comCreditcode != null">
+        		#{comCreditcode, jdbcType=VARCHAR} ,
+			</if>
+			<if test="driverCertno != null">
+        		#{driverCertno, jdbcType=VARCHAR} ,
+			</if>
+			<if test="dataSource != null">
+        		#{dataSource, jdbcType=VARCHAR} ,
+			</if>
+			<if test="storageDate != null">
+        		#{storageDate, jdbcType=TIMESTAMP} ,
+			</if>
+			<if test="eventStatus != null">
+        		#{eventStatus, jdbcType=VARCHAR} ,
+			</if>
+			<if test="createUser != null">
+        		#{createUser, jdbcType=INTEGER} ,
+			</if>
+			<if test="createTime != null">
+        		#{createTime, jdbcType=TIMESTAMP} ,
+			</if>
+			<if test="updateUser != null">
+        		#{updateUser, jdbcType=INTEGER} ,
+			</if>
+			<if test="updateTime != null">
+        		#{updateTime, jdbcType=TIMESTAMP} ,
+			</if>
+		</trim>
+    
+		
+	</insert>
+    
+	<update id="updateIfNotnull"  parameterType="com.nasoft.aboutcar.credit.domain.CxkhEvents">
+    
+        UPDATE cxkh_events
+			<set>
+				<if test="eventDesc != null">
+					event_desc = #{eventDesc, jdbcType=VARCHAR} ,
+				</if>
+				<if test="eventDetail != null">
+					event_detail = #{eventDetail, jdbcType=VARCHAR} ,
+				</if>
+				<if test="attachment != null">
+					attachment = #{attachment, jdbcType=VARCHAR} ,
+				</if>
+				<if test="arFact != null">
+					ar_fact = #{arFact, jdbcType=VARCHAR} ,
+				</if>
+				<if test="occurDate != null">
+					occur_date = #{occurDate, jdbcType=TIMESTAMP} ,
+				</if>
+				<if test="occurAddress != null">
+					occur_address = #{occurAddress, jdbcType=VARCHAR} ,
+				</if>
+				<if test="comCreditcode != null">
+					com_creditcode = #{comCreditcode, jdbcType=VARCHAR} ,
+				</if>
+				<if test="driverCertno != null">
+					driver_certno = #{driverCertno, jdbcType=VARCHAR} ,
+				</if>
+				<if test="dataSource != null">
+					data_source = #{dataSource, jdbcType=VARCHAR} ,
+				</if>
+				<if test="storageDate != null">
+					storage_date = #{storageDate, jdbcType=TIMESTAMP} ,
+				</if>
+				<if test="eventStatus != null">
+					event_status = #{eventStatus, jdbcType=VARCHAR} ,
+				</if>
+				<if test="createUser != null">
+					create_user = #{createUser, jdbcType=INTEGER} ,
+				</if>
+				<if test="createTime != null">
+					create_time = #{createTime, jdbcType=TIMESTAMP} ,
+				</if>
+				<if test="updateUser != null">
+					update_user = #{updateUser, jdbcType=INTEGER} ,
+				</if>
+				<if test="updateTime != null">
+					update_time = #{updateTime, jdbcType=TIMESTAMP} ,
+				</if>
+			</set>
+        WHERE 
+	        event_no = #{eventNo, jdbcType=CHAR} 
+    
+	</update>
+
+    <delete id="deleteById">
+    
+        DELETE FROM cxkh_events WHERE
+        event_no = #{eventNo } 
+    
+    </delete>
+    
+    
+    <delete id="delete">
+    
+        DELETE FROM cxkh_events WHERE
+        
+    </delete>
+    
+		<select id="selectById" resultMap="CxkhEventsResultMap">
+			SELECT <include refid="columns" />
+		   
+				FROM cxkh_events 
+				WHERE 
+					event_no = #{eventNo, jdbcType=CHAR} 
+			
+		</select>
+	
+	<sql id="selectList_where">
+		<where>	      				
+	       <if test="eventNo != null">
+		 	   	 	AND event_no = #{eventNo, jdbcType=CHAR}
+			</if>
+	       <if test="eventDesc != null">
+		 	   	 	AND event_desc = #{eventDesc, jdbcType=VARCHAR}
+			</if>
+	       <if test="eventDetail != null">
+		 	   	 	AND event_detail = #{eventDetail, jdbcType=VARCHAR}
+			</if>
+	       <if test="attachment != null">
+		 	   	 	AND attachment = #{attachment, jdbcType=VARCHAR}
+			</if>
+	       <if test="arFact != null">
+		 	   	 	AND ar_fact = #{arFact, jdbcType=VARCHAR}
+			</if>
+	       <if test="occurDateBegin != null">
+				AND occur_date >= #{occurDateBegin }
+		   </if>
+		   <if test="occurDateEnd != null">
+				AND occur_date &lt;= #{occurDateEnd }
+		   </if>
+	       <if test="occurAddress != null">
+		 	   	 	AND occur_address = #{occurAddress, jdbcType=VARCHAR}
+			</if>
+	       <if test="comCreditcode != null">
+		 	   	 	AND com_creditcode = #{comCreditcode, jdbcType=VARCHAR}
+			</if>
+	       <if test="driverCertno != null">
+		 	   	 	AND driver_certno = #{driverCertno, jdbcType=VARCHAR}
+			</if>
+	       <if test="dataSource != null">
+		 	   	 	AND data_source = #{dataSource, jdbcType=VARCHAR}
+			</if>
+	       <if test="storageDateBegin != null">
+				AND storage_date >= #{storageDateBegin }
+		   </if>
+		   <if test="storageDateEnd != null">
+				AND storage_date &lt;= #{storageDateEnd }
+		   </if>
+	       <if test="eventStatus != null">
+		 	   	 	AND event_status = #{eventStatus, jdbcType=VARCHAR}
+			</if>
+	       <if test="createUser != null">
+		 		 		AND create_user = #{createUser, jdbcType=INTEGER}
+			</if>
+	       <if test="createTimeBegin != null">
+				AND create_time >= #{createTimeBegin }
+		   </if>
+		   <if test="createTimeEnd != null">
+				AND create_time &lt;= #{createTimeEnd }
+		   </if>
+	       <if test="updateUser != null">
+		 		 		AND update_user = #{updateUser, jdbcType=INTEGER}
+			</if>
+	       <if test="updateTimeBegin != null">
+				AND update_time >= #{updateTimeBegin }
+		   </if>
+		   <if test="updateTimeEnd != null">
+				AND update_time &lt;= #{updateTimeEnd }
+		   </if>
+		</where>
+	</sql>
+		
+    <select id="selectListCount" resultType="long">
+        SELECT count(*) FROM cxkh_events 
+		<include refid="selectList_where"/>    
+    </select>
+    
+   
+    <select id="selectList" resultMap="CxkhEventsResultMap">
+    	SELECT <include refid="columns" />
+	    FROM cxkh_events 
+		<include refid="selectList_where"/>
+		
+		
+    </select>
+    
+    <resultMap type="java.util.HashMap" id="CxkhEventsResultToMap">
+    	
+    </resultMap>
+    <select id="getVertical" resultMap="CxkhEventsResultToMap">
+    	SELECT <include refid="columns" />
+	    FROM cxkh_events 
+		<include refid="selectList_where"/>
+    </select>
+
+	
+	
+</mapper>
+

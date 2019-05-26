@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.nasoft.aboutcar.CxkhIndicTypeMapper">
+
+	<resultMap id="CxkhIndicTypeResultMap" type="com.nasoft.aboutcar.credit.domain.CxkhIndicType">
+        <result property="typeName" column="type_name" jdbcType="VARCHAR"/>
+        <result property="typeCode" column="type_code" jdbcType="CHAR"/>
+        <result property="typeLevel" column="type_level" jdbcType="INTEGER"/>
+        <result property="typeDesc" column="type_desc" jdbcType="VARCHAR"/>
+        <result property="upperTypeCode" column="upper_type_code" jdbcType="CHAR"/>
+        <result property="createUser" column="create_user" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="INTEGER"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	   
+		type_name,type_code,type_level,type_desc,upper_type_code,create_user,create_time,update_user,update_time
+	   
+	</sql>
+
+	<insert id="insertIfNotnull"   parameterType="com.nasoft.aboutcar.credit.domain.CxkhIndicType">
+		<selectKey   keyProperty="typeCode"  resultType="java.lang.String">  
+		SELECT LAST_INSERT_ID()  
+	  </selectKey>
+        INSERT INTO cxkh_indic_type 
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="typeName != null">
+        		type_name ,
+			</if>
+			<if test="typeLevel != null">
+        		type_level ,
+			</if>
+			<if test="typeDesc != null">
+        		type_desc ,
+			</if>
+			<if test="upperTypeCode != null">
+        		upper_type_code ,
+			</if>
+			<if test="createUser != null">
+        		create_user ,
+			</if>
+			<if test="createTime != null">
+        		create_time ,
+			</if>
+			<if test="updateUser != null">
+        		update_user ,
+			</if>
+			<if test="updateTime != null">
+        		update_time ,
+			</if>
+		</trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="typeName != null">
+        		#{typeName, jdbcType=VARCHAR} ,
+			</if>
+			<if test="typeLevel != null">
+        		#{typeLevel, jdbcType=INTEGER} ,
+			</if>
+			<if test="typeDesc != null">
+        		#{typeDesc, jdbcType=VARCHAR} ,
+			</if>
+			<if test="upperTypeCode != null">
+        		#{upperTypeCode, jdbcType=CHAR} ,
+			</if>
+			<if test="createUser != null">
+        		#{createUser, jdbcType=INTEGER} ,
+			</if>
+			<if test="createTime != null">
+        		#{createTime, jdbcType=TIMESTAMP} ,
+			</if>
+			<if test="updateUser != null">
+        		#{updateUser, jdbcType=INTEGER} ,
+			</if>
+			<if test="updateTime != null">
+        		#{updateTime, jdbcType=TIMESTAMP} ,
+			</if>
+		</trim>
+    
+		
+	</insert>
+    
+	<update id="updateIfNotnull"  parameterType="com.nasoft.aboutcar.credit.domain.CxkhIndicType">
+    
+        UPDATE cxkh_indic_type
+			<set>
+				<if test="typeName != null">
+					type_name = #{typeName, jdbcType=VARCHAR} ,
+				</if>
+				<if test="typeLevel != null">
+					type_level = #{typeLevel, jdbcType=INTEGER} ,
+				</if>
+				<if test="typeDesc != null">
+					type_desc = #{typeDesc, jdbcType=VARCHAR} ,
+				</if>
+				<if test="upperTypeCode != null">
+					upper_type_code = #{upperTypeCode, jdbcType=CHAR} ,
+				</if>
+				<if test="createUser != null">
+					create_user = #{createUser, jdbcType=INTEGER} ,
+				</if>
+				<if test="createTime != null">
+					create_time = #{createTime, jdbcType=TIMESTAMP} ,
+				</if>
+				<if test="updateUser != null">
+					update_user = #{updateUser, jdbcType=INTEGER} ,
+				</if>
+				<if test="updateTime != null">
+					update_time = #{updateTime, jdbcType=TIMESTAMP} ,
+				</if>
+			</set>
+        WHERE 
+	        type_code = #{typeCode, jdbcType=CHAR} 
+    
+	</update>
+
+    <delete id="deleteById">
+    
+        DELETE FROM cxkh_indic_type WHERE
+        type_code = #{typeCode } 
+    
+    </delete>
+    
+    
+    <delete id="delete">
+    
+        DELETE FROM cxkh_indic_type WHERE
+        
+    </delete>
+    
+		<select id="selectById" resultMap="CxkhIndicTypeResultMap">
+			SELECT <include refid="columns" />
+		   
+				FROM cxkh_indic_type 
+				WHERE 
+					type_code = #{typeCode, jdbcType=CHAR} 
+			
+		</select>
+	
+	<sql id="selectList_where">
+		<where>	      				
+	       <if test="typeName != null">
+		 	   	 	AND type_name = #{typeName, jdbcType=VARCHAR}
+			</if>
+	       <if test="typeCode != null">
+		 	   	 	AND type_code = #{typeCode, jdbcType=CHAR}
+			</if>
+	       <if test="typeLevel != null">
+		 		 		AND type_level = #{typeLevel, jdbcType=INTEGER}
+			</if>
+	       <if test="typeDesc != null">
+		 	   	 	AND type_desc = #{typeDesc, jdbcType=VARCHAR}
+			</if>
+	       <if test="upperTypeCode != null">
+		 	   	 	AND upper_type_code = #{upperTypeCode, jdbcType=CHAR}
+			</if>
+	       <if test="createUser != null">
+		 		 		AND create_user = #{createUser, jdbcType=INTEGER}
+			</if>
+	       <if test="createTimeBegin != null">
+				AND create_time >= #{createTimeBegin }
+		   </if>
+		   <if test="createTimeEnd != null">
+				AND create_time &lt;= #{createTimeEnd }
+		   </if>
+	       <if test="updateUser != null">
+		 		 		AND update_user = #{updateUser, jdbcType=INTEGER}
+			</if>
+	       <if test="updateTimeBegin != null">
+				AND update_time >= #{updateTimeBegin }
+		   </if>
+		   <if test="updateTimeEnd != null">
+				AND update_time &lt;= #{updateTimeEnd }
+		   </if>
+		</where>
+	</sql>
+		
+    <select id="selectListCount" resultType="long">
+        SELECT count(*) FROM cxkh_indic_type 
+		<include refid="selectList_where"/>    
+    </select>
+    
+   
+    <select id="selectList" resultMap="CxkhIndicTypeResultMap">
+    	SELECT <include refid="columns" />
+	    FROM cxkh_indic_type 
+		<include refid="selectList_where"/>
+		
+		
+    </select>
+    
+    <resultMap type="java.util.HashMap" id="CxkhIndicTypeResultToMap">
+    	
+    </resultMap>
+    <select id="getVertical" resultMap="CxkhIndicTypeResultToMap">
+    	SELECT <include refid="columns" />
+	    FROM cxkh_indic_type 
+		<include refid="selectList_where"/>
+    </select>
+
+	
+	
+</mapper>
+

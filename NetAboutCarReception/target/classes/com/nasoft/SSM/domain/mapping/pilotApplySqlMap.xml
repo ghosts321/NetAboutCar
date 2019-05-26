@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nasoft.SSM.PilotApply">
+	
+	<select id="selectByApplyid" parameterType="String" resultType="com.nasoft.SSM.domain.PilotApply">
+		select * from PILOT_APPLY where applyid=#{applyId}
+	</select>
+	
+	<insert id="addPilotApply" parameterType="com.nasoft.SSM.domain.PilotApply">
+		insert into PILOT_APPLY
+		(uid,name,sex,areaCode,nation,
+		political,birth,idCard,age,driveCard,cardDate,driverYears,address,)
+		tel,contacts,contactsEmploy,contactsTel,familyBg,educationbg,company,contractId,)
+		workStatus,licenseStatus,idcardPhoto,drivecardPhoto,remark,createDate,createMan,applyDate,)
+		crimeMark,recordContext)
+		values
+		(#{uid},#{name},#{sex},#{areaCode},#{nation},#{political},#{birth},#{idCard},#{age},#{driveCard},
+		#{cardDate},#{driverYears},#{address},#{tel},#{contacts},#{contactsEmploy},#{contactsTel},#{familyBg},#{educationbg},#{company},
+		#{contractId},#{workStatus},#{licenseStatus},#{idcardPhoto},#{drivecardPhoto},
+		#{remark},#{createDate},#{createMan},#{applyDate},#{crimeMark},#{recordContext})
+	</insert>
+	
+    <update id="updatePilotApply" parameterType="com.nasoft.SSM.domain.PilotApply">
+		update PILOT_APPLY set 
+		 uid=#{uid},name=#{name},sex=#{sex},areaCode=#{areaCode},nation=#{nation},political=#{political},birth=#{birth},
+		 idCard=#{idCard},age=#{age},driveCard=#{driveCard},cardDate=#{cardDate},driverYears=#{driverYears},address=#{address},
+		 tel=#{tel},contacts=#{contacts},contactsEmploy=#{contactsEmploy},contactsTel=#{contactsTel},familyBg=#{familyBg},
+		 educationbg=#{educationbg},company=#{company},contractId=#{contractId},workStatus=#{workStatus},
+		 licenseStatus=#{licenseStatus},idcardPhoto=#{idcardPhoto},drivecardPhoto=#{drivecardPhoto},remark=#{remark},
+		 createDate=#{createDate},createMan=#{createMan},applyDate=#{applyDate},crimeMark=#{crimeMark},recordContext=#{recordContext}
+    </update>
+    
+    <delete id="deletePilotApply" parameterType="String">
+    	delete from PILOT_APPLY where applyid=#{applyId}
+    </delete>
+    
+</mapper>

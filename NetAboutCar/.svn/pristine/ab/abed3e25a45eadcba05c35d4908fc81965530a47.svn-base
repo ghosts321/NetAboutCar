@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.nasoft.aboutcar.CxkhComAnnualWork">
+  <select id="findPlatExaminationList" parameterType="map" resultType="hashmap">
+  SELECT 
+  cd.com_license,
+  cd.score,
+  cd.year,
+  cd.assess_level,
+  xd.comname,
+  xd.creditcode
+FROM
+  cxkh_com_annual_work cd 
+  LEFT JOIN xzsp_com_companyinfo xd 
+  ON cd.com_license = xd.busiliceno 
+<where>
+<if test="comname != null and comname != ''">
+  and xd.comname like CONCAT('%',#{comname},'%' )
+</if>
+<if test="year != null and year != ''">
+ and cd.year = #{year}
+</if>
+</where>
+  </select>
+  <select id="findAllYear" resultType="hashmap">
+  select * from cxkh_drv_annual_work;
+  </select>
+  <select id="findCreditComByCreditcode" parameterType="String" resultType="hashmap">
+  SELECT 
+  ci.* 
+FROM
+  cxkh_com_score_record cr 
+  LEFT JOIN cxkh_indic ci 
+    ON cr.indic_code = ci.indic_code 
+WHERE cr.com_license = #{creditcode} 
+  </select>
+  
+  
+</mapper>

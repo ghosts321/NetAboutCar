@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.nasoft.aboutcar.CxkhDrvScoreRecordMapper">
+
+	<resultMap id="CxkhDrvScoreRecordResultMap" type="com.nasoft.aboutcar.credit.domain.CxkhDrvScoreRecord">
+        <result property="recNo" column="rec_no" jdbcType="CHAR"/>
+        <result property="drvName" column="drv_name" jdbcType="VARCHAR"/>
+        <result property="certno" column="certno" jdbcType="VARCHAR"/>
+        <result property="drvLicense" column="drv_license" jdbcType="CHAR"/>
+        <result property="recDate" column="rec_date" jdbcType="DATE"/>
+        <result property="indicCode" column="indic_code" jdbcType="CHAR"/>
+        <result property="indicText" column="indic_text" jdbcType="VARCHAR"/>
+        <result property="score" column="score" jdbcType="INTEGER"/>
+        <result property="eventNo" column="event_no" jdbcType="CHAR"/>
+        <result property="reviewNo" column="review_no" jdbcType="CHAR"/>
+        <result property="appealNo" column="appeal_no" jdbcType="CHAR"/>
+        <result property="year" column="year" jdbcType="CHAR"/>
+        <result property="recStatus" column="rec_status" jdbcType="VARCHAR"/>
+        <result property="createUser" column="create_user" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="INTEGER"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	   
+		rec_no,drv_name,certno,drv_license,rec_date,indic_code,indic_text,score,event_no,review_no,appeal_no,year,rec_status,create_user,create_time,update_user,update_time
+	   
+	</sql>
+
+	<insert id="insertIfNotnull"   parameterType="com.nasoft.aboutcar.credit.domain.CxkhDrvScoreRecord">
+		<selectKey   keyProperty="recNo"  resultType="java.lang.String">  
+		SELECT LAST_INSERT_ID()  
+	  </selectKey>
+        INSERT INTO cxkh_drv_score_record 
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="drvName != null">
+        		drv_name ,
+			</if>
+			<if test="certno != null">
+        		certno ,
+			</if>
+			<if test="drvLicense != null">
+        		drv_license ,
+			</if>
+			<if test="recDate != null">
+        		rec_date ,
+			</if>
+			<if test="indicCode != null">
+        		indic_code ,
+			</if>
+			<if test="indicText != null">
+        		indic_text ,
+			</if>
+			<if test="score != null">
+        		score ,
+			</if>
+			<if test="eventNo != null">
+        		event_no ,
+			</if>
+			<if test="reviewNo != null">
+        		review_no ,
+			</if>
+			<if test="appealNo != null">
+        		appeal_no ,
+			</if>
+			<if test="year != null">
+        		year ,
+			</if>
+			<if test="recStatus != null">
+        		rec_status ,
+			</if>
+			<if test="createUser != null">
+        		create_user ,
+			</if>
+			<if test="createTime != null">
+        		create_time ,
+			</if>
+			<if test="updateUser != null">
+        		update_user ,
+			</if>
+			<if test="updateTime != null">
+        		update_time ,
+			</if>
+		</trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="drvName != null">
+        		#{drvName, jdbcType=VARCHAR} ,
+			</if>
+			<if test="certno != null">
+        		#{certno, jdbcType=VARCHAR} ,
+			</if>
+			<if test="drvLicense != null">
+        		#{drvLicense, jdbcType=CHAR} ,
+			</if>
+			<if test="recDate != null">
+        		#{recDate, jdbcType=DATE} ,
+			</if>
+			<if test="indicCode != null">
+        		#{indicCode, jdbcType=CHAR} ,
+			</if>
+			<if test="indicText != null">
+        		#{indicText, jdbcType=VARCHAR} ,
+			</if>
+			<if test="score != null">
+        		#{score, jdbcType=INTEGER} ,
+			</if>
+			<if test="eventNo != null">
+        		#{eventNo, jdbcType=CHAR} ,
+			</if>
+			<if test="reviewNo != null">
+        		#{reviewNo, jdbcType=CHAR} ,
+			</if>
+			<if test="appealNo != null">
+        		#{appealNo, jdbcType=CHAR} ,
+			</if>
+			<if test="year != null">
+        		#{year, jdbcType=CHAR} ,
+			</if>
+			<if test="recStatus != null">
+        		#{recStatus, jdbcType=VARCHAR} ,
+			</if>
+			<if test="createUser != null">
+        		#{createUser, jdbcType=INTEGER} ,
+			</if>
+			<if test="createTime != null">
+        		#{createTime, jdbcType=TIMESTAMP} ,
+			</if>
+			<if test="updateUser != null">
+        		#{updateUser, jdbcType=INTEGER} ,
+			</if>
+			<if test="updateTime != null">
+        		#{updateTime, jdbcType=TIMESTAMP} ,
+			</if>
+		</trim>
+    
+		
+	</insert>
+    
+	<update id="updateIfNotnull"  parameterType="com.nasoft.aboutcar.credit.domain.CxkhDrvScoreRecord">
+    
+        UPDATE cxkh_drv_score_record
+			<set>
+				<if test="drvName != null">
+					drv_name = #{drvName, jdbcType=VARCHAR} ,
+				</if>
+				<if test="certno != null">
+					certno = #{certno, jdbcType=VARCHAR} ,
+				</if>
+				<if test="drvLicense != null">
+					drv_license = #{drvLicense, jdbcType=CHAR} ,
+				</if>
+				<if test="recDate != null">
+					rec_date = #{recDate, jdbcType=DATE} ,
+				</if>
+				<if test="indicCode != null">
+					indic_code = #{indicCode, jdbcType=CHAR} ,
+				</if>
+				<if test="indicText != null">
+					indic_text = #{indicText, jdbcType=VARCHAR} ,
+				</if>
+				<if test="score != null">
+					score = #{score, jdbcType=INTEGER} ,
+				</if>
+				<if test="eventNo != null">
+					event_no = #{eventNo, jdbcType=CHAR} ,
+				</if>
+				<if test="reviewNo != null">
+					review_no = #{reviewNo, jdbcType=CHAR} ,
+				</if>
+				<if test="appealNo != null">
+					appeal_no = #{appealNo, jdbcType=CHAR} ,
+				</if>
+				<if test="year != null">
+					year = #{year, jdbcType=CHAR} ,
+				</if>
+				<if test="recStatus != null">
+					rec_status = #{recStatus, jdbcType=VARCHAR} ,
+				</if>
+				<if test="createUser != null">
+					create_user = #{createUser, jdbcType=INTEGER} ,
+				</if>
+				<if test="createTime != null">
+					create_time = #{createTime, jdbcType=TIMESTAMP} ,
+				</if>
+				<if test="updateUser != null">
+					update_user = #{updateUser, jdbcType=INTEGER} ,
+				</if>
+				<if test="updateTime != null">
+					update_time = #{updateTime, jdbcType=TIMESTAMP} ,
+				</if>
+			</set>
+        WHERE 
+	        rec_no = #{recNo, jdbcType=CHAR} 
+    
+	</update>
+
+    <delete id="deleteById">
+    
+        DELETE FROM cxkh_drv_score_record WHERE
+        rec_no = #{recNo } 
+    
+    </delete>
+    
+    
+    <delete id="delete">
+    
+        DELETE FROM cxkh_drv_score_record WHERE
+        
+    </delete>
+    
+		<select id="selectById" resultMap="CxkhDrvScoreRecordResultMap">
+			SELECT <include refid="columns" />
+		   
+				FROM cxkh_drv_score_record 
+				WHERE 
+					rec_no = #{recNo, jdbcType=CHAR} 
+			
+		</select>
+	
+	<sql id="selectList_where">
+		<where>	      				
+	       <if test="recNo != null">
+		 	   	 	AND rec_no = #{recNo, jdbcType=CHAR}
+			</if>
+	       <if test="drvName != null">
+		 	   	 	AND drv_name = #{drvName, jdbcType=VARCHAR}
+			</if>
+	       <if test="certno != null">
+		 	   	 	AND certno = #{certno, jdbcType=VARCHAR}
+			</if>
+	       <if test="drvLicense != null">
+		 	   	 	AND drv_license = #{drvLicense, jdbcType=CHAR}
+			</if>
+	       <if test="recDateBegin != null">
+				AND rec_date >= #{recDateBegin }
+		   </if>
+		   <if test="recDateEnd != null">
+				AND rec_date &lt;= #{recDateEnd }
+		   </if>
+	       <if test="indicCode != null">
+		 	   	 	AND indic_code = #{indicCode, jdbcType=CHAR}
+			</if>
+	       <if test="indicText != null">
+		 	   	 	AND indic_text = #{indicText, jdbcType=VARCHAR}
+			</if>
+	       <if test="score != null">
+		 		 		AND score = #{score, jdbcType=INTEGER}
+			</if>
+	       <if test="eventNo != null">
+		 	   	 	AND event_no = #{eventNo, jdbcType=CHAR}
+			</if>
+	       <if test="reviewNo != null">
+		 	   	 	AND review_no = #{reviewNo, jdbcType=CHAR}
+			</if>
+	       <if test="appealNo != null">
+		 	   	 	AND appeal_no = #{appealNo, jdbcType=CHAR}
+			</if>
+	       <if test="year != null">
+		 	   	 	AND year = #{year, jdbcType=CHAR}
+			</if>
+	       <if test="recStatus != null">
+		 	   	 	AND rec_status = #{recStatus, jdbcType=VARCHAR}
+			</if>
+	       <if test="createUser != null">
+		 		 		AND create_user = #{createUser, jdbcType=INTEGER}
+			</if>
+	       <if test="createTimeBegin != null">
+				AND create_time >= #{createTimeBegin }
+		   </if>
+		   <if test="createTimeEnd != null">
+				AND create_time &lt;= #{createTimeEnd }
+		   </if>
+	       <if test="updateUser != null">
+		 		 		AND update_user = #{updateUser, jdbcType=INTEGER}
+			</if>
+	       <if test="updateTimeBegin != null">
+				AND update_time >= #{updateTimeBegin }
+		   </if>
+		   <if test="updateTimeEnd != null">
+				AND update_time &lt;= #{updateTimeEnd }
+		   </if>
+		</where>
+	</sql>
+		
+    <select id="selectListCount" resultType="long">
+        SELECT count(*) FROM cxkh_drv_score_record 
+		<include refid="selectList_where"/>    
+    </select>
+    
+   
+    <select id="selectList" resultMap="CxkhDrvScoreRecordResultMap">
+    	SELECT <include refid="columns" />
+	    FROM cxkh_drv_score_record 
+		<include refid="selectList_where"/>
+		
+		
+    </select>
+    
+    <resultMap type="java.util.HashMap" id="CxkhDrvScoreRecordResultToMap">
+    	
+    </resultMap>
+    <select id="getVertical" resultMap="CxkhDrvScoreRecordResultToMap">
+    	SELECT <include refid="columns" />
+	    FROM cxkh_drv_score_record 
+		<include refid="selectList_where"/>
+    </select>
+
+	
+	
+</mapper>
+

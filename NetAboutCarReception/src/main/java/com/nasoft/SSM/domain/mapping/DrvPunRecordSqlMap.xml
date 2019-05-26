@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!-- 使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.nasoft.SSM.DrvPunRecord">
+<select id="findAllRecord" parameterType="String" resultType="hashmap">
+SELECT 
+  cdsl.list_no listNo,
+  cdsr.drv_name drvName,
+  cdsr.certno,
+  cps.pun_text punText,
+  SUM(cdsr.score) score,
+  xcc.belongs,
+  xcc.carnum 
+FROM
+  cxkh_drv_pun_record cdsl,
+  xzsp_drv_userinfo xdu,
+  xzsp_car_carinfo xcc,
+  cxkh_drv_score_record cdsr,
+  cxkh_punished_set cps 
+WHERE 
+xdu.certno = cdsr.certno 
+  AND cdsl.pun_code = cps.pun_code 
+  AND xcc.certno = xdu.certno
+  AND cdsr.drv_license=cdsl.drv_license 
+  AND cdsr.certno = #{certno}
+   </select> 
+    <select id="findDetailAPpeal" parameterType="map" resultType="map">
+    SELECT 
+  cdsr.drv_name,
+  cdsr.certno,
+  xcc.belongs,
+  xcc.carnum ,
+  ce.event_detail eventDetail
+FROM
+  cxkh_drv_score_record cdsr,
+  xzsp_car_carinfo xcc,
+  cxkh_events ce
+WHERE cdsr.certno = xcc.certno 
+  AND cdsr.certno = #{certno}
+  AND cdsr.event_no = ce.event_no 
+    </select>
+    <select id="findIndicType" parameterType="string" resultType="hashmap">
+   SELECT 
+   cit.type_name name,
+  ci.indic_text indicText,
+  ci.score,
+  ci.indic_code
+  
+FROM
+  cxkh_indic ci,
+  cxkh_indic_type cit ,
+  cxkh_drv_score_record cdpl
+WHERE ci.type_code = cit.type_code 
+AND ci.indic_code=cdpl.indic_code
+AND cdpl.certno=#{certno}
+    </select>
+    <insert id="addAppeal" parameterType="com.nasoft.SSM.domain.DrvAppeals">
+    INSERT INTO cxkh_drv_appeals (
+    appeal_no,
+  appeal_status,
+  drv_name,
+  appeal_text,
+  appeal_date,
+  certno
+) 
+VALUES
+  (#{appealNo},#{appealStatus},#{drvName},#{appealText},#{appealDate},#{certno}) ;
+    
+    </insert>
+</mapper>
+

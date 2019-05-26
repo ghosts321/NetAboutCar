@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.nasoft.aboutcar.JcfxDataCatalogMapper">
+
+	<resultMap id="JcfxDataCatalogResultMap" type="com.nasoft.aboutcar.report.domain.JcfxDataCatalog">
+        <result property="dataCode" column="data_code" jdbcType="VARCHAR"/>
+        <result property="dataTitle" column="data_title" jdbcType="VARCHAR"/>
+        <result property="execPeriod" column="exec_period" jdbcType="VARCHAR"/>
+        <result property="execTime" column="exec_time" jdbcType="VARCHAR"/>
+        <result property="dataSql" column="data_sql" jdbcType="VARCHAR"/>
+        <result property="createUser" column="create_user" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="INTEGER"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	   
+		data_code,data_title,exec_period,exec_time,data_sql,create_user,create_time,update_user,update_time
+	   
+	</sql>
+
+	<insert id="insertIfNotnull"   parameterType="com.nasoft.aboutcar.report.domain.JcfxDataCatalog">
+        INSERT INTO jcfx_data_catalog 
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="dataCode != null">
+        		data_code ,
+			</if>
+			<if test="dataTitle != null">
+        		data_title ,
+			</if>
+			<if test="execPeriod != null">
+        		exec_period ,
+			</if>
+			<if test="execTime != null">
+        		exec_time ,
+			</if>
+			<if test="dataSql != null">
+        		data_sql ,
+			</if>
+			<if test="createUser != null">
+        		create_user ,
+			</if>
+			<if test="createTime != null">
+        		create_time ,
+			</if>
+			<if test="updateUser != null">
+        		update_user ,
+			</if>
+			<if test="updateTime != null">
+        		update_time ,
+			</if>
+		</trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="dataCode != null">
+        		#{dataCode, jdbcType=VARCHAR} ,
+			</if>
+			<if test="dataTitle != null">
+        		#{dataTitle, jdbcType=VARCHAR} ,
+			</if>
+			<if test="execPeriod != null">
+        		#{execPeriod, jdbcType=VARCHAR} ,
+			</if>
+			<if test="execTime != null">
+        		#{execTime, jdbcType=VARCHAR} ,
+			</if>
+			<if test="dataSql != null">
+        		#{dataSql, jdbcType=VARCHAR} ,
+			</if>
+			<if test="createUser != null">
+        		#{createUser, jdbcType=INTEGER} ,
+			</if>
+			<if test="createTime != null">
+        		#{createTime, jdbcType=TIMESTAMP} ,
+			</if>
+			<if test="updateUser != null">
+        		#{updateUser, jdbcType=INTEGER} ,
+			</if>
+			<if test="updateTime != null">
+        		#{updateTime, jdbcType=TIMESTAMP} ,
+			</if>
+		</trim>
+    
+		
+	</insert>
+    
+	<update id="updateIfNotnull"  parameterType="com.nasoft.aboutcar.report.domain.JcfxDataCatalog">
+    
+        UPDATE jcfx_data_catalog
+			<set>
+				<if test="dataTitle != null">
+					data_title = #{dataTitle, jdbcType=VARCHAR} ,
+				</if>
+				<if test="execPeriod != null">
+					exec_period = #{execPeriod, jdbcType=VARCHAR} ,
+				</if>
+				<if test="execTime != null">
+					exec_time = #{execTime, jdbcType=VARCHAR} ,
+				</if>
+				<if test="dataSql != null">
+					data_sql = #{dataSql, jdbcType=VARCHAR} ,
+				</if>
+				<if test="createUser != null">
+					create_user = #{createUser, jdbcType=INTEGER} ,
+				</if>
+				<if test="createTime != null">
+					create_time = #{createTime, jdbcType=TIMESTAMP} ,
+				</if>
+				<if test="updateUser != null">
+					update_user = #{updateUser, jdbcType=INTEGER} ,
+				</if>
+				<if test="updateTime != null">
+					update_time = #{updateTime, jdbcType=TIMESTAMP} ,
+				</if>
+			</set>
+        WHERE 
+	        data_code = #{dataCode, jdbcType=VARCHAR} 
+    
+	</update>
+
+    <delete id="deleteById">
+    
+        DELETE FROM jcfx_data_catalog WHERE
+        data_code = #{dataCode } 
+    
+    </delete>
+    
+    
+    <delete id="delete">
+    
+        DELETE FROM jcfx_data_catalog WHERE
+        
+    </delete>
+    
+		<select id="selectById" resultMap="JcfxDataCatalogResultMap">
+			SELECT <include refid="columns" />
+		   
+				FROM jcfx_data_catalog 
+				WHERE 
+					data_code = #{dataCode, jdbcType=VARCHAR} 
+			
+		</select>
+	
+	<sql id="selectList_where">
+		<where>	      				
+	       <if test="dataCode != null">
+		 	   	 	AND data_code = #{dataCode, jdbcType=VARCHAR}
+			</if>
+	       <if test="dataTitle != null">
+		 	   	 	AND data_title = #{dataTitle, jdbcType=VARCHAR}
+			</if>
+	       <if test="execPeriod != null">
+		 	   	 	AND exec_period = #{execPeriod, jdbcType=VARCHAR}
+			</if>
+	       <if test="execTime != null">
+		 	   	 	AND exec_time = #{execTime, jdbcType=VARCHAR}
+			</if>
+	       <if test="dataSql != null">
+		 	   	 	AND data_sql = #{dataSql, jdbcType=VARCHAR}
+			</if>
+	       <if test="createUser != null">
+		 		 		AND create_user = #{createUser, jdbcType=INTEGER}
+			</if>
+	       <if test="createTimeBegin != null">
+				AND create_time >= #{createTimeBegin }
+		   </if>
+		   <if test="createTimeEnd != null">
+				AND create_time &lt;= #{createTimeEnd }
+		   </if>
+	       <if test="updateUser != null">
+		 		 		AND update_user = #{updateUser, jdbcType=INTEGER}
+			</if>
+	       <if test="updateTimeBegin != null">
+				AND update_time >= #{updateTimeBegin }
+		   </if>
+		   <if test="updateTimeEnd != null">
+				AND update_time &lt;= #{updateTimeEnd }
+		   </if>
+		</where>
+	</sql>
+		
+    <select id="selectListCount" resultType="long">
+        SELECT count(*) FROM jcfx_data_catalog 
+		<include refid="selectList_where"/>    
+    </select>
+    
+   
+    <select id="selectList" resultMap="JcfxDataCatalogResultMap">
+    	SELECT <include refid="columns" />
+	    FROM jcfx_data_catalog 
+		<include refid="selectList_where"/>
+		
+		
+    </select>
+    
+    <resultMap type="java.util.HashMap" id="JcfxDataCatalogResultToMap">
+    	
+    </resultMap>
+    <select id="getVertical" resultMap="JcfxDataCatalogResultToMap">
+    	SELECT <include refid="columns" />
+	    FROM jcfx_data_catalog 
+		<include refid="selectList_where"/>
+    </select>
+
+	
+	
+</mapper>
+

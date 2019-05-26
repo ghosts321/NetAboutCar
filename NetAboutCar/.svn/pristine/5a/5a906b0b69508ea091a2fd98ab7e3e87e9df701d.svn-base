@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.nasoft.aboutcar.CxkhCarBlacklistMapper">
+
+	<resultMap id="CxkhCarBlacklistResultMap" type="com.nasoft.aboutcar.credit.domain.CxkhCarBlacklist">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="carid" column="carid" jdbcType="VARCHAR"/>
+        <result property="carnum" column="carnum" jdbcType="CHAR"/>
+        <result property="enginenum" column="enginenum" jdbcType="VARCHAR"/>
+        <result property="certno" column="certno" jdbcType="VARCHAR"/>
+        <result property="storageDate" column="storage_date" jdbcType="DATE"/>
+        <result property="storageReason" column="storage_reason" jdbcType="VARCHAR"/>
+        <result property="storageFile" column="storage_file" jdbcType="VARCHAR"/>
+        <result property="storager" column="storager" jdbcType="VARCHAR"/>
+        <result property="removeDate" column="remove_date" jdbcType="DATE"/>
+        <result property="removeReason" column="remove_reason" jdbcType="VARCHAR"/>
+        <result property="removeFile" column="remove_file" jdbcType="VARCHAR"/>
+        <result property="remover" column="remover" jdbcType="VARCHAR"/>
+        <result property="preRemoveDate" column="pre_remove_date" jdbcType="DATE"/>
+        <result property="status" column="status" jdbcType="CHAR"/>
+        <result property="blType" column="bl_type" jdbcType="VARCHAR"/>
+        <result property="createUser" column="create_user" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="INTEGER"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	   
+		id,carid,carnum,enginenum,certno,storage_date,storage_reason,storage_file,storager,remove_date,remove_reason,remove_file,remover,pre_remove_date,status,bl_type,create_user,create_time,update_user,update_time
+	   
+	</sql>
+
+	<insert id="insertIfNotnull"   parameterType="com.nasoft.aboutcar.credit.domain.CxkhCarBlacklist">
+		<selectKey   keyProperty="id"  resultType="java.lang.Integer">  
+		SELECT LAST_INSERT_ID()  
+	  </selectKey>
+        INSERT INTO cxkh_car_blacklist 
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="carid != null">
+        		carid ,
+			</if>
+			<if test="carnum != null">
+        		carnum ,
+			</if>
+			<if test="enginenum != null">
+        		enginenum ,
+			</if>
+			<if test="certno != null">
+        		certno ,
+			</if>
+			<if test="storageDate != null">
+        		storage_date ,
+			</if>
+			<if test="storageReason != null">
+        		storage_reason ,
+			</if>
+			<if test="storageFile != null">
+        		storage_file ,
+			</if>
+			<if test="storager != null">
+        		storager ,
+			</if>
+			<if test="removeDate != null">
+        		remove_date ,
+			</if>
+			<if test="removeReason != null">
+        		remove_reason ,
+			</if>
+			<if test="removeFile != null">
+        		remove_file ,
+			</if>
+			<if test="remover != null">
+        		remover ,
+			</if>
+			<if test="preRemoveDate != null">
+        		pre_remove_date ,
+			</if>
+			<if test="status != null">
+        		status ,
+			</if>
+			<if test="blType != null">
+        		bl_type ,
+			</if>
+			<if test="createUser != null">
+        		create_user ,
+			</if>
+			<if test="createTime != null">
+        		create_time ,
+			</if>
+			<if test="updateUser != null">
+        		update_user ,
+			</if>
+			<if test="updateTime != null">
+        		update_time ,
+			</if>
+		</trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="carid != null">
+        		#{carid, jdbcType=VARCHAR} ,
+			</if>
+			<if test="carnum != null">
+        		#{carnum, jdbcType=CHAR} ,
+			</if>
+			<if test="enginenum != null">
+        		#{enginenum, jdbcType=VARCHAR} ,
+			</if>
+			<if test="certno != null">
+        		#{certno, jdbcType=VARCHAR} ,
+			</if>
+			<if test="storageDate != null">
+        		#{storageDate, jdbcType=DATE} ,
+			</if>
+			<if test="storageReason != null">
+        		#{storageReason, jdbcType=VARCHAR} ,
+			</if>
+			<if test="storageFile != null">
+        		#{storageFile, jdbcType=VARCHAR} ,
+			</if>
+			<if test="storager != null">
+        		#{storager, jdbcType=VARCHAR} ,
+			</if>
+			<if test="removeDate != null">
+        		#{removeDate, jdbcType=DATE} ,
+			</if>
+			<if test="removeReason != null">
+        		#{removeReason, jdbcType=VARCHAR} ,
+			</if>
+			<if test="removeFile != null">
+        		#{removeFile, jdbcType=VARCHAR} ,
+			</if>
+			<if test="remover != null">
+        		#{remover, jdbcType=VARCHAR} ,
+			</if>
+			<if test="preRemoveDate != null">
+        		#{preRemoveDate, jdbcType=DATE} ,
+			</if>
+			<if test="status != null">
+        		#{status, jdbcType=CHAR} ,
+			</if>
+			<if test="blType != null">
+        		#{blType, jdbcType=VARCHAR} ,
+			</if>
+			<if test="createUser != null">
+        		#{createUser, jdbcType=INTEGER} ,
+			</if>
+			<if test="createTime != null">
+        		#{createTime, jdbcType=TIMESTAMP} ,
+			</if>
+			<if test="updateUser != null">
+        		#{updateUser, jdbcType=INTEGER} ,
+			</if>
+			<if test="updateTime != null">
+        		#{updateTime, jdbcType=TIMESTAMP} ,
+			</if>
+		</trim>
+    
+		
+	</insert>
+    
+	<update id="updateIfNotnull"  parameterType="com.nasoft.aboutcar.credit.domain.CxkhCarBlacklist">
+    
+        UPDATE cxkh_car_blacklist
+			<set>
+				<if test="carid != null">
+					carid = #{carid, jdbcType=VARCHAR} ,
+				</if>
+				<if test="carnum != null">
+					carnum = #{carnum, jdbcType=CHAR} ,
+				</if>
+				<if test="enginenum != null">
+					enginenum = #{enginenum, jdbcType=VARCHAR} ,
+				</if>
+				<if test="certno != null">
+					certno = #{certno, jdbcType=VARCHAR} ,
+				</if>
+				<if test="storageDate != null">
+					storage_date = #{storageDate, jdbcType=DATE} ,
+				</if>
+				<if test="storageReason != null">
+					storage_reason = #{storageReason, jdbcType=VARCHAR} ,
+				</if>
+				<if test="storageFile != null">
+					storage_file = #{storageFile, jdbcType=VARCHAR} ,
+				</if>
+				<if test="storager != null">
+					storager = #{storager, jdbcType=VARCHAR} ,
+				</if>
+				<if test="removeDate != null">
+					remove_date = #{removeDate, jdbcType=DATE} ,
+				</if>
+				<if test="removeReason != null">
+					remove_reason = #{removeReason, jdbcType=VARCHAR} ,
+				</if>
+				<if test="removeFile != null">
+					remove_file = #{removeFile, jdbcType=VARCHAR} ,
+				</if>
+				<if test="remover != null">
+					remover = #{remover, jdbcType=VARCHAR} ,
+				</if>
+				<if test="preRemoveDate != null">
+					pre_remove_date = #{preRemoveDate, jdbcType=DATE} ,
+				</if>
+				<if test="status != null">
+					status = #{status, jdbcType=CHAR} ,
+				</if>
+				<if test="blType != null">
+					bl_type = #{blType, jdbcType=VARCHAR} ,
+				</if>
+				<if test="createUser != null">
+					create_user = #{createUser, jdbcType=INTEGER} ,
+				</if>
+				<if test="createTime != null">
+					create_time = #{createTime, jdbcType=TIMESTAMP} ,
+				</if>
+				<if test="updateUser != null">
+					update_user = #{updateUser, jdbcType=INTEGER} ,
+				</if>
+				<if test="updateTime != null">
+					update_time = #{updateTime, jdbcType=TIMESTAMP} ,
+				</if>
+			</set>
+        WHERE 
+	        id = #{id, jdbcType=INTEGER} 
+    
+	</update>
+
+    <delete id="deleteById">
+    
+        DELETE FROM cxkh_car_blacklist WHERE
+        id = #{id } 
+    
+    </delete>
+    
+    
+    <delete id="delete">
+    
+        DELETE FROM cxkh_car_blacklist WHERE
+        
+    </delete>
+    
+		<select id="selectById" resultMap="CxkhCarBlacklistResultMap">
+			SELECT <include refid="columns" />
+		   
+				FROM cxkh_car_blacklist 
+				WHERE 
+					id = #{id, jdbcType=INTEGER} 
+			
+		</select>
+	
+	<sql id="selectList_where">
+		<where>	      				
+	       <if test="id != null">
+		 		 		AND id = #{id, jdbcType=INTEGER}
+			</if>
+	       <if test="carid != null">
+		 	   	 	AND carid = #{carid, jdbcType=VARCHAR}
+			</if>
+	       <if test="carnum != null">
+		 	   	 	AND carnum = #{carnum, jdbcType=CHAR}
+			</if>
+	       <if test="enginenum != null">
+		 	   	 	AND enginenum = #{enginenum, jdbcType=VARCHAR}
+			</if>
+	       <if test="certno != null">
+		 	   	 	AND certno = #{certno, jdbcType=VARCHAR}
+			</if>
+	       <if test="storageDateBegin != null">
+				AND storage_date >= #{storageDateBegin }
+		   </if>
+		   <if test="storageDateEnd != null">
+				AND storage_date &lt;= #{storageDateEnd }
+		   </if>
+	       <if test="storageReason != null">
+		 	   	 	AND storage_reason = #{storageReason, jdbcType=VARCHAR}
+			</if>
+	       <if test="storageFile != null">
+		 	   	 	AND storage_file = #{storageFile, jdbcType=VARCHAR}
+			</if>
+	       <if test="storager != null">
+		 	   	 	AND storager = #{storager, jdbcType=VARCHAR}
+			</if>
+	       <if test="removeDateBegin != null">
+				AND remove_date >= #{removeDateBegin }
+		   </if>
+		   <if test="removeDateEnd != null">
+				AND remove_date &lt;= #{removeDateEnd }
+		   </if>
+	       <if test="removeReason != null">
+		 	   	 	AND remove_reason = #{removeReason, jdbcType=VARCHAR}
+			</if>
+	       <if test="removeFile != null">
+		 	   	 	AND remove_file = #{removeFile, jdbcType=VARCHAR}
+			</if>
+	       <if test="remover != null">
+		 	   	 	AND remover = #{remover, jdbcType=VARCHAR}
+			</if>
+	       <if test="preRemoveDateBegin != null">
+				AND pre_remove_date >= #{preRemoveDateBegin }
+		   </if>
+		   <if test="preRemoveDateEnd != null">
+				AND pre_remove_date &lt;= #{preRemoveDateEnd }
+		   </if>
+	       <if test="status != null">
+		 	   	 	AND status = #{status, jdbcType=CHAR}
+			</if>
+	       <if test="blType != null">
+		 	   	 	AND bl_type = #{blType, jdbcType=VARCHAR}
+			</if>
+	       <if test="createUser != null">
+		 		 		AND create_user = #{createUser, jdbcType=INTEGER}
+			</if>
+	       <if test="createTimeBegin != null">
+				AND create_time >= #{createTimeBegin }
+		   </if>
+		   <if test="createTimeEnd != null">
+				AND create_time &lt;= #{createTimeEnd }
+		   </if>
+	       <if test="updateUser != null">
+		 		 		AND update_user = #{updateUser, jdbcType=INTEGER}
+			</if>
+	       <if test="updateTimeBegin != null">
+				AND update_time >= #{updateTimeBegin }
+		   </if>
+		   <if test="updateTimeEnd != null">
+				AND update_time &lt;= #{updateTimeEnd }
+		   </if>
+		</where>
+	</sql>
+		
+    <select id="selectListCount" resultType="long">
+        SELECT count(*) FROM cxkh_car_blacklist 
+		<include refid="selectList_where"/>    
+    </select>
+    
+   
+    <select id="selectList" resultMap="CxkhCarBlacklistResultMap">
+    	SELECT <include refid="columns" />
+	    FROM cxkh_car_blacklist 
+		<include refid="selectList_where"/>
+		
+		
+    </select>
+    
+    <resultMap type="java.util.HashMap" id="CxkhCarBlacklistResultToMap">
+    	
+    </resultMap>
+    <select id="getVertical" resultMap="CxkhCarBlacklistResultToMap">
+    	SELECT <include refid="columns" />
+	    FROM cxkh_car_blacklist 
+		<include refid="selectList_where"/>
+    </select>
+
+	
+	
+</mapper>
+

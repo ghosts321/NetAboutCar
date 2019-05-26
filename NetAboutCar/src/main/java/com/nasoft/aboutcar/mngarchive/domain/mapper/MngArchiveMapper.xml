@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nasoft.aboutcar.mngArchiveMapper" >
+  
+  <insert id="addMngArchive" parameterType="com.nasoft.aboutcar.mngarchive.domain.MngArchive" >
+    insert into mng_archive (archiveid, archivenum, archivename, archivetype, applyid, createtime)
+    values (#{archiveid,jdbcType=INTEGER}, #{archivenum,jdbcType=VARCHAR}, #{archivename,jdbcType=VARCHAR}, 
+      #{archivetype,jdbcType=CHAR}, #{applyid,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP})
+  </insert>
+  
+</mapper>
